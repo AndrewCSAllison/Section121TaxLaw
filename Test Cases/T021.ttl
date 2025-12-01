@@ -1,0 +1,68 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Taxpayer Individuals
+#########################
+:T021a a :Taxpayer .  # H, teacher
+:T021b a :Taxpayer .  # W, pilot
+
+#########################
+# Property Individual
+#########################
+:Property_T021 a :Property ;
+    rdfs:label "House Purchase 2003" .
+
+#########################
+# Ownership and Residence Intervals
+#########################
+:T021a_OwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :Property_T021 ;
+    :ownershipStart "2003-04-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date .
+
+:T021b_OwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :Property_T021 ;
+    :ownershipStart "2003-04-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date .
+
+:T021a_ResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :Property_T021 ;
+    :residenceStart "2003-04-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+:T021b_ResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :Property_T021 ;
+    :residenceStart "2003-04-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+#########################
+# Disposition
+#########################
+:T021_Disposition a :Disposition ;
+    :involves :Property_T021 ;
+    :sellDate "2004-12-31"^^xsd:date ;
+    :potentialGain 650000 ;
+    :partialExclusionReason :UnforeseenCircumstanceReason .
+
+#########################
+# Linking Taxpayers to Ownership/Residence/Disposition
+#########################
+:T021a :owns :T021a_OwnershipInterval ;
+        :uses :T021a_ResidenceInterval ;
+        :disposesOf :T021_Disposition .
+
+:T021b :owns :T021b_OwnershipInterval ;
+        :uses :T021b_ResidenceInterval ;
+        :disposesOf :T021_Disposition .
+
+#########################
+# Tax Return
+#########################
+:T021_Return a :JointReturn ;
+    :associates :T021a, :T021b ;
+    :linkedTo :T021_Disposition ;
+    :exclusionCap 500000 .

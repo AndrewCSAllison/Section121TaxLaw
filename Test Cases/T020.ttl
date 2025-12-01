@@ -1,0 +1,53 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Taxpayer Individual
+#########################
+:T020 a :Taxpayer .
+
+#########################
+# Property Individual
+#########################
+:Property_T020 a :Property ;
+    rdfs:label "California House" .
+
+#########################
+# Ownership and Residence Interval
+#########################
+:T020_OwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :Property_T020 ;
+    :ownershipStart "2003-09-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date .
+
+:T020_ResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :Property_T020 ;
+    :residenceStart "2003-09-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+#########################
+# Disposition
+#########################
+:T020_Disposition a :Disposition ;
+    :involves :Property_T020 ;
+    :sellDate "2004-12-31"^^xsd:date ;
+    :potentialGain 150000 ;
+    :partialExclusionReason :UnforeseenCircumstanceReason .
+
+#########################
+# Linking Taxpayer to Ownership/Residence/Disposition
+#########################
+:T020 :owns :T020_OwnershipInterval ;
+       :uses :T020_ResidenceInterval ;
+       :disposesOf :T020_Disposition .
+
+#########################
+# Tax Return
+#########################
+:T020_Return a :SingleReturn ;
+    :associates :T020 ;
+    :linkedTo :T020_Disposition ;
+    :exclusionCap 250000 .

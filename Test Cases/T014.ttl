@@ -1,0 +1,43 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#########################
+# Taxpayer Individual
+#########################
+:T014 a :Taxpayer ;
+    :disposesOf :T014_Disposition ;
+    :owns :T014_Ownership ;
+    :uses :T014_Residence .
+
+#########################
+# Property and Ownership/Residence Intervals
+#########################
+:T014_Property a :Property .
+
+:T014_Ownership a :OwnershipUseInterval ;
+    :ownershipStart "2003-07-01"^^xsd:date ;
+    :ownershipEnd "2004-02-01"^^xsd:date ;
+    :hasOwnershipOf :T014_Property .
+
+:T014_Residence a :ResidenceUseInterval ;
+    :residenceStart "2003-07-01"^^xsd:date ;
+    :residenceEnd "2004-02-01"^^xsd:date ;
+    :hasResidenceOf :T014_Property .
+
+#########################
+# Disposition
+#########################
+:T014_Disposition a :Disposition ;
+    :involves :T014_Property ;
+    :sellDate "2004-02-01"^^xsd:date ;
+    :potentialGain 200000 ;
+    :partialExclusionReason :EmploymentRelatedReason .
+
+#########################
+# Tax Return
+#########################
+:T014_SingleReturn a :SingleReturn ;
+    :associates :T014 ;
+    :linkedTo :T014_Disposition ;
+    :exclusionCap 250000 .

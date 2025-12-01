@@ -1,0 +1,55 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Taxpayers
+#########################
+:T022a a :Taxpayer .
+:T022b a :Taxpayer .
+
+#########################
+# Property: Two-bedroom condominium
+#########################
+:Property_T022 a :Property .
+
+#########################
+# Ownership and Residence Intervals
+#########################
+:OwnershipInterval_T022 a :OwnershipUseInterval ;
+    :hasOwnershipOf :Property_T022 ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2004-06-01"^^xsd:date .
+
+:ResidenceInterval_T022 a :ResidenceUseInterval ;
+    :hasResidenceOf :Property_T022 ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-06-01"^^xsd:date .
+
+:T022a :owns :OwnershipInterval_T022 ;
+        :uses :ResidenceInterval_T022 .
+
+:T022b :owns :OwnershipInterval_T022 ;
+        :uses :ResidenceInterval_T022 .
+
+#########################
+# Disposition: Sale in 2004
+#########################
+:Disposition_T022 a :Disposition ;
+    :involves :Property_T022 ;
+    :sellDate "2004-06-01"^^xsd:date ;
+    :potentialGain "400000"^^xsd:integer ;
+    :partialExclusionReason :UnforeseenCircumstanceReason .
+
+:T022a :disposesOf :Disposition_T022 .
+:T022b :disposesOf :Disposition_T022 .
+
+#########################
+# Joint Return
+#########################
+:JointReturn_T022 a :JointReturn ;
+    :exclusionCap 500000 ;
+    :associates :T022a, :T022b ;
+    :linkedTo :Disposition_T022 .

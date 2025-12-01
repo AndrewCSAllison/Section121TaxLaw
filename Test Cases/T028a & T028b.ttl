@@ -1,0 +1,48 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+################################################################################
+# Scenario T028
+################################################################################
+
+:T028a a :Taxpayer .
+:T028b a :Taxpayer .
+
+:Home_T028 a :Property .
+
+:Own_T028a a :OwnershipUseInterval ;
+    :ownershipStart "2023-06-01"^^xsd:date ;
+    :ownershipEnd "2024-08-01"^^xsd:date ;
+    :hasOwnershipOf :Home_T028 .
+
+:Own_T028b a :OwnershipUseInterval ;
+    :ownershipStart "2023-06-01"^^xsd:date ;
+    :ownershipEnd "2024-08-01"^^xsd:date ;
+    :hasOwnershipOf :Home_T028 .
+
+:Use_T028a a :ResidenceUseInterval ;
+    :residenceStart "2019-01-01"^^xsd:date ;
+    :residenceEnd "2024-08-01"^^xsd:date ;
+    :hasResidenceOf :Home_T028 .
+
+:Use_T028b a :ResidenceUseInterval ;
+    :residenceStart "2019-01-01"^^xsd:date ;
+    :residenceEnd "2024-08-01"^^xsd:date ;
+    :hasResidenceOf :Home_T028 .
+
+:Disp_T028 a :Disposition ;
+    :sellDate "2024-08-01"^^xsd:date ;
+    :potentialGain 210000 ;
+    :partialExclusionReason :NonQualifyingReason ;
+    :involves :Home_T028 .
+
+:T028a :owns :Own_T028a ; :uses :Use_T028a ; :disposesOf :Disp_T028 .
+:T028b :owns :Own_T028b ; :uses :Use_T028b ; :disposesOf :Disp_T028 .
+
+:Return_T028 a :JointReturn ;
+    :exclusionCap 500000 ;
+    :associates :T028a, :T028b ;
+    :linkedTo :Disp_T028 .

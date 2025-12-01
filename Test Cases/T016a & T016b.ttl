@@ -1,0 +1,49 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#########################
+# Taxpayers
+#########################
+:T016a a :Taxpayer ;
+    :disposesOf :T016_Disposition ;
+    :owns :T016_Ownership ;
+    :uses :T016_Residence .
+
+:T016b a :Taxpayer ;
+    :disposesOf :T016_Disposition ;
+    :owns :T016_Ownership ;
+    :uses :T016_Residence .
+
+#########################
+# Property and Ownership/Residence Intervals
+#########################
+:T016_Property a :Property .
+
+:T016_Ownership a :OwnershipUseInterval ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2004-01-01"^^xsd:date ;
+    :hasOwnershipOf :T016_Property .
+
+:T016_Residence a :ResidenceUseInterval ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-01-01"^^xsd:date ;
+    :hasResidenceOf :T016_Property .
+
+#########################
+# Disposition
+#########################
+:T016_Disposition a :Disposition ;
+    :involves :T016_Property ;
+    :sellDate "2004-01-01"^^xsd:date ;
+    :potentialGain 300000 ;
+    :partialExclusionReason :HealthRelatedReason .
+
+#########################
+# Joint Tax Return
+#########################
+:T016_JointReturn a :JointReturn ;
+    :associates :T016a ;
+    :associates :T016b ;
+    :linkedTo :T016_Disposition ;
+    :exclusionCap 500000 .

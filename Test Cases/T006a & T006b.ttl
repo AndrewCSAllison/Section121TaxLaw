@@ -1,0 +1,68 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+###################################################################
+# Taxpayer T006a and T006b — Unmarried Joint Owners Example
+# Each owns 50% of property, sells after 2 years, $256k total gain.
+###################################################################
+
+### --- Taxpayer A ---
+:T006a a :Taxpayer ;
+    :owns :Ownership_T006a ;
+    :uses :Residence_T006a ;
+    :disposesOf :Disposition_T006a .
+
+:Ownership_T006a a :OwnershipUseInterval ;
+    :ownershipStart "2001-01-01"^^xsd:date ;
+    :ownershipEnd "2003-01-01"^^xsd:date ;
+    :hasOwnershipOf :Property_SharedHouse .
+
+:Residence_T006a a :ResidenceUseInterval ;
+    :residenceStart "2001-01-01"^^xsd:date ;
+    :residenceEnd "2003-01-01"^^xsd:date ;
+    :hasResidenceOf :Property_SharedHouse .
+
+:Disposition_T006a a :Disposition ;
+    :sellDate "2003-01-01"^^xsd:date ;
+    :potentialGain "128000"^^xsd:integer ;
+    :involves :Property_SharedHouse .
+
+:Return_T006a a :SingleReturn ;
+    :exclusionCap "250000"^^xsd:integer ;
+    :associates :T006a ;
+    :linkedTo :Disposition_T006a .
+
+
+### --- Taxpayer B ---
+:T006b a :Taxpayer ;
+    :owns :Ownership_T006b ;
+    :uses :Residence_T006b ;
+    :disposesOf :Disposition_T006b .
+
+:Ownership_T006b a :OwnershipUseInterval ;
+    :ownershipStart "2001-01-01"^^xsd:date ;
+    :ownershipEnd "2003-01-01"^^xsd:date ;
+    :hasOwnershipOf :Property_SharedHouse .
+
+:Residence_T006b a :ResidenceUseInterval ;
+    :residenceStart "2001-01-01"^^xsd:date ;
+    :residenceEnd "2003-01-01"^^xsd:date ;
+    :hasResidenceOf :Property_SharedHouse .
+
+:Disposition_T006b a :Disposition ;
+    :sellDate "2003-01-01"^^xsd:date ;
+    :potentialGain "128000"^^xsd:integer ;
+    :involves :Property_SharedHouse .
+
+:Return_T006b a :SingleReturn ;
+    :exclusionCap "250000"^^xsd:integer ;
+    :associates :T006b ;
+    :linkedTo :Disposition_T006b .
+
+
+### --- Shared Property ---
+:Property_SharedHouse a :Property ;
+    rdfs:comment "Property jointly owned 50/50 by T006a and T006b; each qualifies for exclusion up to $250,000 based on individual interest in the home." .

@@ -1,0 +1,119 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Ontology Declaration
+#########################
+: a owl:Ontology ;
+   rdfs:comment "Section 121 Taxpayer Tax Law Ontology in OWL 2 DL." .
+
+#########################
+# Classes
+#########################
+:Taxpayer a owl:Class .
+:OwnershipUseInterval a owl:Class .
+:ResidenceUseInterval a owl:Class .
+:Property a owl:Class .
+:Disposition a owl:Class .
+:ReasonType a owl:Class .
+:Return a owl:Class .
+:JointReturn rdfs:subClassOf :Return .
+:SingleReturn rdfs:subClassOf :Return .
+:DerivedInfo a owl:Class .
+:Interpretation a owl:Class .
+
+#########################
+# Datatype Properties
+#########################
+:ownershipStart a owl:DatatypeProperty ;
+    rdfs:domain :OwnershipUseInterval ;
+    rdfs:range xsd:date .
+
+:ownershipEnd a owl:DatatypeProperty ;
+    rdfs:domain :OwnershipUseInterval ;
+    rdfs:range xsd:date .
+
+:residenceStart a owl:DatatypeProperty ;
+    rdfs:domain :ResidenceUseInterval ;
+    rdfs:range xsd:date .
+
+:residenceEnd a owl:DatatypeProperty ;
+    rdfs:domain :ResidenceUseInterval ;
+    rdfs:range xsd:date .
+
+:sellDate a owl:DatatypeProperty ;
+    rdfs:domain :Disposition ;
+    rdfs:range xsd:date .
+
+:potentialGain a owl:DatatypeProperty ;
+    rdfs:domain :Disposition ;
+    rdfs:range xsd:integer .
+
+:exclusionCap a owl:DatatypeProperty ;
+    rdfs:domain :Return ;
+    rdfs:range xsd:integer .
+
+#########################
+# Object Properties
+#########################
+:disposesOf a owl:ObjectProperty ;
+    rdfs:domain :Taxpayer ;
+    rdfs:range :Disposition .
+
+:owns a owl:ObjectProperty ;
+    rdfs:domain :Taxpayer ;
+    rdfs:range :OwnershipUseInterval .
+
+:uses a owl:ObjectProperty ;
+    rdfs:domain :Taxpayer ;
+    rdfs:range :ResidenceUseInterval .
+
+:hasOwnershipOf a owl:ObjectProperty ;
+    rdfs:domain :OwnershipUseInterval ;
+    rdfs:range :Property .
+
+:hasResidenceOf a owl:ObjectProperty ;
+    rdfs:domain :ResidenceUseInterval ;
+    rdfs:range :Property .
+
+:involves a owl:ObjectProperty ;
+    rdfs:domain :Disposition ;
+    rdfs:range :Property .
+
+:associates a owl:ObjectProperty ;
+    rdfs:domain :Return ;
+    rdfs:range :Taxpayer .
+
+:linkedTo a owl:ObjectProperty ;
+    rdfs:domain :Return ;
+    rdfs:range :Disposition .
+
+:partialExclusionReason a owl:ObjectProperty ;
+    rdfs:domain :Disposition ;
+    rdfs:range :ReasonType .
+
+:hasDerivedInfo a owl:ObjectProperty ;
+    rdfs:domain :DerivedInfo ;
+    rdfs:range :Disposition .
+
+:hasInterpretation a owl:ObjectProperty ;
+    rdfs:domain :DerivedInfo ;
+    rdfs:range :Disposition .
+
+#########################
+# Individuals — §121(c) Generalized Reason Flags
+#########################
+
+### --- Qualifying (Valid) Reasons For Partial Exclusions ---
+:EmploymentRelatedReason a :ReasonType .
+
+:HealthRelatedReason a :ReasonType .
+
+:UnforeseenCircumstanceReason a :ReasonType .
+
+### --- Non-Qualifying (Invalid) Reason ---
+:NonQualifyingReason a :ReasonType .
+

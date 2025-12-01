@@ -1,0 +1,80 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Taxpayer T003
+#########################
+:T003 a :Taxpayer ;
+    rdfs:label "T003" ;
+    rdfs:comment "Buys house + 1 acre in 1998 and 29 adjacent acres in 1999. Sells house + 1 acre at a loss and 29 acres at gain in 2003. Eligible for §121 exclusion on gain." ;
+    :owns :Own_HouseAcre_1998_2003 , :Own_29Acre_1999_2003 ;
+    :uses :ResUse_HouseAcre_1998_2003 , :ResUse_29Acre_1999_2003 ;
+    :disposesOf :Disposition_HouseAcre_2003 , :Disposition_29Acre_2003 .
+
+#########################
+# Properties
+#########################
+:Property_HouseAcre a :Property ;
+    rdfs:label "House + 1 Acre" ;
+    rdfs:comment "Principal residence portion including house and 1 acre." .
+
+:Property_29Acre a :Property ;
+    rdfs:label "29 Acres" ;
+    rdfs:comment "Adjacent land used as part of principal residence." .
+
+#########################
+# Ownership intervals
+#########################
+:Own_HouseAcre_1998_2003 a :OwnershipUseInterval ;
+    :ownershipStart "1998-01-01"^^xsd:date ;
+    :ownershipEnd   "2003-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_HouseAcre ;
+    rdfs:comment "Ownership from purchase in 1998 to sale in 2003." .
+
+:Own_29Acre_1999_2003 a :OwnershipUseInterval ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd   "2003-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_29Acre ;
+    rdfs:comment "Ownership from purchase in 1999 to sale in 2003." .
+
+#########################
+# Residence use intervals (split)
+#########################
+:ResUse_HouseAcre_1998_2003 a :ResidenceUseInterval ;
+    :residenceStart "1998-01-01"^^xsd:date ;
+    :residenceEnd   "2003-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_HouseAcre ;
+    rdfs:comment "Principal residence use for house + 1 acre from purchase to sale." .
+
+:ResUse_29Acre_1999_2003 a :ResidenceUseInterval ;
+    :residenceStart "1999-01-01"^^xsd:date ;
+    :residenceEnd   "2003-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_29Acre ;
+    rdfs:comment "Principal residence use for 29 adjacent acres from purchase to sale." .
+
+#########################
+# Dispositions
+#########################
+:Disposition_HouseAcre_2003 a :Disposition ;
+    :sellDate "2003-01-01"^^xsd:date ;
+    :potentialGain -25000 ;
+    :involves :Property_HouseAcre ;
+    rdfs:comment "Sale of house + 1 acre at a loss of $25,000." .
+
+:Disposition_29Acre_2003 a :Disposition ;
+    :sellDate "2003-01-01"^^xsd:date ;
+    :potentialGain 270000 ;
+    :involves :Property_29Acre ;
+    rdfs:comment "Sale of 29 acres at a gain of $270,000. §121 exclusion applies for $245,000." .
+
+#########################
+# Return linking dispositions and taxpayer
+#########################
+:Return_T003_2003 a :SingleReturn ;
+    :exclusionCap 250000 ;
+    :associates :T003 ;
+    :linkedTo :Disposition_HouseAcre_2003 , :Disposition_29Acre_2003 ;
+    rdfs:comment "Single filer return for T003 in 2003. Gain exclusion applied to 29 acres ($245,000)." .

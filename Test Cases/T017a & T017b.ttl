@@ -1,0 +1,60 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+#########################
+# Taxpayers
+#########################
+:T017a a :Taxpayer ;
+    :disposesOf :Disposition_House1 ;
+    :owns :OwnershipUse_House1 ;
+    :uses :ResidenceUse_House1 .
+
+:T017b a :Taxpayer ;
+    :disposesOf :Disposition_House1 ;
+    :owns :OwnershipUse_House1 ;
+    :uses :ResidenceUse_House1 .
+
+#########################
+# Property
+#########################
+:House1 a :Property ;
+    rdfs:label "Principal residence (House1)" ;
+    rdfs:comment "Primary residence purchased by T017a and T017b in 2003." .
+
+#########################
+# Ownership and Residence Intervals
+#########################
+:OwnershipUse_House1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :House1 ;
+    :ownershipStart "2003-03-01"^^xsd:date ;
+    :ownershipEnd "2004-07-15"^^xsd:date .
+
+:ResidenceUse_House1 a :ResidenceUseInterval ;
+    :hasResidenceOf :House1 ;
+    :residenceStart "2003-03-01"^^xsd:date ;
+    :residenceEnd "2004-07-15"^^xsd:date ;
+    rdfs:comment "House served as the principal residence during this entire period." .
+
+#########################
+# Disposition (Sale of the House)
+#########################
+:Disposition_House1 a :Disposition ;
+    :involves :House1 ;
+    :sellDate "2004-07-15"^^xsd:date ;
+    :potentialGain 350000 ;
+    :partialExclusionReason :HealthRelatedReason ;
+    rdfs:label "Sale of House1 to relocate for medical treatment" .
+
+#########################
+# Joint Return
+#########################
+:Return_2004_Joint a :JointReturn ;
+    :associates :T017a , :T017b ;
+    :linkedTo :Disposition_House1 ;
+    :exclusionCap 500000 ;
+    rdfs:label "2004 Joint Federal Income Tax Return" .
+

@@ -1,0 +1,43 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#########################
+# Taxpayer Individual
+#########################
+:T015 a :Taxpayer ;
+    :disposesOf :T015_Disposition ;
+    :owns :T015_Ownership ;
+    :uses :T015_Residence .
+
+#########################
+# Property and Ownership/Residence Intervals
+#########################
+:T015_Property a :Property .
+
+:T015_Ownership a :OwnershipUseInterval ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2004-01-01"^^xsd:date ;
+    :hasOwnershipOf :T015_Property .
+
+:T015_Residence a :ResidenceUseInterval ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-01-01"^^xsd:date ;
+    :hasResidenceOf :T015_Property .
+
+#########################
+# Disposition
+#########################
+:T015_Disposition a :Disposition ;
+    :involves :T015_Property ;
+    :sellDate "2004-01-01"^^xsd:date ;
+    :potentialGain 150000 ;
+    :partialExclusionReason :HealthRelatedReason .
+
+#########################
+# Tax Return
+#########################
+:T015_SingleReturn a :SingleReturn ;
+    :associates :T015 ;
+    :linkedTo :T015_Disposition ;
+    :exclusionCap 250000 .

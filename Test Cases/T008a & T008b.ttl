@@ -1,0 +1,64 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Individuals — Taxpayers
+#########################
+:T008a a :Taxpayer .
+:T008b a :Taxpayer .
+
+#########################
+# Property
+#########################
+:T008_Residence a :Property .
+
+#########################
+# Ownership Use Intervals
+#########################
+:T008a_Ownership a :OwnershipUseInterval ;
+    :ownershipStart "1990-01-01"^^xsd:date ;
+    :ownershipEnd "1999-06-30"^^xsd:date ;
+    :hasOwnershipOf :T008_Residence .
+
+:T008b_Ownership a :OwnershipUseInterval ;
+    :ownershipStart "1990-01-01"^^xsd:date ;
+    :ownershipEnd "1999-06-30"^^xsd:date ;
+    :hasOwnershipOf :T008_Residence .
+
+#########################
+# Residence Use Interval
+#########################
+:T008b_Use a :ResidenceUseInterval ;
+    :residenceStart "1990-01-01"^^xsd:date ;
+    :residenceEnd "1999-06-30"^^xsd:date ;
+    :hasResidenceOf :T008_Residence .
+
+#########################
+# Disposition
+#########################
+:T008_Sale a :Disposition ;
+    :sellDate "1999-06-30"^^xsd:date ;
+    :potentialGain 300000 ;
+    :involves :T008_Residence .
+
+#########################
+# Joint Return
+#########################
+:T008_JointReturn a :JointReturn ;
+    :exclusionCap 500000 ;  
+    :associates :T008a, :T008b ;
+    :linkedTo :T008_Sale .
+
+#########################
+# Linking Taxpayers to Intervals and Disposition
+#########################
+:T008a :owns :T008a_Ownership ;
+       # Does not satisfy §121; no use interval linked
+       :disposesOf :T008_Sale .
+
+:T008b :owns :T008b_Ownership ;
+       :uses :T008b_Use ;
+       :disposesOf :T008_Sale .

@@ -1,0 +1,55 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Taxpayer
+#########################
+:T023 a :Taxpayer .
+
+#########################
+# Property
+#########################
+:Condo2003 a :Property ;
+    rdfs:label "High-Rise Condominium 2003" ;
+    rdfs:comment "Monthly condominium fee $X; fee doubled after 3 months due to roof/heating repairs." .
+
+#########################
+# Ownership and Residence Intervals
+# (Only 3 months, triggers reduced exclusion)
+#########################
+:T023_CondoOwnership a :OwnershipUseInterval ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2003-04-01"^^xsd:date ;
+    :hasOwnershipOf :Condo2003 .
+
+:T023_CondoResidence a :ResidenceUseInterval ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2003-04-01"^^xsd:date ;
+    :hasResidenceOf :Condo2003 .
+
+#########################
+# Disposition
+#########################
+:Disposition_2003 a :Disposition ;
+    :sellDate "2003-04-01"^^xsd:date ;
+    :potentialGain 60000 ;  # Example potential gain
+    :involves :Condo2003 ;
+    :partialExclusionReason :UnforeseenCircumstanceReason .
+
+#########################
+# Linking Taxpayer to Ownership, Residence, and Disposition
+#########################
+:T023 :owns :T023_CondoOwnership ;
+      :uses :T023_CondoResidence ;
+      :disposesOf :Disposition_2003 .
+
+#########################
+# Single Return with Reduced Exclusion
+#########################
+:T023_SingleReturn a :SingleReturn ;
+    :associates :T023 ;
+    :linkedTo :Disposition_2003 ;
+    :exclusionCap 250000 .  # Example reduced maximum exclusion

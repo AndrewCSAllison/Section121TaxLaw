@@ -1,0 +1,59 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Taxpayer T005
+#########################
+:T005 a :Taxpayer ;
+    rdfs:label "T005" ;
+    rdfs:comment "Owned and used house as principal residence from 1986 to 12/31/1997. Moved 1/4/1998. Son moved in 3/1999. Sold house 7/1/2001. Not eligible for §121 exclusion." ;
+    :owns :Own_House_1986_2001 ;
+    :uses :ResUse_House_1986_1997 ;
+    :disposesOf :Disposition_House_2001 .
+
+#########################
+# Property
+#########################
+:Property_House a :Property ;
+    rdfs:label "House" ;
+    rdfs:comment "Principal residence owned and used by T005." .
+
+#########################
+# Ownership interval
+#########################
+:Own_House_1986_2001 a :OwnershipUseInterval ;
+    :ownershipStart "1986-01-01"^^xsd:date ;
+    :ownershipEnd   "2001-07-01"^^xsd:date ;
+    :hasOwnershipOf :Property_House ;
+    rdfs:comment "Ownership from purchase in 1986 until sale in 2001." .
+
+#########################
+# Residence use interval
+#########################
+:ResUse_House_1986_1997 a :ResidenceUseInterval ;
+    :residenceStart "1986-01-01"^^xsd:date ;
+    :residenceEnd   "1997-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_House ;
+    rdfs:comment "Principal residence use until move in 1998." .
+
+#########################
+# Disposition
+#########################
+:Disposition_House_2001 a :Disposition ;
+    :sellDate "2001-07-01"^^xsd:date ;
+    :potentialGain 300000 ;
+    :involves :Property_House ;
+    :partialExclusionReason :NonQualifyingReason ;
+    rdfs:comment "Sale of house in 2001. §121 exclusion not allowed because ownership/use tests are not satisfied for the 5-year lookback." .
+
+#########################
+# Return
+#########################
+:Return_T005_2001 a :SingleReturn ;
+    :exclusionCap 250000 ;
+    :associates :T005 ;
+    :linkedTo :Disposition_House_2001 ;
+    rdfs:comment "Single filer return for T005 in 2001. §121 exclusion not applied." .

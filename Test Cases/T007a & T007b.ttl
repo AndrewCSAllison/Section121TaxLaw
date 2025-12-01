@@ -1,0 +1,75 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Individuals — Taxpayers
+#########################
+:T007a a :Taxpayer .
+:T007b a :Taxpayer .
+
+#########################
+# Properties
+#########################
+:T007a_Residence a :Property .
+:T007b_Residence a :Property .
+
+#########################
+# Ownership Use Intervals
+#########################
+:T007a_Ownership a :OwnershipUseInterval ;
+    :ownershipStart "1990-01-01"^^xsd:date ;
+    :ownershipEnd "1999-06-30"^^xsd:date ;
+    :hasOwnershipOf :T007a_Residence .
+
+:T007b_Ownership a :OwnershipUseInterval ;
+    :ownershipStart "1990-01-01"^^xsd:date ;
+    :ownershipEnd "1999-06-30"^^xsd:date ;
+    :hasOwnershipOf :T007b_Residence .
+
+#########################
+# Residence Use Intervals
+#########################
+:T007a_Use a :ResidenceUseInterval ;
+    :residenceStart "1990-01-01"^^xsd:date ;
+    :residenceEnd "1999-06-30"^^xsd:date ;
+    :hasResidenceOf :T007a_Residence .
+
+:T007b_Use a :ResidenceUseInterval ;
+    :residenceStart "1990-01-01"^^xsd:date ;
+    :residenceEnd "1999-06-30"^^xsd:date ;
+    :hasResidenceOf :T007b_Residence .
+
+#########################
+# Dispositions
+#########################
+:T007a_Sale a :Disposition ;
+    :sellDate "1999-06-30"^^xsd:date ;
+    :potentialGain 200000 ;
+    :involves :T007a_Residence .
+
+:T007b_Sale a :Disposition ;
+    :sellDate "1999-06-30"^^xsd:date ;
+    :potentialGain 300000 ;
+    :involves :T007b_Residence .
+
+#########################
+# Returns
+#########################
+:T007_JointReturn a :JointReturn ;
+    :exclusionCap 500000 ;
+    :associates :T007a, :T007b ;
+    :linkedTo :T007a_Sale, :T007b_Sale .
+
+#########################
+# Linking Taxpayers to Intervals and Dispositions
+#########################
+:T007a :owns :T007a_Ownership ;
+       :uses :T007a_Use ;
+       :disposesOf :T007a_Sale .
+
+:T007b :owns :T007b_Ownership ;
+       :uses :T007b_Use ;
+       :disposesOf :T007b_Sale .

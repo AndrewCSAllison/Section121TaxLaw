@@ -1,0 +1,40 @@
+
+PREFIX : <http://example.org/section121#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?taxpayer ?property ?sellDate
+       (MAX(?Rule121aFinalSafe) AS ?Rule121aFinal)
+       (MAX(?Rule121b1ExcludedSafe) AS ?Rule121b1Excluded)
+       (MAX(?Rule121b2AExcludedSafe) AS ?Rule121b2AExcluded)
+       (MAX(?Rule121b2BExcludedSafe) AS ?Rule121b2BExcluded)
+       (MAX(?Rule121b3AppliesSafe) AS ?Rule121b3Applies)
+       (MAX(?Rule121cExcludedSafe) AS ?Rule121cExcluded)
+	   (MAX(?Rule121d1Applies) AS ?Rule121d1Applies)
+       (MAX(?partialExclusionReasonSafe) AS ?partialExclusionReason)
+       (MAX(?realizedGainSafe) AS ?realizedGain)
+       (MAX(?excludedGainSafe) AS ?excludedGain)
+       (MAX(?taxableGainSafe) AS ?taxableGain)
+WHERE {
+  # Step 1: get sellDate from disposition node (default graph)
+  ?disposition :sellDate ?sellDate .
+
+  # Step 2: get interpretation info (from the Interpretation graph)
+  GRAPH :Interpretation {
+    ?interpNode :forDisposition ?disposition ;
+                :forTaxpayer ?taxpayer ;
+                :involves ?property .
+    OPTIONAL { ?interpNode :Rule121aFinal ?Rule121aFinalSafe }
+    OPTIONAL { ?interpNode :Rule121b1Excluded ?Rule121b1ExcludedSafe }
+    OPTIONAL { ?interpNode :Rule121b2AExcluded ?Rule121b2AExcludedSafe }
+    OPTIONAL { ?interpNode :Rule121b2BExcluded ?Rule121b2BExcludedSafe }
+    OPTIONAL { ?interpNode :Rule121b3Applies ?Rule121b3AppliesSafe }
+    OPTIONAL { ?interpNode :Rule121cExcluded ?Rule121cExcludedSafe }
+    OPTIONAL { ?interpNode :Rule121d1Applies ?Rule121d1Applies }
+    OPTIONAL { ?interpNode :partialExclusionReason ?partialExclusionReasonSafe }
+    OPTIONAL { ?interpNode :excludedGain ?excludedGainSafe }
+    OPTIONAL { ?interpNode :taxableGain ?taxableGainSafe }
+    OPTIONAL { ?interpNode :potentialGain ?realizedGainSafe }
+  }
+}
+GROUP BY ?taxpayer ?property ?sellDate
+ORDER BY ?taxpayer ?property ?sellDate

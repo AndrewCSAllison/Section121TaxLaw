@@ -1,0 +1,158 @@
+@prefix : <http://example.org/section121#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#########################
+# SHACL Shapes
+#########################
+
+:TaxpayerShape
+    a sh:NodeShape ;
+    sh:targetClass :Taxpayer ;
+    sh:property [
+	sh:path :disposesOf ;
+	sh:class :Disposition ;
+    ] ;
+    sh:property [
+	sh:path :owns ;
+	sh:class :OwnershipUseInterval ;
+    ] ;
+    sh:property [
+	sh:path :uses ;
+	sh:class :ResidenceUseInterval ;
+    ] .
+
+:OwnershipUseIntervalShape
+    a sh:NodeShape ;
+    sh:targetClass :OwnershipUseInterval ;
+    sh:property [
+	sh:path :hasOwnershipOf ;
+	sh:class :Property ;
+	sh:minCount 1 ;
+	sh:maxCount 1 ;
+    ] ;
+    sh:property [
+	sh:path :ownershipStart ;
+	sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+	sh:path :ownershipEnd ;
+	sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] .
+
+:ResidenceUseIntervalShape
+    a sh:NodeShape ;
+    sh:targetClass :ResidenceUseInterval ;
+    sh:property [
+	sh:path :hasResidenceOf ;
+	sh:class :Property ;
+	sh:minCount 1 ;
+	sh:maxCount 1 ;
+    ] ;
+    sh:property [
+	sh:path :residenceStart ;
+	sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+	sh:path :residenceEnd ;
+	sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] .
+
+:DispositionShape
+    a sh:NodeShape ;
+    sh:targetClass :Disposition ;
+
+    # Must involve a Property
+    sh:property [
+        sh:path :involves ;
+        sh:class :Property ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Every disposition must involve exactly one property." ;
+    ] ;
+
+    # Must have a sell date (required, must be xsd:date)
+    sh:property [
+        sh:path :sellDate ;
+        sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Disposition must have a valid sellDate (xsd:date)." ;
+    ] ;
+
+    # Must have a potential gain (integer)
+    sh:property [
+        sh:path :potentialGain ;
+        sh:datatype xsd:integer ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Disposition must specify potentialGain as an integer." ;
+    ] ;
+
+    # Optional: partial exclusion reason, but if present it must be a ReasonType
+    sh:property [
+        sh:path :partialExclusionReason ;
+        sh:class :ReasonType ;
+	sh:in (
+	    :EmploymentRelatedReason
+        :HealthRelatedReason
+        :UnforeseenCircumstanceReason
+	    :NonQualifyingReason
+	) ;
+        sh:maxCount 1 ;
+        sh:message "partialExclusionReason must reference a valid ReasonType." ;
+    ] .
+
+:ReturnShape
+    a sh:NodeShape ;
+    sh:targetClass :Return ;
+
+    # Must associate with at least one Taxpayer
+    sh:property [
+        sh:path :associates ;
+        sh:class :Taxpayer ;
+        sh:minCount 1 ;
+        sh:message "A Return must have at least one associated Taxpayer." ;
+    ] ;
+
+    # Must be linked to at least one Disposition
+    sh:property [
+        sh:path :linkedTo ;
+        sh:class :Disposition ;
+        sh:minCount 1 ;
+        sh:message "A Return must be linked to at least one Disposition." ;
+    ] .
+
+:SingleReturnShape
+    a sh:NodeShape ;
+    sh:targetClass :SingleReturn ;
+    sh:property [
+        sh:path :exclusionCap ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 250000 ;
+        sh:maxInclusive 250000 ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "SingleReturn exclusionCap must be exactly $250,000." ;
+    ] .
+
+:JointReturnShape
+    a sh:NodeShape ;
+    sh:targetClass :JointReturn ;
+    sh:property [
+        sh:path :exclusionCap ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 500000 ;
+        sh:maxInclusive 500000 ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "JointReturn exclusionCap must be exactly $500,000." ;
+    ] .

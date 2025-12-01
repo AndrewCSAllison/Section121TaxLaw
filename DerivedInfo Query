@@ -1,0 +1,340 @@
+PREFIX : <http://example.org/section121#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+INSERT {
+  GRAPH :DerivedInfo {
+    ?derivedNode a :DerivedInfo ;
+                 :forTaxpayer ?taxpayer ;
+                 :sellDate ?sellDate ;
+                 :singleReturnFlag ?isSingleReturn ;
+                 :singleExclusionCap ?singleCap ;
+                 :jointReturnFlag ?isJointReturn ;
+                 :jointExclusionCap ?jointCap ;
+                 :spouseOwnDays ?spouseOwnDaysSafe ;
+                 :spouseResDays ?spouseResDaysSafe ;
+                 :spouseDaysSincePrevQualifyingSale ?spouseDaysSincePrevQualifyingSale ;
+                 :forDisposition ?disposition ;
+                 :hasReason ?reasonType ;
+                 :involves ?property ;
+                 :potentialGain ?gain ;
+                 :ownDays ?ownDaysSafe ;
+                 :resDays ?resDaysSafe ;
+                 :shorterDays ?shorterDaysSafe ;
+                 :numeratorDays ?numeratorDaysSafe ;
+                 :fiveYearCutoff ?fiveYearCutoff ;
+                 :daysSincePrevQualifyingSale ?daysSincePrevQualifyingSale .
+    ?disposition :hasDerivedInfo ?derivedNode .
+  }
+}
+WHERE {
+  ?taxpayer a :Taxpayer ;
+            :disposesOf ?disposition .
+  ?disposition :involves ?property ;
+               :sellDate ?sellDate ;
+               :potentialGain ?gain .
+
+  OPTIONAL { ?disposition :partialExclusionReason ?reason }
+  BIND(?reason AS ?reasonType)
+
+  # Compute five-year cutoff as xsd:date once at outer scope (used for insertion)
+  BIND(year(?sellDate) - 5 AS ?cutYear)
+  BIND(month(?sellDate) AS ?cutMonth)
+  BIND(day(?sellDate) AS ?cutDay)
+  BIND(xsd:date(CONCAT(
+    STR(?cutYear), "-",
+    IF(?cutMonth<10,"0",""), STR(?cutMonth), "-",
+    IF(?cutDay<10,"0",""), STR(?cutDay)
+  )) AS ?fiveYearCutoff)
+
+  # Single & joint return flags/caps
+  OPTIONAL {
+    ?singleReturn a :SingleReturn ;
+                  :linkedTo ?disposition ;
+                  :associates ?taxpayer ;
+                  :exclusionCap ?singleCap .
+  }
+  BIND(IF(bound(?singleReturn), true, false) AS ?isSingleReturn)
+
+  OPTIONAL {
+    ?jointReturn a :JointReturn ;
+                 :linkedTo ?disposition ;
+                 :associates ?taxpayer ;
+                 :exclusionCap ?jointCap .
+  }
+  BIND(IF(bound(?jointReturn), true, false) AS ?isJointReturn)
+
+  # --- Aggregate ownership days within the 5-year window (taxpayer) ---
+  OPTIONAL {
+    SELECT ?taxpayer ?property (SUM(?windowDays) AS ?ownDays)
+    WHERE {
+      # Bind sellDate locally (correlated subselect) and recompute cutoff
+      ?taxpayer :disposesOf ?disp .
+      ?disp :sellDate ?sellDate .
+
+      BIND(year(?sellDate) - 5 AS ?cutYearLoc)
+      BIND(month(?sellDate) AS ?cutMonthLoc)
+      BIND(day(?sellDate) AS ?cutDayLoc)
+      BIND(xsd:date(CONCAT(
+        STR(?cutYearLoc), "-",
+        IF(?cutMonthLoc<10,"0",""), STR(?cutMonthLoc), "-",
+        IF(?cutDayLoc<10,"0",""), STR(?cutDayLoc)
+      )) AS ?fiveYearCutoffLoc)
+
+      ?taxpayer :owns ?ownInterval .
+      ?ownInterval :hasOwnershipOf ?property ;
+                   :ownershipStart ?ownStart ;
+                   :ownershipEnd ?ownEnd .
+
+      # Clamp to [fiveYearCutoffLoc, sellDate]
+      BIND(IF(?ownStart < ?fiveYearCutoffLoc, ?fiveYearCutoffLoc, ?ownStart) AS ?startBoundRaw)
+      BIND(IF(?ownEnd   > ?sellDate,          ?sellDate,          ?ownEnd)   AS ?endBoundRaw)
+
+      # Cast clamped bounds to dateTime for Y/M/D functions
+      BIND(xsd:dateTime(?startBoundRaw) AS ?startBound)
+      BIND(xsd:dateTime(?endBoundRaw)   AS ?endBound)
+
+      # Compute days only if overlap
+      BIND(
+        IF(?endBound >= ?startBound,
+           xsd:integer(
+             ((year(?endBound) - year(?startBound)) * 365) +
+             ((month(?endBound) - month(?startBound)) * 30.4167) +
+             ((day(?endBound) - day(?startBound)) + 1)
+           ),
+           0
+        ) AS ?windowDays
+      )
+    }
+    GROUP BY ?taxpayer ?property
+  }
+
+  # --- Aggregate residence days within the 5-year window (taxpayer) ---
+  OPTIONAL {
+    SELECT ?taxpayer ?property (SUM(?resWindowDays) AS ?resDays)
+    WHERE {
+      # Bind sellDate locally and recompute cutoff
+      ?taxpayer :disposesOf ?disp .
+      ?disp :sellDate ?sellDate .
+
+      BIND(year(?sellDate) - 5 AS ?cutYearLoc)
+      BIND(month(?sellDate) AS ?cutMonthLoc)
+      BIND(day(?sellDate) AS ?cutDayLoc)
+      BIND(xsd:date(CONCAT(
+        STR(?cutYearLoc), "-",
+        IF(?cutMonthLoc<10,"0",""), STR(?cutMonthLoc), "-",
+        IF(?cutDayLoc<10,"0",""), STR(?cutDayLoc)
+      )) AS ?fiveYearCutoffLoc)
+
+      ?taxpayer :uses ?resInterval .
+      ?resInterval :hasResidenceOf ?property ;
+                   :residenceStart ?resStart ;
+                   :residenceEnd ?resEnd .
+
+      # Clamp to [fiveYearCutoffLoc, sellDate]
+      BIND(IF(?resStart < ?fiveYearCutoffLoc, ?fiveYearCutoffLoc, ?resStart) AS ?resStartBoundRaw)
+      BIND(IF(?resEnd   > ?sellDate,          ?sellDate,          ?resEnd)   AS ?resEndBoundRaw)
+
+      # Cast clamped bounds to dateTime
+      BIND(xsd:dateTime(?resStartBoundRaw) AS ?resStartBound)
+      BIND(xsd:dateTime(?resEndBoundRaw)   AS ?resEndBound)
+
+      # Compute days only if overlap
+      BIND(
+        IF(?resEndBound >= ?resStartBound,
+           xsd:integer(
+             ((year(?resEndBound) - year(?resStartBound)) * 365) +
+             ((month(?resEndBound) - month(?resStartBound)) * 30.4167) +
+             ((day(?resEndBound) - day(?resStartBound)) + 1)
+           ),
+           0
+        ) AS ?resWindowDays
+      )
+    }
+    GROUP BY ?taxpayer ?property
+  }
+
+  # --- Spouse ownership aggregated within the 5-year window (keyed to taxpayer) ---
+  OPTIONAL {
+    SELECT ?taxpayer ?property (SUM(?spouseOwnWindowDays) AS ?spouseOwnDays)
+    WHERE {
+      # Use correlated disposition ?disp and bind joint return to get spouse for this taxpayer/disposition
+      ?jointReturn a :JointReturn ;
+                   :linkedTo ?disp ;
+                   :associates ?taxpayer ;
+                   :associates ?spouse .
+      FILTER(?spouse != ?taxpayer)
+      ?disp :sellDate ?sellDate .
+
+      BIND(year(?sellDate) - 5 AS ?cutYearLoc)
+      BIND(month(?sellDate) AS ?cutMonthLoc)
+      BIND(day(?sellDate) AS ?cutDayLoc)
+      BIND(xsd:date(CONCAT(
+        STR(?cutYearLoc), "-",
+        IF(?cutMonthLoc<10,"0",""), STR(?cutMonthLoc), "-",
+        IF(?cutDayLoc<10,"0",""), STR(?cutDayLoc)
+      )) AS ?fiveYearCutoffLoc)
+
+      ?spouse :owns ?spouseOwn .
+      ?spouseOwn :hasOwnershipOf ?property ;
+                 :ownershipStart ?spouseOwnStart ;
+                 :ownershipEnd ?spouseOwnEnd .
+
+      # Clamp
+      BIND(IF(?spouseOwnStart < ?fiveYearCutoffLoc, ?fiveYearCutoffLoc, ?spouseOwnStart) AS ?spouseOwnStartBoundRaw)
+      BIND(IF(?spouseOwnEnd   > ?sellDate,          ?sellDate,          ?spouseOwnEnd)   AS ?spouseOwnEndBoundRaw)
+
+      # Cast
+      BIND(xsd:dateTime(?spouseOwnStartBoundRaw) AS ?spouseOwnStartBound)
+      BIND(xsd:dateTime(?spouseOwnEndBoundRaw)   AS ?spouseOwnEndBound)
+
+      # Overlap days
+      BIND(
+        IF(?spouseOwnEndBound >= ?spouseOwnStartBound,
+           xsd:integer(
+             ((year(?spouseOwnEndBound) - year(?spouseOwnStartBound)) * 365) +
+             ((month(?spouseOwnEndBound) - month(?spouseOwnStartBound)) * 30.4167) +
+             ((day(?spouseOwnEndBound) - day(?spouseOwnStartBound)) + 1)
+           ),
+           0
+        ) AS ?spouseOwnWindowDays
+      )
+    }
+    GROUP BY ?taxpayer ?property
+  }
+
+  # --- Spouse residence aggregated within the 5-year window (keyed to taxpayer) ---
+  OPTIONAL {
+    SELECT ?taxpayer ?property (SUM(?spouseResWindowDays) AS ?spouseResDays)
+    WHERE {
+      ?jointReturn a :JointReturn ;
+                   :linkedTo ?disp ;
+                   :associates ?taxpayer ;
+                   :associates ?spouse .
+      FILTER(?spouse != ?taxpayer)
+      ?disp :sellDate ?sellDate .
+
+      BIND(year(?sellDate) - 5 AS ?cutYearLoc)
+      BIND(month(?sellDate) AS ?cutMonthLoc)
+      BIND(day(?sellDate) AS ?cutDayLoc)
+      BIND(xsd:date(CONCAT(
+        STR(?cutYearLoc), "-",
+        IF(?cutMonthLoc<10,"0",""), STR(?cutMonthLoc), "-",
+        IF(?cutDayLoc<10,"0",""), STR(?cutDayLoc)
+      )) AS ?fiveYearCutoffLoc)
+
+      ?spouse :uses ?spouseRes .
+      ?spouseRes :hasResidenceOf ?property ;
+                 :residenceStart ?spouseResStart ;
+                 :residenceEnd ?spouseResEnd .
+
+      # Clamp
+      BIND(IF(?spouseResStart < ?fiveYearCutoffLoc, ?fiveYearCutoffLoc, ?spouseResStart) AS ?spouseResStartBoundRaw)
+      BIND(IF(?spouseResEnd   > ?sellDate,          ?sellDate,          ?spouseResEnd)   AS ?spouseResEndBoundRaw)
+
+      # Cast
+      BIND(xsd:dateTime(?spouseResStartBoundRaw) AS ?spouseResStartBound)
+      BIND(xsd:dateTime(?spouseResEndBoundRaw)   AS ?spouseResEndBound)
+
+      # Overlap days
+      BIND(
+        IF(?spouseResEndBound >= ?spouseResStartBound,
+           xsd:integer(
+             ((year(?spouseResEndBound) - year(?spouseResStartBound)) * 365) +
+             ((month(?spouseResEndBound) - month(?spouseResStartBound)) * 30.4167) +
+             ((day(?spouseResEndBound) - day(?spouseResStartBound)) + 1)
+           ),
+           0
+        ) AS ?spouseResWindowDays
+      )
+    }
+    GROUP BY ?taxpayer ?property
+  }
+
+  # Shorter and numerator logic
+  BIND(IF(?ownDays < ?resDays, ?ownDays, ?resDays) AS ?shorterDays)
+  BIND(IF(?spouseOwnDays < ?spouseResDays, ?spouseOwnDays, ?spouseResDays) AS ?spouseShorterDays)
+
+  # Previous sale for two-year lookback (taxpayer)
+  OPTIONAL {
+    SELECT ?taxpayer ?disposition (MAX(?prevSellDate) AS ?mostRecentPrev)
+    WHERE {
+      ?disposition :sellDate ?sellDate .
+      ?taxpayer :disposesOf ?prevDisposition .
+      ?prevDisposition :sellDate ?prevSellDate .
+      FILTER(?prevDisposition != ?disposition && ?prevSellDate < ?sellDate)
+    }
+    GROUP BY ?taxpayer ?disposition
+  }
+
+  BIND(
+    IF(bound(?mostRecentPrev),
+       xsd:integer(
+         ((year(?sellDate) - year(?mostRecentPrev)) * 365) +
+         ((month(?sellDate) - month(?mostRecentPrev)) * 30.4167) +
+         ((day(?sellDate) - day(?mostRecentPrev)) + 1)
+       ),
+       -1
+    ) AS ?daysSincePrevQualifyingSale
+  )
+
+  OPTIONAL {
+  SELECT ?taxpayer ?disposition (MAX(?spousePrevSellDate) AS ?spouseMostRecentPrev)
+  WHERE {
+    ?taxpayer :disposesOf ?disposition .
+    ?jointReturn a :JointReturn ;
+                 :linkedTo ?disposition ;
+                 :associates ?taxpayer ;
+                 :associates ?spouse .
+    FILTER(?spouse != ?taxpayer)
+
+    # Look at any disposition of the spouse (single or joint)
+    ?spouse :disposesOf ?spousePrevDisposition .
+    ?spousePrevDisposition :sellDate ?spousePrevSellDate .
+            FILTER(?spousePrevDisposition != ?disposition) .
+
+    # Must be before the current disposition
+    ?disposition :sellDate ?sellDate .
+    FILTER(?spousePrevSellDate < ?sellDate)
+  }
+  GROUP BY ?taxpayer ?disposition
+}
+
+
+
+  # Compute spouseDaysSincePrevQualifyingSale (keyed to taxpayer)
+  BIND(
+    IF(bound(?spouseMostRecentPrev),
+       xsd:integer(
+         ((year(?sellDate) - year(?spouseMostRecentPrev)) * 365) +
+         ((month(?sellDate) - month(?spouseMostRecentPrev)) * 30.4167) +
+         ((day(?sellDate) - day(?spouseMostRecentPrev)) + 1)
+       ),
+       -1
+    ) AS ?spouseDaysSincePrevQualifyingSale
+  )
+
+  # Numerator (taxpayer only)
+  BIND(
+    IF(?daysSincePrevQualifyingSale >= 0,
+       IF(?daysSincePrevQualifyingSale < ?shorterDays, ?daysSincePrevQualifyingSale, ?shorterDays),
+       ?shorterDays
+    ) AS ?numeratorDays
+  )
+
+  # Safe bindings to satisfy SHACL
+  BIND(xsd:integer(COALESCE(?ownDays, 0)) AS ?ownDaysSafe)
+  BIND(xsd:integer(COALESCE(?resDays, 0)) AS ?resDaysSafe)
+  BIND(xsd:integer(COALESCE(?shorterDays, 0)) AS ?shorterDaysSafe)
+  BIND(xsd:integer(COALESCE(?numeratorDays, 0)) AS ?numeratorDaysSafe)
+  BIND(xsd:integer(COALESCE(?spouseOwnDays, 0)) AS ?spouseOwnDaysSafe)
+  BIND(xsd:integer(COALESCE(?spouseResDays, 0)) AS ?spouseResDaysSafe)
+  BIND(xsd:integer(COALESCE(?spouseDaysSincePrevQualifyingSale, -1)) AS ?spouseDaysSincePrevQualifyingSaleSafe)
+
+  # Derived node
+  BIND(IRI(CONCAT(
+      STR(:),
+      "DerivedInfo_",
+      STRAFTER(STR(?taxpayer), "#"), "_",
+      STRAFTER(STR(?disposition), "#")
+  )) AS ?derivedNode)
+}

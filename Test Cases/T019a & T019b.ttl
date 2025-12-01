@@ -1,0 +1,68 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Taxpayer Individuals
+#########################
+:T019a a :Taxpayer .
+:T019b a :Taxpayer .
+
+#########################
+# Property Individual
+#########################
+:Property_T019 a :Property ;
+    rdfs:label "Michigan House" .
+
+#########################
+# Ownership and Residence Intervals
+#########################
+:T019a_OwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :Property_T019 ;
+    :ownershipStart "2003-05-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date .
+
+:T019b_OwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :Property_T019 ;
+    :ownershipStart "2003-05-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date .
+
+:T019a_ResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :Property_T019 ;
+    :residenceStart "2003-05-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+:T019b_ResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :Property_T019 ;
+    :residenceStart "2003-05-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+#########################
+# Disposition
+#########################
+:T019_Disposition a :Disposition ;
+    :involves :Property_T019 ;
+    :sellDate "2004-12-31"^^xsd:date ;
+    :potentialGain 450000 ;
+    :partialExclusionReason :NonQualifyingReason .
+
+#########################
+# Linking Taxpayers to Ownership/Residence/Disposition
+#########################
+:T019a :owns :T019a_OwnershipInterval ;
+        :uses :T019a_ResidenceInterval ;
+        :disposesOf :T019_Disposition .
+
+:T019b :owns :T019b_OwnershipInterval ;
+        :uses :T019b_ResidenceInterval ;
+        :disposesOf :T019_Disposition .
+
+#########################
+# Tax Return
+#########################
+:T019_Return a :JointReturn ;
+    :associates :T019a, :T019b ;
+    :linkedTo :T019_Disposition ;
+    :exclusionCap 500000 .

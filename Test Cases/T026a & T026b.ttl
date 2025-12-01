@@ -1,0 +1,42 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+################################################################################
+# Scenario T026
+################################################################################
+
+:T026a a :Taxpayer .
+:T026b a :Taxpayer .
+
+:Home_T026 a :Property .
+
+:Own_T026a a :OwnershipUseInterval ;
+    :ownershipStart "2018-01-01"^^xsd:date ;
+    :ownershipEnd "2025-06-01"^^xsd:date ;
+    :hasOwnershipOf :Home_T026 .
+
+:Use_T026a a :ResidenceUseInterval ;
+    :residenceStart "2018-01-01"^^xsd:date ;
+    :residenceEnd "2025-06-01"^^xsd:date ;
+    :hasResidenceOf :Home_T026 .
+
+:Use_T026b a :ResidenceUseInterval ;
+    :residenceStart "2021-01-01"^^xsd:date ;
+    :residenceEnd "2025-06-01"^^xsd:date ;
+    :hasResidenceOf :Home_T026 .
+
+:Disp_T026 a :Disposition ;
+    :sellDate "2025-06-01"^^xsd:date ;
+    :potentialGain 470000 ;
+    :involves :Home_T026 .
+
+:T026a :owns :Own_T026a ; :uses :Use_T026a ; :disposesOf :Disp_T026 .
+:T026b :uses :Use_T026b ; :disposesOf :Disp_T026 .
+
+:Return_T026 a :JointReturn ;
+    :exclusionCap 500000 ;
+    :associates :T026a, :T026b ;
+    :linkedTo :Disp_T026 .

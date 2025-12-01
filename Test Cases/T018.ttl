@@ -1,0 +1,50 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+#########################
+# Taxpayer Individual
+#########################
+:T018 a :Taxpayer ;
+    :owns :T018_OwnershipInterval ;
+    :uses :T018_ResidenceInterval ;
+    :disposesOf :T018_Disposition .
+
+#########################
+# Property Individual
+#########################
+:T018_Property a :Property ;
+    rdfs:label "Minnesota House" .
+
+#########################
+# Ownership and Residence Intervals
+#########################
+:T018_OwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :T018_Property ;
+    :ownershipStart "2003-06-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date .
+
+:T018_ResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :T018_Property ;
+    :residenceStart "2003-06-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+#########################
+# Disposition
+#########################
+:T018_Disposition a :Disposition ;
+    :involves :T018_Property ;
+    :sellDate "2004-12-31"^^xsd:date ;
+    :potentialGain 250000 ;
+    :partialExclusionReason :HealthRelatedReason .
+
+#########################
+# Tax Return
+#########################
+:T018_Return a :SingleReturn ;
+    :associates :T018 ;
+    :linkedTo :T018_Disposition ;
+    :exclusionCap 250000 .

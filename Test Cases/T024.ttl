@@ -1,0 +1,55 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Taxpayer
+#########################
+:T024 a :Taxpayer .
+
+#########################
+# Property
+#########################
+:House2003 a :Property ;
+    rdfs:label "House on Heavily Traveled Road 2003" ;
+    rdfs:comment "C purchased and lived on a property located on a heavily traveled road." .
+
+#########################
+# Ownership and Residence Intervals
+#########################
+:T024_HouseOwnership a :OwnershipUseInterval ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2004-06-30"^^xsd:date ;
+    :hasOwnershipOf :House2003 .
+
+:T024_HouseResidence a :ResidenceUseInterval ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-06-30"^^xsd:date ;
+    :hasResidenceOf :House2003 .
+
+#########################
+# Disposition
+#########################
+:Disposition_2004_T024 a :Disposition ;
+    :sellDate "2004-06-30"^^xsd:date ;
+    :potentialGain 80000 ;  # Example potential gain
+    :involves :House2003 ;
+    :partialExclusionReason :NonQualifyingReason .
+
+#########################
+# Linking Taxpayer to Ownership, Residence, and Disposition
+#########################
+:T024 :owns :T024_HouseOwnership ;
+      :uses :T024_HouseResidence ;
+      :disposesOf :Disposition_2004_T024 .
+
+#########################
+# Single Return
+# Exclusion cap is always 250k for single returns
+#########################
+:T024_SingleReturn a :SingleReturn ;
+    :associates :T024 ;
+    :linkedTo :Disposition_2004_T024 ;
+    :exclusionCap 250000 .

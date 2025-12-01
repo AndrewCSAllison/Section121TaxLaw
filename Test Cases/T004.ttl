@@ -1,0 +1,58 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Taxpayer T004
+#########################
+:T004 a :Taxpayer ;
+    rdfs:label "T004" ;
+    rdfs:comment "Owned and used house as principal residence since 1986. Moved 1/31/1998. Rented house until 4/18/2000, when sold. Eligible for §121 exclusion." ;
+    :owns :Own_House_1986_2000 ;
+    :uses :ResUse_House_1986_1998 ;
+    :disposesOf :Disposition_House_2000 .
+
+#########################
+# Property
+#########################
+:Property_House a :Property ;
+    rdfs:label "House" ;
+    rdfs:comment "Principal residence owned and used by T004." .
+
+#########################
+# Ownership interval
+#########################
+:Own_House_1986_2000 a :OwnershipUseInterval ;
+    :ownershipStart "1986-01-01"^^xsd:date ;
+    :ownershipEnd   "2000-04-18"^^xsd:date ;
+    :hasOwnershipOf :Property_House ;
+    rdfs:comment "Ownership from purchase in 1986 until sale in 2000." .
+
+#########################
+# Residence use interval
+#########################
+:ResUse_House_1986_1998 a :ResidenceUseInterval ;
+    :residenceStart "1986-01-01"^^xsd:date ;
+    :residenceEnd   "1998-01-31"^^xsd:date ;
+    :hasResidenceOf :Property_House ;
+    rdfs:comment "Principal residence use until move to another state." .
+
+#########################
+# Disposition
+#########################
+:Disposition_House_2000 a :Disposition ;
+    :sellDate "2000-04-18"^^xsd:date ;
+    :potentialGain 200000 ;
+    :involves :Property_House ;
+    rdfs:comment "Sale of house in 2000. §121 exclusion applies because ownership/use tests are satisfied." .
+
+#########################
+# Return
+#########################
+:Return_T004_2000 a :SingleReturn ;
+    :exclusionCap 250000 ;
+    :associates :T004 ;
+    :linkedTo :Disposition_House_2000 ;
+    rdfs:comment "Single filer return for T004 in 2000. §121 exclusion applied." .

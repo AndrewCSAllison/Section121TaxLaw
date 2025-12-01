@@ -1,0 +1,70 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Taxpayers
+#########################
+:T025a a :Taxpayer .
+:T025b a :Taxpayer .
+
+#########################
+# Property
+#########################
+:House2003_DE a :Property ;
+    rdfs:label "House 2003 D&E" ;
+    rdfs:comment "Purchased and used as principal residence; sale triggered by broken engagement." .
+
+#########################
+# Ownership and Residence Intervals
+# (Less than 2 years to trigger reduced exclusion)
+#########################
+:T025a_HouseOwnership a :OwnershipUseInterval ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2004-06-30"^^xsd:date ;
+    :hasOwnershipOf :House2003_DE .
+
+:T025a_HouseResidence a :ResidenceUseInterval ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-06-30"^^xsd:date ;
+    :hasResidenceOf :House2003_DE .
+
+:T025b_HouseOwnership a :OwnershipUseInterval ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2004-06-30"^^xsd:date ;
+    :hasOwnershipOf :House2003_DE .
+
+:T025b_HouseResidence a :ResidenceUseInterval ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-06-30"^^xsd:date ;
+    :hasResidenceOf :House2003_DE .
+
+#########################
+# Disposition
+#########################
+:Disposition_2004_DE a :Disposition ;
+    :sellDate "2004-06-30"^^xsd:date ;
+    :potentialGain 670000 ;  # Example potential gain
+    :involves :House2003_DE ;
+    :partialExclusionReason :UnforeseenCircumstanceReason .
+
+#########################
+# Linking Taxpayers to Ownership, Residence, and Disposition
+#########################
+:T025a :owns :T025a_HouseOwnership ;
+       :uses :T025a_HouseResidence ;
+       :disposesOf :Disposition_2004_DE .
+
+:T025b :owns :T025b_HouseOwnership ;
+       :uses :T025b_HouseResidence ;
+       :disposesOf :Disposition_2004_DE .
+
+#########################
+# Joint Return with Reduced Exclusion
+#########################
+:T025_JointReturn a :JointReturn ;
+    :associates :T025a , :T025b ;
+    :linkedTo :Disposition_2004_DE ;
+    :exclusionCap 500000 .  # Reduced maximum exclusion under §121(c)(2)

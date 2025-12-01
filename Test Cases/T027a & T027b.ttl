@@ -1,0 +1,37 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+################################################################################
+# Scenario T027
+################################################################################
+
+:T027a a :Taxpayer .
+:T027b a :Taxpayer .
+
+:Home_T027 a :Property .
+
+:Own_T027a a :OwnershipUseInterval ;
+    :ownershipStart "2020-01-01"^^xsd:date ;
+    :ownershipEnd "2024-09-01"^^xsd:date ;
+    :hasOwnershipOf :Home_T027 .
+
+:Use_T027a a :ResidenceUseInterval ;
+    :residenceStart "2020-01-01"^^xsd:date ;
+    :residenceEnd "2024-09-01"^^xsd:date ;
+    :hasResidenceOf :Home_T027 .
+
+:Disp_T027 a :Disposition ;
+    :sellDate "2024-09-01"^^xsd:date ;
+    :potentialGain 300000 ;
+    :involves :Home_T027 .
+
+:T027a :owns :Own_T027a ; :uses :Use_T027a ; :disposesOf :Disp_T027 .
+:T027b :disposesOf :Disp_T027 .
+
+:Return_T027 a :JointReturn ;
+    :exclusionCap 500000 ;
+    :associates :T027a, :T027b ;
+    :linkedTo :Disp_T027 .

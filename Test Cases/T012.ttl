@@ -1,0 +1,48 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Taxpayer Individual
+#########################
+:T012 a :Taxpayer ;
+    :disposesOf :T012_Disposition ;
+    :owns :T012_OwnershipInterval ;
+    :uses :T012_ResidenceInterval .
+
+#########################
+# Ownership & Residence Intervals
+#########################
+:T012_OwnershipInterval a :OwnershipUseInterval ;
+    :ownershipStart "2002-01-01"^^xsd:date ;
+    :ownershipEnd "2004-01-15"^^xsd:date ;
+    :hasOwnershipOf :T012_Property .
+
+:T012_ResidenceInterval a :ResidenceUseInterval ;
+    :residenceStart "2002-01-01"^^xsd:date ;
+    :residenceEnd "2003-05-01"^^xsd:date ;
+    :hasResidenceOf :T012_Property .
+
+#########################
+# Property
+#########################
+:T012_Property a :Property .
+
+#########################
+# Disposition (Sale)
+#########################
+:T012_Disposition a :Disposition ;
+    :sellDate "2004-01-15"^^xsd:date ;
+    :involves :T012_Property ;
+    :partialExclusionReason :EmploymentRelatedReason ;
+    :potentialGain "200000"^^xsd:integer .
+
+#########################
+# Single Return
+#########################
+:T012_Return a :SingleReturn ;
+    :associates :T012 ;
+    :linkedTo :T012_Disposition ;
+    :exclusionCap 250000 .

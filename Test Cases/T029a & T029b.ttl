@@ -1,0 +1,52 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+################################################################################
+# Scenario T029
+################################################################################
+
+:T029a a :Taxpayer .
+:T029b a :Taxpayer .
+
+:Home_T029 a :Property .
+
+:Own_T029a a :OwnershipUseInterval ;
+    :ownershipStart "2020-01-01"^^xsd:date ;
+    :ownershipEnd "2025-07-01"^^xsd:date ;
+    :hasOwnershipOf :Home_T029 .
+
+:Own_T029b a :OwnershipUseInterval ;
+    :ownershipStart "2020-01-01"^^xsd:date ;
+    :ownershipEnd "2025-07-01"^^xsd:date ;
+    :hasOwnershipOf :Home_T029 .
+
+:Use_T029a a :ResidenceUseInterval ;
+    :residenceStart "2020-01-01"^^xsd:date ;
+    :residenceEnd "2025-07-01"^^xsd:date ;
+    :hasResidenceOf :Home_T029 .
+
+:Use_T029b_1 a :ResidenceUseInterval ;
+    :residenceStart "2020-01-01"^^xsd:date ;
+    :residenceEnd "2021-12-31"^^xsd:date ;
+    :hasResidenceOf :Home_T029 .
+
+:Use_T029b_2 a :ResidenceUseInterval ;
+    :residenceStart "2024-01-01"^^xsd:date ;
+    :residenceEnd "2025-07-01"^^xsd:date ;
+    :hasResidenceOf :Home_T029 .
+
+:Disp_T029 a :Disposition ;
+    :sellDate "2025-07-01"^^xsd:date ;
+    :potentialGain 380000 ;
+    :involves :Home_T029 .
+
+:T029a :owns :Own_T029a ; :uses :Use_T029a ; :disposesOf :Disp_T029 .
+:T029b :owns :Own_T029b ; :uses :Use_T029b_1, :Use_T029b_2 ; :disposesOf :Disp_T029 .
+
+:Return_T029 a :JointReturn ;
+    :exclusionCap 500000 ;
+    :associates :T029a, :T029b ;
+    :linkedTo :Disp_T029 .

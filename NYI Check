@@ -1,0 +1,74 @@
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX :     <http://example.org/section121#>
+
+SELECT DISTINCT ?s ?undefined ?type
+WHERE {
+
+  # Only validate the BASE data (not derived, not interpreted)
+  GRAPH <http://www.openrdf.org/schema/sesame#nil> {
+
+    #########################
+    # CLASSES (including subclasses)
+    #########################
+    {
+      ?s rdf:type ?undefined .
+      BIND("Class" AS ?type)
+
+      # Ignore derived + interpretation entities
+      FILTER(
+        !STRSTARTS(STR(?s), STR(:DerivedInfo_)) &&
+        !STRSTARTS(STR(?s), STR(:Interpretation_))
+      )
+
+      # Ignore RDF/RDFS/OWL classes
+      FILTER(!STRSTARTS(STR(?undefined), "http://www.w3.org/"))
+
+      # Undefined unless class or subclass is declared in ontology
+      FILTER NOT EXISTS {
+        GRAPH <https://example.org/section121/Ontology> {
+          ?undefined a owl:Class .
+        }
+      }
+      FILTER NOT EXISTS {
+        GRAPH <https://example.org/section121/Ontology> {
+          ?undefined rdfs:subClassOf ?anySuperclass .
+        }
+      }
+    }
+
+    UNION
+
+    #########################
+    # PROPERTIES
+    #########################
+    {
+      ?s ?undefined ?o .
+      BIND("Property" AS ?type)
+
+      # Ignore derived + interpretation entities
+      FILTER(
+        !STRSTARTS(STR(?s), STR(:DerivedInfo_)) &&
+        !STRSTARTS(STR(?s), STR(:Interpretation_))
+      )
+
+      # Ignore RDF/RDFS/OWL built-ins
+      FILTER(!STRSTARTS(STR(?undefined), "http://www.w3.org/"))
+      FILTER(!STRSTARTS(STR(?undefined), "http://proton"))
+
+      # Undefined unless declared as property in ontology
+      FILTER NOT EXISTS {
+        GRAPH <https://example.org/section121/Ontology> {
+          ?undefined a owl:ObjectProperty .
+        }
+      }
+      FILTER NOT EXISTS {
+        GRAPH <https://example.org/section121/Ontology> {
+          ?undefined a owl:DatatypeProperty .
+        }
+      }
+    }
+  }
+}
+ORDER BY ?type ?undefined

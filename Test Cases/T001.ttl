@@ -1,0 +1,78 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#################################################################
+# Ontology: Section 121 Example - Taxpayer T001
+#################################################################
+
+:T001 a :Taxpayer ;
+    rdfs:comment "Renamed from Taxpayer A per LLM instruction: owns two residences (New York, Florida) and lived in both from 1999 through 2004; New York is principal residence." .
+
+#################################################################
+# Properties (Individuals)
+#################################################################
+
+:Property_NY a :Property ;
+    rdfs:label "New York Residence" ;
+    rdfs:comment "New York residence — principal residence (7 months each year 1999–2004)." .
+
+:Property_FL a :Property ;
+    rdfs:label "Florida Residence" ;
+    rdfs:comment "Florida residence — secondary residence (5 months each year 1999–2004)." .
+
+#################################################################
+# Ownership Intervals
+#################################################################
+
+:T001_Own_NY a :OwnershipUseInterval ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_NY ;
+    rdfs:comment "Ownership interval for New York residence (covers years 1999–2004)." .
+
+:T001_Own_FL a :OwnershipUseInterval ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_FL ;
+    rdfs:comment "Ownership interval for Florida residence (covers years 1999–2004)." .
+
+:T001 :owns :T001_Own_NY , :T001_Own_FL .
+
+#################################################################
+# Residence Use Intervals
+#################################################################
+
+:T001_Res_NY a :ResidenceUseInterval ;
+    :residenceStart "1999-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_NY ;
+    rdfs:comment "Used as a residence by T001 for seven months of each year 1999–2004; treated as principal residence in absence of contrary facts." .
+
+:T001_Res_FL a :ResidenceUseInterval ;
+    :residenceStart "1999-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_FL ;
+    rdfs:comment "Used as a residence by T001 for five months of each year 1999–2004; not treated as principal residence in absence of contrary facts." .
+
+:T001 :uses :T001_Res_NY , :T001_Res_FL .
+
+#################################################################
+# Disposition and Return
+#################################################################
+
+:Disposition_NY_Sale a :Disposition ;
+    :sellDate "2004-12-31"^^xsd:date ;
+    :potentialGain 100000 ;
+    :involves :Property_NY ;
+    rdfs:comment "Disposition of New York residence; description states T001 would be eligible for §121 exclusion for this property." .
+
+:T001 :disposesOf :Disposition_NY_Sale .
+
+:Return_T001_2004 a :SingleReturn ;
+    :exclusionCap 250000 ;
+    :associates :T001 ;
+    :linkedTo :Disposition_NY_Sale ;
+    rdfs:comment "Single return associated with T001 for disposition(s) in 2004; exclusion cap set to $250,000 per LLM instruction for single returns." .
