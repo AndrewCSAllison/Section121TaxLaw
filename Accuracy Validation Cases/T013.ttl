@@ -1,0 +1,75 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+##############################
+# T013
+##############################
+
+:T013 a :Taxpayer .
+
+##############
+# Properties
+##############
+
+:Property_T013_House a :Property .
+:Property_T013_Land a :Property .
+
+##############
+# Ownership Intervals
+##############
+
+:Own_T013_House a :OwnershipUseInterval ;
+    :ownershipStart "2000-01-01"^^xsd:date ;
+    :ownershipEnd "2005-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T013_House .
+
+:Own_T013_Land a :OwnershipUseInterval ;
+    :ownershipStart "2001-01-01"^^xsd:date ;
+    :ownershipEnd "2005-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T013_Land .
+
+:T013 :owns :Own_T013_House , :Own_T013_Land .
+
+##############
+# Residence Use Intervals
+##############
+
+:Use_T013_House_2000_2005 a :ResidenceUseInterval ;
+    :residenceStart "2000-01-01"^^xsd:date ;
+    :residenceEnd "2005-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T013_House .
+
+:Use_T013_Land_2001_2005 a :ResidenceUseInterval ;
+    :residenceStart "2001-01-01"^^xsd:date ;
+    :residenceEnd "2005-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T013_Land .
+
+:T013 :uses :Use_T013_House_2000_2005 , :Use_T013_Land_2001_2005 .
+
+##############
+# Dispositions
+##############
+
+:Disp_T013_House a :Disposition ;
+    :sellDate "2005-07-01"^^xsd:date ;
+    :potentialGain "-15000"^^xsd:integer ;
+    :involves :Property_T013_House .
+
+:T013 :disposesOf :Disp_T013_House .
+
+:Disp_T013_Land a :Disposition ;
+    :sellDate "2005-07-01"^^xsd:date ;
+    :potentialGain "300000"^^xsd:integer ;
+    :involves :Property_T013_Land .
+
+:T013 :disposesOf :Disp_T013_Land .
+
+##############
+# Return (single filer)
+##############
+
+:Return_T013 a :SingleReturn ;
+    :associates :T013 ;
+    :linkedTo :Disp_T013_House , :Disp_T013_Land ;
+    :exclusionCap "250000"^^xsd:integer .

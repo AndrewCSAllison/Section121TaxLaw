@@ -1,0 +1,57 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+##############################
+# T016
+##############################
+
+:T016 a :Taxpayer .
+
+##############
+# Property
+##############
+
+:Property_T016_House a :Property .
+
+##############
+# Ownership Intervals (continuous)
+##############
+
+:Own_T016_House a :OwnershipUseInterval ;
+    :ownershipStart "1986-01-01"^^xsd:date ;
+    :ownershipEnd "2000-04-18"^^xsd:date ;
+    :hasOwnershipOf :Property_T016_House .
+
+:T016 :owns :Own_T016_House .
+
+##############
+# Residence Use Intervals
+##############
+
+:Use_T016_House_1986_1998 a :ResidenceUseInterval ;
+    :residenceStart "1986-01-01"^^xsd:date ;
+    :residenceEnd "1998-01-31"^^xsd:date ;
+    :hasResidenceOf :Property_T016_House .
+
+:T016 :uses :Use_T016_House_1986_1998 .
+
+##############
+# Disposition
+##############
+
+:Disp_T016_House a :Disposition ;
+    :sellDate "2000-04-18"^^xsd:date ;
+    :potentialGain "200000"^^xsd:integer ;
+    :involves :Property_T016_House .
+
+:T016 :disposesOf :Disp_T016_House .
+
+##############
+# Return (single filer)
+##############
+
+:Return_T016 a :SingleReturn ;
+    :associates :T016 ;
+    :linkedTo :Disp_T016_House ;
+    :exclusionCap "250000"^^xsd:integer .

@@ -1,0 +1,79 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+##############
+# Taxpayer
+##############
+
+:T001 a :Taxpayer .
+
+##############
+# Properties (New York & Florida)
+##############
+
+:Property_T001_NY a :Property .
+:Property_T001_FL a :Property .
+
+##############
+# Ownership Intervals
+##############
+
+:Own_T001_NY a :OwnershipUseInterval ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T001_NY .
+
+:Own_T001_FL a :OwnershipUseInterval ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T001_FL .
+
+:T001 :owns :Own_T001_NY , :Own_T001_FL .
+
+##############
+# Residence Use Intervals
+##############
+
+# New York residence — principal residence (7 months/year)
+:Use_T001_NY a :ResidenceUseInterval ;
+    :residenceStart "1999-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T001_NY .
+
+# Florida residence — 5 months/year, not principal residence
+:Use_T001_FL a :ResidenceUseInterval ;
+    :residenceStart "1999-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T001_FL .
+
+:T001 :uses :Use_T001_NY , :Use_T001_FL .
+
+##############
+# Dispositions (fabricated for completeness)
+##############
+
+# New York residence sold — eligible for §121 exclusion
+:Disp_T001_NY a :Disposition ;
+    :sellDate "2005-06-01"^^xsd:date ;
+    :potentialGain "300000"^^xsd:integer ;
+    :involves :Property_T001_NY .
+
+:T001 :disposesOf :Disp_T001_NY .
+
+# Florida residence sold — not eligible for exclusion (not principal residence)
+:Disp_T001_FL a :Disposition ;
+    :sellDate "2005-06-01"^^xsd:date ;
+    :potentialGain "150000"^^xsd:integer ;
+    :involves :Property_T001_FL . 
+
+:T001 :disposesOf :Disp_T001_FL .
+
+##############
+# Return (single filer)
+##############
+
+:Return_T001 a :SingleReturn ;
+    :associates :T001 ;
+    :linkedTo :Disp_T001_NY , :Disp_T001_FL ;
+    :exclusionCap "250000"^^xsd:integer .

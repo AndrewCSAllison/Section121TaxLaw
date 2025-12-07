@@ -1,0 +1,37 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+##############################
+# T019
+##############################
+
+:T019 a :Taxpayer .
+
+:Property_T019_House a :Property .
+
+:Own_T019_House a :OwnershipUseInterval ;
+    :ownershipStart "1992-06-15"^^xsd:date ;
+    :ownershipEnd "2001-02-28"^^xsd:date ;
+    :hasOwnershipOf :Property_T019_House .
+
+:T019 :owns :Own_T019_House .
+
+:Use_T019_House_1992_1999 a :ResidenceUseInterval ;
+    :residenceStart "1992-06-15"^^xsd:date ;
+    :residenceEnd "1999-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T019_House .
+
+:T019 :uses :Use_T019_House_1992_1999 .
+
+:Disp_T019_House a :Disposition ;
+    :sellDate "2001-02-28"^^xsd:date ;
+    :potentialGain "220000"^^xsd:integer ;
+    :involves :Property_T019_House .
+
+:T019 :disposesOf :Disp_T019_House .
+
+:Return_T019 a :SingleReturn ;
+    :associates :T019 ;
+    :linkedTo :Disp_T019_House ;
+    :exclusionCap "250000"^^xsd:integer .

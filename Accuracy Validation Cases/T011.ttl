@@ -1,0 +1,63 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+##############################
+# T011
+##############################
+
+:T011 a :Taxpayer .
+
+:Property_T011_AZ a :Property .
+:Property_T011_VA a :Property .
+
+:Own_T011_AZ a :OwnershipUseInterval ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2007-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T011_AZ .
+
+:Own_T011_VA a :OwnershipUseInterval ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2007-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T011_VA .
+
+:T011 :owns :Own_T011_AZ , :Own_T011_VA .
+
+# Residency periods
+:Use_T011_AZ_2003_2004 a :ResidenceUseInterval ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T011_AZ .
+
+:Use_T011_VA_2005_2006 a :ResidenceUseInterval ;
+    :residenceStart "2005-01-01"^^xsd:date ;
+    :residenceEnd "2006-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T011_VA .
+
+:Use_T011_AZ_2007 a :ResidenceUseInterval ;
+    :residenceStart "2007-01-01"^^xsd:date ;
+    :residenceEnd "2007-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T011_AZ .
+
+:T011 :uses :Use_T011_AZ_2003_2004 , :Use_T011_VA_2005_2006 , :Use_T011_AZ_2007 .
+
+# Dispositions (same date)
+:Disp_T011_AZ a :Disposition ;
+    :sellDate "2007-12-20"^^xsd:date ;
+    :potentialGain "240000"^^xsd:integer ;
+    :involves :Property_T011_AZ .
+
+:T011 :disposesOf :Disp_T011_AZ .
+
+:Disp_T011_VA a :Disposition ;
+    :sellDate "2007-12-20"^^xsd:date ;
+    :potentialGain "215000"^^xsd:integer ;
+    :involves :Property_T011_VA .
+
+:T011 :disposesOf :Disp_T011_VA .
+
+:Return_T011 a :SingleReturn ;
+    :associates :T011 ;
+    :linkedTo :Disp_T011_AZ , :Disp_T011_VA ;
+    :exclusionCap "250000"^^xsd:integer .
+ 

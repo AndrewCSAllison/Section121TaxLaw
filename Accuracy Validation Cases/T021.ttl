@@ -1,0 +1,57 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+##############################
+# T021
+##############################
+
+:T021 a :Taxpayer .
+
+##############
+# Property
+##############
+
+:Property_T021_House a :Property .
+
+##############
+# Ownership Intervals (continuous)
+##############
+
+:Own_T021_House a :OwnershipUseInterval ;
+    :ownershipStart "1986-01-01"^^xsd:date ;
+    :ownershipEnd "2001-07-01"^^xsd:date ;
+    :hasOwnershipOf :Property_T021_House .
+
+:T021 :owns :Own_T021_House .
+
+##############
+# Residence Use Intervals
+##############
+
+:Use_T021_House_1986_1997 a :ResidenceUseInterval ;
+    :residenceStart "1986-01-01"^^xsd:date ;
+    :residenceEnd "1997-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T021_House .
+
+:T021 :uses :Use_T021_House_1986_1997 .
+
+##############
+# Disposition
+##############
+
+:Disp_T021_House a :Disposition ;
+    :sellDate "2001-07-01"^^xsd:date ;
+    :potentialGain "180000"^^xsd:integer ;
+    :involves :Property_T021_House .
+
+:T021 :disposesOf :Disp_T021_House .
+
+##############
+# Return (single filer)
+##############
+
+:Return_T021 a :SingleReturn ;
+    :associates :T021 ;
+    :linkedTo :Disp_T021_House ;
+    :exclusionCap "250000"^^xsd:integer .

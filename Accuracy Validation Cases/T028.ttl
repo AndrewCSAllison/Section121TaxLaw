@@ -1,0 +1,52 @@
+##############################
+# T028
+##############################
+
+:T028 a :Taxpayer .
+
+:Property_T028_Townhouse a :Property .
+
+##############
+# Ownership
+##############
+
+:Own_T028_Townhouse a :OwnershipUseInterval ;
+    :ownershipStart "1996-11-05"^^xsd:date ;
+    :ownershipEnd "2000-03-01"^^xsd:date ;
+    :hasOwnershipOf :Property_T028_Townhouse .
+
+:T028 :owns :Own_T028_Townhouse .
+
+##############
+# Residence Use Intervals
+##############
+
+# Pre-ownership residence
+:Use_T028_Townhouse_1993_1995 a :ResidenceUseInterval ;
+    :residenceStart "1993-01-01"^^xsd:date ;
+    :residenceEnd "1995-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T028_Townhouse .
+
+# Residence after purchase
+:Use_T028_Townhouse_1996_1998 a :ResidenceUseInterval ;
+    :residenceStart "1996-11-05"^^xsd:date ;
+    :residenceEnd "1998-01-30"^^xsd:date ;
+    :hasResidenceOf :Property_T028_Townhouse .
+
+:T028 :uses :Use_T028_Townhouse_1993_1995 , :Use_T028_Townhouse_1996_1998 .
+
+##############
+# Disposition
+##############
+
+:Disp_T028_Townhouse a :Disposition ;
+    :sellDate "2000-03-01"^^xsd:date ;
+    :potentialGain "220000"^^xsd:integer ;
+    :involves :Property_T028_Townhouse .
+
+:T028 :disposesOf :Disp_T028_Townhouse .
+
+:Return_T028 a :SingleReturn ;
+    :associates :T028 ;
+    :linkedTo :Disp_T028_Townhouse ;
+    :exclusionCap "250000"^^xsd:integer .

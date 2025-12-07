@@ -1,0 +1,56 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+##############################
+# T027
+##############################
+
+:T027 a :Taxpayer .
+
+:Property_T027_Townhouse a :Property .
+
+##############
+# Ownership
+##############
+
+:Own_T027_Townhouse a :OwnershipUseInterval ;
+    :ownershipStart "1997-02-10"^^xsd:date ;
+    :ownershipEnd "2000-06-12"^^xsd:date ;
+    :hasOwnershipOf :Property_T027_Townhouse .
+
+:T027 :owns :Own_T027_Townhouse .
+
+##############
+# Residence Use Intervals
+##############
+
+# Pre-ownership principal residence (rental)
+:Use_T027_Townhouse_1993_1996 a :ResidenceUseInterval ;
+    :residenceStart "1993-01-01"^^xsd:date ;
+    :residenceEnd "1996-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T027_Townhouse .
+
+# Residence after purchase
+:Use_T027_Townhouse_1997_1998 a :ResidenceUseInterval ;
+    :residenceStart "1997-02-10"^^xsd:date ;
+    :residenceEnd "1998-04-20"^^xsd:date ;
+    :hasResidenceOf :Property_T027_Townhouse .
+
+:T027 :uses :Use_T027_Townhouse_1993_1996 , :Use_T027_Townhouse_1997_1998 .
+
+##############
+# Disposition
+##############
+
+:Disp_T027_Townhouse a :Disposition ;
+    :sellDate "2000-06-12"^^xsd:date ;
+    :potentialGain "195000"^^xsd:integer ;
+    :involves :Property_T027_Townhouse .
+
+:T027 :disposesOf :Disp_T027_Townhouse .
+
+:Return_T027 a :SingleReturn ;
+    :associates :T027 ;
+    :linkedTo :Disp_T027_Townhouse ;
+    :exclusionCap "250000"^^xsd:integer .

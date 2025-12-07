@@ -1,0 +1,56 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+##############################
+# T030
+##############################
+
+:T030 a :Taxpayer .
+
+:Property_T030_Townhouse a :Property .
+
+##############
+# Ownership
+##############
+
+:Own_T030_Townhouse a :OwnershipUseInterval ;
+    :ownershipStart "1996-12-12"^^xsd:date ;
+    :ownershipEnd "2000-04-21"^^xsd:date ;
+    :hasOwnershipOf :Property_T030_Townhouse .
+
+:T030 :owns :Own_T030_Townhouse .
+
+##############
+# Residence Use Intervals
+##############
+
+# Pre-ownership residence
+:Use_T030_Townhouse_1993_1996 a :ResidenceUseInterval ;
+    :residenceStart "1993-01-01"^^xsd:date ;
+    :residenceEnd "1996-12-11"^^xsd:date ;
+    :hasResidenceOf :Property_T030_Townhouse .
+
+# Residence after purchase
+:Use_T030_Townhouse_1996_1998 a :ResidenceUseInterval ;
+    :residenceStart "1996-12-12"^^xsd:date ;
+    :residenceEnd "1998-02-10"^^xsd:date ;
+    :hasResidenceOf :Property_T030_Townhouse .
+
+:T030 :uses :Use_T030_Townhouse_1993_1996 , :Use_T030_Townhouse_1996_1998 .
+
+##############
+# Disposition
+##############
+
+:Disp_T030_Townhouse a :Disposition ;
+    :sellDate "2000-04-21"^^xsd:date ;
+    :potentialGain "235000"^^xsd:integer ;
+    :involves :Property_T030_Townhouse .
+
+:T030 :disposesOf :Disp_T030_Townhouse .
+
+:Return_T030 a :SingleReturn ;
+    :associates :T030 ;
+    :linkedTo :Disp_T030_Townhouse ;
+    :exclusionCap "250000"^^xsd:integer .

@@ -1,0 +1,87 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+##############
+# Taxpayer
+##############
+
+:T002 a :Taxpayer .
+
+##############
+# Properties
+##############
+
+:Property_T002_VA a :Property .
+:Property_T002_ME a :Property .
+
+##############
+# Ownership Intervals (continuous)
+##############
+
+# Virginia ownership
+:Own_T002_VA a :OwnershipUseInterval ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2003-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T002_VA .
+
+# Maine ownership
+:Own_T002_ME a :OwnershipUseInterval ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2003-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T002_ME .
+
+:T002 :owns :Own_T002_VA , :Own_T002_ME .
+
+##############
+# Residence Use Intervals (three consolidated periods)
+##############
+
+# 1999–2000 Virginia
+:Use_T002_VA_1999_2000 a :ResidenceUseInterval ;
+    :residenceStart "1999-01-01"^^xsd:date ;
+    :residenceEnd "2000-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T002_VA .
+
+# 2001–2002 Maine
+:Use_T002_ME_2001_2002 a :ResidenceUseInterval ;
+    :residenceStart "2001-01-01"^^xsd:date ;
+    :residenceEnd "2002-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T002_ME .
+
+# 2003 Virginia
+:Use_T002_VA_2003 a :ResidenceUseInterval ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2003-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T002_VA .
+
+:T002 :uses :Use_T002_VA_1999_2000 , :Use_T002_ME_2001_2002 , :Use_T002_VA_2003 .
+
+##############
+# Dispositions (fabricated)
+##############
+
+# Virginia residence sold in 2003 — eligible for §121 exclusion
+:Disp_T002_VA a :Disposition ;
+    :sellDate "2003-12-20"^^xsd:date ;
+    :potentialGain "200000"^^xsd:integer ;
+    :involves :Property_T002_VA .
+
+:T002 :disposesOf :Disp_T002_VA .
+
+# Maine residence sold in 2003 — not eligible for exclusion
+:Disp_T002_ME a :Disposition ;
+    :sellDate "2003-12-20"^^xsd:date ;
+    :potentialGain "180000"^^xsd:integer ;
+    :involves :Property_T002_ME .
+
+:T002 :disposesOf :Disp_T002_ME .
+
+##############
+# Return (single filer)
+##############
+
+:Return_T002 a :SingleReturn ;
+    :associates :T002 ;
+    :linkedTo :Disp_T002_VA , :Disp_T002_ME ;
+    :exclusionCap "250000"^^xsd:integer .

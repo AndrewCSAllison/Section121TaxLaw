@@ -1,0 +1,79 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+##############################
+# T012
+##############################
+
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:T012 a :Taxpayer .
+
+##############
+# Properties
+##############
+
+:Property_T012_House a :Property .
+:Property_T012_Land a :Property .
+
+##############
+# Ownership Intervals (continuous)
+##############
+
+:Own_T012_House a :OwnershipUseInterval ;
+    :ownershipStart "1998-01-01"^^xsd:date ;
+    :ownershipEnd "2003-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T012_House .
+
+:Own_T012_Land a :OwnershipUseInterval ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2003-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T012_Land .
+
+:T012 :owns :Own_T012_House , :Own_T012_Land .
+
+##############
+# Residence Use Intervals
+##############
+
+:Use_T012_House_1998_2003 a :ResidenceUseInterval ;
+    :residenceStart "1998-01-01"^^xsd:date ;
+    :residenceEnd "2003-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T012_House .
+
+:Use_T012_Land_1998_2003 a :ResidenceUseInterval ;
+    :residenceStart "1998-01-01"^^xsd:date ;
+    :residenceEnd "2003-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T012_Land .
+
+:T012 :uses :Use_T012_House_1998_2003 , :Use_T012_Land_1998_2003 .
+
+##############
+# Dispositions
+##############
+
+:Disp_T012_House a :Disposition ;
+    :sellDate "2003-06-15"^^xsd:date ;
+    :potentialGain "-25000"^^xsd:integer ;
+    :involves :Property_T012_House .
+
+:T012 :disposesOf :Disp_T012_House .
+
+:Disp_T012_Land a :Disposition ;
+    :sellDate "2003-06-15"^^xsd:date ;
+    :potentialGain "270000"^^xsd:integer ;
+    :involves :Property_T012_Land .
+
+:T012 :disposesOf :Disp_T012_Land .
+
+##############
+# Return (single filer)
+##############
+
+:Return_T012 a :SingleReturn ;
+    :associates :T012 ;
+    :linkedTo :Disp_T012_House , :Disp_T012_Land ;
+    :exclusionCap "250000"^^xsd:integer .

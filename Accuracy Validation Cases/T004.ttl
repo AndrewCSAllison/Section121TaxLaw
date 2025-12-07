@@ -1,0 +1,62 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+##############################
+# T004
+##############################
+
+:T004 a :Taxpayer .
+
+:Property_T004_FL a :Property .
+:Property_T004_NY a :Property .
+
+:Own_T004_FL a :OwnershipUseInterval ;
+    :ownershipStart "1998-01-01"^^xsd:date ;
+    :ownershipEnd "2002-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T004_FL .
+
+:Own_T004_NY a :OwnershipUseInterval ;
+    :ownershipStart "1998-01-01"^^xsd:date ;
+    :ownershipEnd "2002-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T004_NY .
+
+:T004 :owns :Own_T004_FL , :Own_T004_NY .
+
+# Residency periods
+:Use_T004_FL_1998_1999 a :ResidenceUseInterval ;
+    :residenceStart "1998-01-01"^^xsd:date ;
+    :residenceEnd "1999-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T004_FL .
+
+:Use_T004_NY_2000_2001 a :ResidenceUseInterval ;
+    :residenceStart "2000-01-01"^^xsd:date ;
+    :residenceEnd "2001-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T004_NY .
+
+:Use_T004_FL_2002 a :ResidenceUseInterval ;
+    :residenceStart "2002-01-01"^^xsd:date ;
+    :residenceEnd "2002-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T004_FL .
+
+:T004 :uses :Use_T004_FL_1998_1999 , :Use_T004_NY_2000_2001 , :Use_T004_FL_2002 .
+
+# Dispositions (same date)
+:Disp_T004_FL a :Disposition ;
+    :sellDate "2002-12-20"^^xsd:date ;
+    :potentialGain "240000"^^xsd:integer ;
+    :involves :Property_T004_FL .
+
+:T004 :disposesOf :Disp_T004_FL .
+
+:Disp_T004_NY a :Disposition ;
+    :sellDate "2002-12-20"^^xsd:date ;
+    :potentialGain "210000"^^xsd:integer ;
+    :involves :Property_T004_NY .
+
+:T004 :disposesOf :Disp_T004_NY .
+
+:Return_T004 a :SingleReturn ;
+    :associates :T004 ;
+    :linkedTo :Disp_T004_FL , :Disp_T004_NY ;
+    :exclusionCap "250000"^^xsd:integer .

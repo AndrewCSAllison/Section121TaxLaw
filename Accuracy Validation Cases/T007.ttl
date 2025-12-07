@@ -1,0 +1,62 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+##############################
+# T007
+##############################
+
+:T007 a :Taxpayer .
+
+:Property_T007_OR a :Property .
+:Property_T007_MA a :Property .
+
+:Own_T007_OR a :OwnershipUseInterval ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2003-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T007_OR .
+
+:Own_T007_MA a :OwnershipUseInterval ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2003-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T007_MA .
+
+:T007 :owns :Own_T007_OR , :Own_T007_MA .
+
+# Residency periods
+:Use_T007_OR_1999_2000 a :ResidenceUseInterval ;
+    :residenceStart "1999-01-01"^^xsd:date ;
+    :residenceEnd "2000-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T007_OR .
+
+:Use_T007_MA_2001_2002 a :ResidenceUseInterval ;
+    :residenceStart "2001-01-01"^^xsd:date ;
+    :residenceEnd "2002-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T007_MA .
+
+:Use_T007_OR_2003 a :ResidenceUseInterval ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2003-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T007_OR .
+
+:T007 :uses :Use_T007_OR_1999_2000 , :Use_T007_MA_2001_2002 , :Use_T007_OR_2003 .
+
+# Dispositions (same date)
+:Disp_T007_OR a :Disposition ;
+    :sellDate "2003-12-20"^^xsd:date ;
+    :potentialGain "225000"^^xsd:integer ;
+    :involves :Property_T007_OR .
+
+:T007 :disposesOf :Disp_T007_OR .
+
+:Disp_T007_MA a :Disposition ;
+    :sellDate "2003-12-20"^^xsd:date ;
+    :potentialGain "205000"^^xsd:integer ;
+    :involves :Property_T007_MA .
+
+:T007 :disposesOf :Disp_T007_MA .
+
+:Return_T007 a :SingleReturn ;
+    :associates :T007 ;
+    :linkedTo :Disp_T007_OR , :Disp_T007_MA ;
+    :exclusionCap "250000"^^xsd:integer .

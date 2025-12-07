@@ -1,0 +1,63 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+##############################
+# T010
+##############################
+
+:T010 a :Taxpayer .
+
+:Property_T010_TX a :Property .
+:Property_T010_NM a :Property .
+
+:Own_T010_TX a :OwnershipUseInterval ;
+    :ownershipStart "2000-01-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T010_TX .
+
+:Own_T010_NM a :OwnershipUseInterval ;
+    :ownershipStart "2000-01-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T010_NM .
+
+:T010 :owns :Own_T010_TX , :Own_T010_NM .
+
+# Residency periods
+:Use_T010_TX_2000_2001 a :ResidenceUseInterval ;
+    :residenceStart "2000-01-01"^^xsd:date ;
+    :residenceEnd "2001-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T010_TX .
+
+:Use_T010_NM_2002_2003 a :ResidenceUseInterval ;
+    :residenceStart "2002-01-01"^^xsd:date ;
+    :residenceEnd "2003-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T010_NM .
+
+:Use_T010_TX_2004 a :ResidenceUseInterval ;
+    :residenceStart "2004-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T010_TX .
+
+:T010 :uses :Use_T010_TX_2000_2001 , :Use_T010_NM_2002_2003 , :Use_T010_TX_2004 .
+
+# Dispositions (same date)
+:Disp_T010_TX a :Disposition ;
+    :sellDate "2004-12-18"^^xsd:date ;
+    :potentialGain "230000"^^xsd:integer ;
+    :involves :Property_T010_TX .
+
+:T010 :disposesOf :Disp_T010_TX .
+
+:Disp_T010_NM a :Disposition ;
+    :sellDate "2004-12-18"^^xsd:date ;
+    :potentialGain "210000"^^xsd:integer ;
+    :involves :Property_T010_NM .
+
+:T010 :disposesOf :Disp_T010_NM .
+
+:Return_T010 a :SingleReturn ;
+    :associates :T010 ;
+    :linkedTo :Disp_T010_TX , :Disp_T010_NM ;
+    :exclusionCap "250000"^^xsd:integer .
+    
