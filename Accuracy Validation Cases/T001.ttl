@@ -67,5 +67,5 @@
 
 :Return_T001 a :SingleReturn ;
     :associates :T001 ;
-    :linkedTo :Disp_T001_NY , :Disp_T001_FL ;
+    :linkedTo :Disp_T001_NY ;
     :exclusionCap "250000"^^xsd:integer .
