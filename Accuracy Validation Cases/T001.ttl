@@ -47,7 +47,7 @@
     :residenceEnd "2004-12-31"^^xsd:date ;
     :hasResidenceOf :Property_T001_FL .
 
-:T001 :uses :Use_T001_NY , :Use_T001_FL .
+:T001 :uses :Use_T001_NY .
 
 ##############
 # Dispositions (fabricated for completeness)
@@ -60,14 +60,6 @@
     :involves :Property_T001_NY .
 
 :T001 :disposesOf :Disp_T001_NY .
-
-# Florida residence sold — not eligible for exclusion (not principal residence)
-:Disp_T001_FL a :Disposition ;
-    :sellDate "2004-12-31"^^xsd:date ;
-    :potentialGain "150000"^^xsd:integer ;
-    :involves :Property_T001_FL . 
-
-:T001 :disposesOf :Disp_T001_FL .
 
 ##############
 # Return (single filer)
