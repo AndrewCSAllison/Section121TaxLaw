@@ -1,0 +1,53 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+### Taxpayer
+:T055 a :Taxpayer .
+
+### Properties
+:Property_T055_1 a :Property .
+:Property_T055_2 a :Property .
+
+### Ownership Intervals
+:Own_T055_1 a :OwnershipUseInterval ;
+    :ownershipStart "2001-01-01"^^xsd:date ;
+    :ownershipEnd   "2002-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T055_1 .
+
+:Own_T055_2 a :OwnershipUseInterval ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd   "2005-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T055_2 .
+
+### Residence Use Intervals
+:Use_T055_1 a :ResidenceUseInterval ;
+    :residenceStart "2001-01-01"^^xsd:date ;
+    :residenceEnd   "2002-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T055_1 .
+
+:Use_T055_2 a :ResidenceUseInterval ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd   "2005-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T055_2 .
+
+### Dispositions
+:Disp_T055_1 a :Disposition ;
+    :sellDate "2004-12-31"^^xsd:date ;
+    :potentialGain "220000"^^xsd:integer ;
+    :involves :Property_T055_1 .
+
+:Disp_T055_2 a :Disposition ;
+    :sellDate "2005-12-31"^^xsd:date ;
+    :potentialGain "350000"^^xsd:integer ;
+    :involves :Property_T055_2 .
+
+### Associations
+:T055 :owns :Own_T055_1, :Own_T055_2 ;
+       :uses :Use_T055_1, :Use_T055_2 ;
+       :disposesOf :Disp_T055_1, :Disp_T055_2 .
+
+### Single Return
+:Return_T055 a :SingleReturn ;
+    :exclusionCap "250000"^^xsd:integer ;
+    :associates :T055 ;
+    :linkedTo :Disp_T055_1, :Disp_T055_2 .

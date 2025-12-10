@@ -1,0 +1,60 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Taxpayer — T064
+#########################
+
+:T064 a :Taxpayer ;
+    rdfs:label "Taxpayer D (T064)" ;
+    :owns :OwnershipInterval_T064 ;
+    :uses :ResidenceInterval_T064 ;
+    :disposesOf :Disposition_T064 .
+
+#########################
+# Property
+#########################
+
+:Property_T064 a :Property ;
+    rdfs:label "Condominium (T064)" .
+
+#########################
+# Ownership Interval
+#########################
+
+:OwnershipInterval_T064 a :OwnershipUseInterval ;
+    :ownershipStart "2003-07-01"^^xsd:date ;
+    :ownershipEnd "2004-02-01"^^xsd:date ;
+    :hasOwnershipOf :Property_T064 .
+
+#########################
+# Residence Interval
+#########################
+
+:ResidenceInterval_T064 a :ResidenceUseInterval ;
+    :residenceStart "2003-07-01"^^xsd:date ;
+    :residenceEnd "2004-02-01"^^xsd:date ;
+    :hasResidenceOf :Property_T064 .
+
+#########################
+# Disposition
+#########################
+
+:Disposition_T064 a :Disposition ;
+    :sellDate "2004-02-01"^^xsd:date ;
+    :potentialGain "110000"^^xsd:integer ;
+    :involves :Property_T064 ;
+    :partialExclusionReason :EmploymentRelatedReason ;
+    rdfs:comment "D sells the condominium after accepting a new job 51 miles away. Although the distance change does not meet the §121(c)(2) safe harbor, the primary reason for the sale—under the facts and circumstances—is a change in D’s place of employment. D qualifies for a reduced exclusion under §121(c)(2)." .
+
+#########################
+# Return
+#########################
+
+:Return_T064 a :SingleReturn ;
+    :associates :T064 ;
+    :linkedTo :Disposition_T064 ;
+    :exclusionCap "250000"^^xsd:integer .

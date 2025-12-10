@@ -1,0 +1,60 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Taxpayer — T063
+#########################
+
+:T063 a :Taxpayer ;
+    rdfs:label "Taxpayer C (T063)" ;
+    :owns :OwnershipInterval_T063 ;
+    :uses :ResidenceInterval_T063 ;
+    :disposesOf :Disposition_T063 .
+
+#########################
+# Property
+#########################
+
+:Property_T063 a :Property ;
+    rdfs:label "House (T063)" .
+
+#########################
+# Ownership Interval
+#########################
+
+:OwnershipInterval_T063 a :OwnershipUseInterval ;
+    :ownershipStart "2002-02-01"^^xsd:date ;
+    :ownershipEnd "2005-08-01"^^xsd:date ;
+    :hasOwnershipOf :Property_T063 .
+
+#########################
+# Residence Interval
+#########################
+
+:ResidenceInterval_T063 a :ResidenceUseInterval ;
+    :residenceStart "2002-02-01"^^xsd:date ;
+    :residenceEnd "2003-05-01"^^xsd:date ;
+    :hasResidenceOf :Property_T063 .
+
+#########################
+# Disposition
+#########################
+
+:Disposition_T063 a :Disposition ;
+    :sellDate "2005-08-01"^^xsd:date ;
+    :potentialGain "160000"^^xsd:integer ;
+    :involves :Property_T063 ;
+    :partialExclusionReason :EmploymentRelatedReason ;
+    rdfs:comment "C sells the house in 2005 after being assigned to London. Although neither move qualifies under the §121(c)(2) safe harbor, the primary reason for the sale is a change in place of employment. Therefore, C qualifies for a reduced exclusion under §121(c)(2) based on facts and circumstances." .
+
+#########################
+# Return
+#########################
+
+:Return_T063 a :SingleReturn ;
+    :associates :T063 ;
+    :linkedTo :Disposition_T063 ;
+    :exclusionCap "250000"^^xsd:integer .

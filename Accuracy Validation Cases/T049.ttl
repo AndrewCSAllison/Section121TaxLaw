@@ -1,0 +1,43 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+### Taxpayers
+:T049a a :Taxpayer .
+:T049b a :Taxpayer .
+
+### Property
+:Property_T049 a :Property .
+
+### Ownership Intervals
+:Own_T049a_1 a :OwnershipUseInterval ;
+    :ownershipStart "2002-02-01"^^xsd:date ;
+    :ownershipEnd   "2005-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T049 .
+
+:Own_T049b_1 a :OwnershipUseInterval ;
+    :ownershipStart "2002-02-01"^^xsd:date ;
+    :ownershipEnd   "2005-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T049 .
+
+### Residence Use
+# Only T049b qualifies
+:Use_T049b_1 a :ResidenceUseInterval ;
+    :residenceStart "2002-02-01"^^xsd:date ;
+    :residenceEnd   "2005-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T049 .
+
+### Disposition
+:Disp_T049 a :Disposition ;
+    :sellDate "2005-12-31"^^xsd:date ;
+    :potentialGain "400000"^^xsd:integer ;
+    :involves :Property_T049 .
+
+### Associations
+:T049a :owns :Own_T049a_1 ; :disposesOf :Disp_T049 .
+:T049b :owns :Own_T049b_1 ; :uses :Use_T049b_1 ; :disposesOf :Disp_T049 .
+
+### Joint Return
+:Return_T049 a :JointReturn ;
+    :exclusionCap "500000"^^xsd:integer ;
+    :associates :T049a, :T049b ;
+    :linkedTo :Disp_T049 .

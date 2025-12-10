@@ -1,0 +1,66 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#######################
+# Taxpayers
+#######################
+
+:T077a a :Taxpayer .
+:T077b a :Taxpayer .
+
+:T077_Property a :Property .
+
+##################################
+# Ownership & Residence Intervals
+##################################
+
+:T077a_OwnInterval a :OwnershipUseInterval ;
+    :ownershipStart "1996-01-01"^^xsd:date ;
+    :ownershipEnd   "2000-01-15"^^xsd:date ;
+    :hasOwnershipOf :T077_Property .
+
+:T077a_ResInterval a :ResidenceUseInterval ;
+    :residenceStart "1996-01-01"^^xsd:date ;
+    :residenceEnd   "2000-01-15"^^xsd:date ;
+    :hasResidenceOf :T077_Property .
+
+:T077b_OwnInterval a :OwnershipUseInterval ;
+    :ownershipStart "1999-01-15"^^xsd:date ;
+    :ownershipEnd   "2000-01-15"^^xsd:date ;
+    :hasOwnershipOf :T077_Property .
+
+:T077b_ResInterval a :ResidenceUseInterval ;
+    :residenceStart "1999-01-15"^^xsd:date ;
+    :residenceEnd   "2000-01-15"^^xsd:date ;
+    :hasResidenceOf :T077_Property .
+
+:T077a :owns :T077a_OwnInterval ;
+        :uses :T077a_ResInterval .
+
+:T077b :owns :T077b_OwnInterval ;
+        :uses :T077b_ResInterval .
+
+#####################
+# Disposition (Sale)
+#####################
+
+:T077_Sale a :Disposition ;
+    :sellDate "2000-01-15"^^xsd:date ;
+    :potentialGain "400000"^^xsd:integer ;
+    :involves :T077_Property ;
+    :partialExclusionReason :EmploymentRelatedReason .
+
+:T077a :disposesOf :T077_Sale .
+:T077b :disposesOf :T077_Sale .
+
+###########################
+# Return (Joint)
+###########################
+
+:T077_JointReturn a :JointReturn ;
+    :associates :T077a , :T077b ;
+    :linkedTo :T077_Sale ;
+    :exclusionCap "500000"^^xsd:integer .

@@ -1,0 +1,53 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdfs-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+:T067a a :Taxpayer .
+:T067b a :Taxpayer .
+
+:T067_Property a :Property .
+
+##################################
+# Ownership & Residence Intervals
+##################################
+
+:T067_OwnInterval a :OwnershipUseInterval ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd   "2004-12-31"^^xsd:date ;
+    :hasOwnershipOf :T067_Property .
+
+:T067_ResInterval a :ResidenceUseInterval ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd   "2004-12-31"^^xsd:date ;
+    :hasResidenceOf :T067_Property .
+
+:T067a :owns :T067_OwnInterval ;
+       :uses :T067_ResInterval .
+
+:T067b :owns :T067_OwnInterval ;
+       :uses :T067_ResInterval .
+
+#####################
+# Disposition (Sale)
+#####################
+
+:T067_Sale a :Disposition ;
+    :sellDate "2004-01-01"^^xsd:date ;
+    :potentialGain "150000"^^xsd:integer ;
+    :involves :T067_Property ;
+    :partialExclusionReason :HealthRelatedReason .
+
+:T067a :disposesOf :T067_Sale .
+:T067b :disposesOf :T067_Sale .
+
+###########################
+# Return (Joint)
+###########################
+
+:T067_JointReturn a :JointReturn ;
+    :associates :T067a , :T067b ;
+    :linkedTo :T067_Sale ;
+    :exclusionCap "500000"^^xsd:integer
+     .

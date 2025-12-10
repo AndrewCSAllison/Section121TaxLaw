@@ -1,0 +1,60 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Taxpayer — T065
+#########################
+
+:T065 a :Taxpayer ;
+    rdfs:label "Taxpayer A (T065)" ;
+    :owns :OwnershipInterval_T065 ;
+    :uses :ResidenceInterval_T065 ;
+    :disposesOf :Disposition_T065 .
+
+#########################
+# Property
+#########################
+
+:Property_T065 a :Property ;
+    rdfs:label "House (T065)" .
+
+#########################
+# Ownership Interval
+#########################
+
+:OwnershipInterval_T065 a :OwnershipUseInterval ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2004-06-01"^^xsd:date ;
+    :hasOwnershipOf :Property_T065 .
+
+#########################
+# Residence Interval
+#########################
+
+:ResidenceInterval_T065 a :ResidenceUseInterval ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-06-01"^^xsd:date ;
+    :hasResidenceOf :Property_T065 .
+
+#########################
+# Disposition
+#########################
+
+:Disposition_T065 a :Disposition ;
+    :sellDate "2004-06-01"^^xsd:date ;
+    :potentialGain "130000"^^xsd:integer ;
+    :involves :Property_T065 ;
+    :partialExclusionReason :HealthRelatedReason ;
+    rdfs:comment "A sells her home in 2004 after being injured and unable to care for herself. She moves in with her daughter for needed medical care. Under the facts and circumstances, the primary reason for the sale is A's health, making her eligible for a reduced exclusion under §121(c)(2)." .
+
+#########################
+# Return
+#########################
+
+:Return_T065 a :SingleReturn ;
+    :associates :T065 ;
+    :linkedTo :Disposition_T065 ;
+    :exclusionCap "250000"^^xsd:integer .

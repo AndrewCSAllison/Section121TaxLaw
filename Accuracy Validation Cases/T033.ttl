@@ -1,0 +1,57 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+### Taxpayers
+:T033a a :Taxpayer .
+:T033b a :Taxpayer .
+
+### Property
+:Property_T033 a :Property .
+
+### Ownership Intervals
+:Own_T033a_1 a :OwnershipUseInterval ;
+    :ownershipStart "2015-05-15"^^xsd:date ;
+    :ownershipEnd   "2017-05-14"^^xsd:date ;
+    :hasOwnershipOf :Property_T033 .
+
+:Own_T033b_1 a :OwnershipUseInterval ;
+    :ownershipStart "2015-05-15"^^xsd:date ;
+    :ownershipEnd   "2017-05-14"^^xsd:date ;
+    :hasOwnershipOf :Property_T033 .
+
+### Residence Use
+:Use_T033a_1 a :ResidenceUseInterval ;
+    :residenceStart "2015-05-15"^^xsd:date ;
+    :residenceEnd   "2017-05-14"^^xsd:date ;
+    :hasResidenceOf :Property_T033 .
+
+:Use_T033b_1 a :ResidenceUseInterval ;
+    :residenceStart "2015-05-15"^^xsd:date ;
+    :residenceEnd   "2017-05-14"^^xsd:date ;
+    :hasResidenceOf :Property_T033 .
+
+### Dispositions (split gain)
+:Disp_T033a a :Disposition ;
+    :sellDate "2017-05-14"^^xsd:date ;
+    :potentialGain "270000"^^xsd:integer ;
+    :involves :Property_T033 .
+
+:Disp_T033b a :Disposition ;
+    :sellDate "2017-05-14"^^xsd:date ;
+    :potentialGain "270000"^^xsd:integer ;
+    :involves :Property_T033 .
+
+### Associations
+:T033a :owns :Own_T033a_1 ; :uses :Use_T033a_1 ; :disposesOf :Disp_T033a .
+:T033b :owns :Own_T033b_1 ; :uses :Use_T033b_1 ; :disposesOf :Disp_T033b .
+
+### Individual Returns
+:Return_T033a a :SingleReturn ;
+    :exclusionCap "250000"^^xsd:integer ;
+    :associates :T033a ;
+    :linkedTo :Disp_T033a .
+
+:Return_T033b a :SingleReturn ;
+    :exclusionCap "250000"^^xsd:integer ;
+    :associates :T033b ;
+    :linkedTo :Disp_T033b .

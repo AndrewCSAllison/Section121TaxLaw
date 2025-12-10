@@ -1,0 +1,47 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+:T076 a :Taxpayer .
+
+:T076_Property a :Property .
+
+##################################
+# Ownership & Residence Intervals
+##################################
+
+:T076_OwnInterval a :OwnershipUseInterval ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd   "2004-01-01"^^xsd:date ;
+    :hasOwnershipOf :T076_Property .
+
+:T076_ResInterval a :ResidenceUseInterval ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd   "2004-01-01"^^xsd:date ;
+    :hasResidenceOf :T076_Property .
+
+:T076 :owns :T076_OwnInterval ;
+      :uses :T076_ResInterval .
+
+#####################
+# Disposition (Sale)
+#####################
+
+:T076_Sale a :Disposition ;
+    :sellDate "2004-01-01"^^xsd:date ;
+    :potentialGain "200000"^^xsd:integer ;
+    :involves :T076_Property ;
+    :partialExclusionReason :EmploymentRelatedReason .
+
+:T076 :disposesOf :T076_Sale .
+
+###########################
+# Return (Single)
+###########################
+
+:T076_SingleReturn a :SingleReturn ;
+    :associates :T076 ;
+    :linkedTo :T076_Sale ;
+    :exclusionCap "250000"^^xsd:integer .

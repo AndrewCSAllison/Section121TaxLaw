@@ -1,0 +1,60 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Taxpayer
+#########################
+
+:T061 a :Taxpayer ;
+    rdfs:label "Taxpayer A (T061)" ;
+    :owns :OwnershipInterval_T061 ;
+    :uses :ResidenceInterval_T061 ;
+    :disposesOf :Disposition_T061 .
+
+#########################
+# Property
+#########################
+
+:Property_T061 a :Property ;
+    rdfs:label "Townhouse (T061)" .
+
+#########################
+# Ownership Interval
+#########################
+
+:OwnershipInterval_T061 a :OwnershipUseInterval ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2004-06-01"^^xsd:date ;
+    :hasOwnershipOf :Property_T061 .
+
+#########################
+# Residence Interval
+#########################
+
+:ResidenceInterval_T061 a :ResidenceUseInterval ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-06-01"^^xsd:date ;
+    :hasResidenceOf :Property_T061 .
+
+#########################
+# Disposition
+#########################
+
+:Disposition_T061 a :Disposition ;
+    :sellDate "2004-06-01"^^xsd:date ;
+    :potentialGain "150000"^^xsd:integer ;
+    :involves :Property_T061 ;
+    :partialExclusionReason :EmploymentRelatedReason ;
+    rdfs:comment "A obtained employment 54 miles away in 2004. Sale qualifies for the §121(c)(2) employment-related safe harbor, permitting a reduced maximum exclusion." .
+
+#########################
+# Return
+#########################
+
+:Return_T061 a :SingleReturn ;
+    :associates :T061 ;
+    :linkedTo :Disposition_T061 ;
+    :exclusionCap "250000"^^xsd:integer .

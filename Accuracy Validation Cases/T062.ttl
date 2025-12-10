@@ -1,0 +1,60 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Taxpayer — T062
+#########################
+
+:T062 a :Taxpayer ;
+    rdfs:label "Taxpayer B (T062)" ;
+    :owns :OwnershipInterval_T062 ;
+    :uses :ResidenceInterval_T062 ;
+    :disposesOf :Disposition_T062 .
+
+#########################
+# Property
+#########################
+
+:Property_T062 a :Property ;
+    rdfs:label "Florida House (T062)" .
+
+#########################
+# Ownership Interval
+#########################
+
+:OwnershipInterval_T062 a :OwnershipUseInterval ;
+    :ownershipStart "2002-01-01"^^xsd:date ;
+    :ownershipEnd "2004-01-01"^^xsd:date ;
+    :hasOwnershipOf :Property_T062 .
+
+#########################
+# Residence Interval
+#########################
+
+:ResidenceInterval_T062 a :ResidenceUseInterval ;
+    :residenceStart "2002-01-01"^^xsd:date ;
+    :residenceEnd "2003-05-01"^^xsd:date ;
+    :hasResidenceOf :Property_T062 .
+
+#########################
+# Disposition
+#########################
+
+:Disposition_T062 a :Disposition ;
+    :sellDate "2004-01-01"^^xsd:date ;
+    :potentialGain "120000"^^xsd:integer ;
+    :involves :Property_T062 ;
+    :partialExclusionReason :EmploymentRelatedReason ;
+    rdfs:comment "B moved from Florida to Germany for a 3-year military assignment. Germany is more than 50 miles farther from the residence sold than B's former duty station, satisfying §121(c)(2) safe harbor." .
+
+#########################
+# Return
+#########################
+
+:Return_T062 a :SingleReturn ;
+    :associates :T062 ;
+    :linkedTo :Disposition_T062 ;
+    :exclusionCap "250000"^^xsd:integer .

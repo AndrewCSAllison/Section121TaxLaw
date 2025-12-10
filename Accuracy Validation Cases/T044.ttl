@@ -1,0 +1,53 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+### Taxpayers
+:T044a a :Taxpayer .
+:T044b a :Taxpayer .
+
+### Properties
+:Property_T044a a :Property .
+:Property_T044b a :Property .
+
+### Ownership Intervals
+:Own_T044a_1 a :OwnershipUseInterval ;
+    :ownershipStart "2001-02-01"^^xsd:date ;
+    :ownershipEnd   "2003-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T044a .
+
+:Own_T044b_1 a :OwnershipUseInterval ;
+    :ownershipStart "2001-02-01"^^xsd:date ;
+    :ownershipEnd   "2003-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T044b .
+
+### Residence Use
+:Use_T044a_1 a :ResidenceUseInterval ;
+    :residenceStart "2001-02-01"^^xsd:date ;
+    :residenceEnd   "2003-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T044a .
+
+:Use_T044b_1 a :ResidenceUseInterval ;
+    :residenceStart "2001-02-01"^^xsd:date ;
+    :residenceEnd   "2003-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T044b .
+
+### Dispositions
+:Disp_T044a a :Disposition ;
+    :sellDate "2003-12-31"^^xsd:date ;
+    :potentialGain "200000"^^xsd:integer ;
+    :involves :Property_T044a .
+
+:Disp_T044b a :Disposition ;
+    :sellDate "2003-12-31"^^xsd:date ;
+    :potentialGain "310000"^^xsd:integer ;
+    :involves :Property_T044b .
+
+### Associations
+:T044a :owns :Own_T044a_1 ; :uses :Use_T044a_1 ; :disposesOf :Disp_T044a .
+:T044b :owns :Own_T044b_1 ; :uses :Use_T044b_1 ; :disposesOf :Disp_T044b .
+
+### Joint Return
+:Return_T044 a :JointReturn ;
+    :exclusionCap "500000"^^xsd:integer ;
+    :associates :T044a, :T044b ;
+    :linkedTo :Disp_T044a, :Disp_T044b .

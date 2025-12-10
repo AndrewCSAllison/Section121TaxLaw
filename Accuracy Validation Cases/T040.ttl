@@ -1,0 +1,47 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+### Taxpayers
+:T040a a :Taxpayer .
+:T040b a :Taxpayer .
+
+### Property
+:Property_T040 a :Property .
+
+### Ownership Intervals
+:Own_T040a_1 a :OwnershipUseInterval ;
+    :ownershipStart "2010-06-01"^^xsd:date ;
+    :ownershipEnd   "2012-05-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T040 .
+
+:Own_T040b_1 a :OwnershipUseInterval ;
+    :ownershipStart "2010-06-01"^^xsd:date ;
+    :ownershipEnd   "2012-05-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T040 .
+
+### Residence Use
+:Use_T040a_1 a :ResidenceUseInterval ;
+    :residenceStart "2010-06-01"^^xsd:date ;
+    :residenceEnd   "2012-05-31"^^xsd:date ;
+    :hasResidenceOf :Property_T040 .
+
+:Use_T040b_1 a :ResidenceUseInterval ;
+    :residenceStart "2010-06-01"^^xsd:date ;
+    :residenceEnd   "2012-05-31"^^xsd:date ;
+    :hasResidenceOf :Property_T040 .
+
+### Disposition
+:Disp_T040 a :Disposition ;
+    :sellDate "2012-05-31"^^xsd:date ;
+    :potentialGain "200000"^^xsd:integer ;
+    :involves :Property_T040 .
+
+### Associations
+:T040a :owns :Own_T040a_1 ; :uses :Use_T040a_1 ; :disposesOf :Disp_T040 .
+:T040b :owns :Own_T040b_1 ; :uses :Use_T040b_1 ; :disposesOf :Disp_T040 .
+
+### Joint Return
+:Return_T040 a :JointReturn ;
+    :exclusionCap "500000"^^xsd:integer ;
+    :associates :T040a, :T040b ;
+    :linkedTo :Disp_T040 .

@@ -1,0 +1,43 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+### Taxpayers
+:T050a a :Taxpayer .
+:T050b a :Taxpayer .
+
+### Property
+:Property_T050 a :Property .
+
+### Ownership Intervals
+:Own_T050a_1 a :OwnershipUseInterval ;
+    :ownershipStart "2003-02-01"^^xsd:date ;
+    :ownershipEnd   "2006-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T050 .
+
+:Own_T050b_1 a :OwnershipUseInterval ;
+    :ownershipStart "2003-02-01"^^xsd:date ;
+    :ownershipEnd   "2006-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T050 .
+
+### Residence Use
+# Only T050b qualifies
+:Use_T050b_1 a :ResidenceUseInterval ;
+    :residenceStart "2003-02-01"^^xsd:date ;
+    :residenceEnd   "2006-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T050 .
+
+### Disposition
+:Disp_T050 a :Disposition ;
+    :sellDate "2006-12-31"^^xsd:date ;
+    :potentialGain "320000"^^xsd:integer ;
+    :involves :Property_T050 .
+
+### Associations
+:T050a :owns :Own_T050a_1 ; :disposesOf :Disp_T050 .
+:T050b :owns :Own_T050b_1 ; :uses :Use_T050b_1 ; :disposesOf :Disp_T050 .
+
+### Joint Return
+:Return_T050 a :JointReturn ;
+    :exclusionCap "500000"^^xsd:integer ;
+    :associates :T050a, :T050b ;
+    :linkedTo :Disp_T050 .

@@ -1,0 +1,55 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+### Taxpayer
+:T051 a :Taxpayer .
+
+### Properties
+:Property_T051_1 a :Property .
+:Property_T051_2 a :Property .
+
+### Ownership Intervals
+:Own_T051_1 a :OwnershipUseInterval ;
+    :ownershipStart "1998-01-01"^^xsd:date ;
+    :ownershipEnd   "1999-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T051_1 .
+
+:Own_T051_2 a :OwnershipUseInterval ;
+    :ownershipStart "2000-01-01"^^xsd:date ;
+    :ownershipEnd   "2003-12-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T051_2 .
+
+### Residence Use Intervals
+:Use_T051_1 a :ResidenceUseInterval ;
+    :residenceStart "1998-01-01"^^xsd:date ;
+    :residenceEnd   "1999-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T051_1 .
+
+:Use_T051_2 a :ResidenceUseInterval ;
+    :residenceStart "2000-01-01"^^xsd:date ;
+    :residenceEnd   "2003-12-31"^^xsd:date ;
+    :hasResidenceOf :Property_T051_2 .
+
+### Dispositions
+# Townhouse sale (excluded)
+:Disp_T051_1 a :Disposition ;
+    :sellDate "2002-12-31"^^xsd:date ;
+    :potentialGain "150000"^^xsd:integer ;
+    :involves :Property_T051_1 .
+
+# House sale (gain not excludable due to prior §121 exclusion)
+:Disp_T051_2 a :Disposition ;
+    :sellDate "2003-12-31"^^xsd:date ;
+    :potentialGain "300000"^^xsd:integer ;
+    :involves :Property_T051_2 .
+
+### Associations
+:T051 :owns :Own_T051_1, :Own_T051_2 ;
+       :uses :Use_T051_1, :Use_T051_2 ;
+       :disposesOf :Disp_T051_1, :Disp_T051_2 .
+
+### Single Return
+:Return_T051 a :SingleReturn ;
+    :exclusionCap "250000"^^xsd:integer ;
+    :associates :T051 ;
+    :linkedTo :Disp_T051_1, :Disp_T051_2 .

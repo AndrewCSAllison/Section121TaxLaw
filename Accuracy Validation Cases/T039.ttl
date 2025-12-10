@@ -1,0 +1,47 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+### Taxpayers
+:T039a a :Taxpayer .
+:T039b a :Taxpayer .
+
+### Property
+:Property_T039 a :Property .
+
+### Ownership Intervals
+:Own_T039a_1 a :OwnershipUseInterval ;
+    :ownershipStart "2012-09-01"^^xsd:date ;
+    :ownershipEnd   "2014-08-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T039 .
+
+:Own_T039b_1 a :OwnershipUseInterval ;
+    :ownershipStart "2012-09-01"^^xsd:date ;
+    :ownershipEnd   "2014-08-31"^^xsd:date ;
+    :hasOwnershipOf :Property_T039 .
+
+### Residence Use
+:Use_T039a_1 a :ResidenceUseInterval ;
+    :residenceStart "2012-09-01"^^xsd:date ;
+    :residenceEnd   "2014-08-31"^^xsd:date ;
+    :hasResidenceOf :Property_T039 .
+
+:Use_T039b_1 a :ResidenceUseInterval ;
+    :residenceStart "2012-09-01"^^xsd:date ;
+    :residenceEnd   "2014-08-31"^^xsd:date ;
+    :hasResidenceOf :Property_T039 .
+
+### Disposition
+:Disp_T039 a :Disposition ;
+    :sellDate "2014-08-31"^^xsd:date ;
+    :potentialGain "600000"^^xsd:integer ;
+    :involves :Property_T039 .
+
+### Associations
+:T039a :owns :Own_T039a_1 ; :uses :Use_T039a_1 ; :disposesOf :Disp_T039 .
+:T039b :owns :Own_T039b_1 ; :uses :Use_T039b_1 ; :disposesOf :Disp_T039 .
+
+### Joint Return
+:Return_T039 a :JointReturn ;
+    :exclusionCap "500000"^^xsd:integer ;
+    :associates :T039a, :T039b ;
+    :linkedTo :Disp_T039 .
