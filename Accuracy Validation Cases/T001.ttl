@@ -55,7 +55,7 @@
 
 # New York residence sold — eligible for §121 exclusion
 :Disp_T001_NY a :Disposition ;
-    :sellDate "2005-06-01"^^xsd:date ;
+    :sellDate "2004-12-31"^^xsd:date ;
     :potentialGain "300000"^^xsd:integer ;
     :involves :Property_T001_NY .
 
@@ -63,7 +63,7 @@
 
 # Florida residence sold — not eligible for exclusion (not principal residence)
 :Disp_T001_FL a :Disposition ;
-    :sellDate "2005-06-01"^^xsd:date ;
+    :sellDate "2004-12-31"^^xsd:date ;
     :potentialGain "150000"^^xsd:integer ;
     :involves :Property_T001_FL . 
 
