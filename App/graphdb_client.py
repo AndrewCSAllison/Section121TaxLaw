@@ -8,16 +8,22 @@ from App.config import GRAPHDB_REPO, SHACL_GRAPH
 BASE_DIR = Path(__file__).resolve().parent
 SPARQL_DIR = BASE_DIR / "Resources" / "SPARQL_Queries"
 
-def upload_ttl(ttl_content, target_graph=None):
-    """Upload TTL content to a named graph (or default graph if None)."""
+def upload_ttl(ttl_content: str, target_graph: str = None) -> str:
+    """
+    Upload TTL content to a named graph (or default graph if None).
+    Properly URL-encodes graph URIs with '#' fragments.
+    """
     ttl_content = ttl_content.strip()
     if not ttl_content:
         raise ValueError("TTL content is empty!")
 
     headers = {"Content-Type": "application/x-turtle", "Accept": "text/plain"}
     upload_url = f"{GRAPHDB_REPO}/statements"
+
     if target_graph:
-        upload_url += f"?context={urllib.parse.quote(target_graph)}"
+        # URL-encode the graph URI so '#' becomes %23
+        safe_graph = urllib.parse.quote(target_graph, safe=':/')
+        upload_url += f"?context=<{safe_graph}>"
 
     response = requests.post(upload_url, data=ttl_content.encode("utf-8"), headers=headers)
     response.raise_for_status()
@@ -58,8 +64,13 @@ def load_query_file(filename):
         return f.read().strip()
 
 
-def run_update_query(filename):
-    query = load_query_file(filename)
+def run_update_query(query: str, from_file: bool = True):
+    """
+    Sends a SPARQL update to GraphDB. If from_file=True, query is treated as a filename.
+    """
+    if from_file:
+        query = load_query_file(query)
+        
     headers = {"Content-Type": "application/sparql-update"}
     response = requests.post(
         f"{GRAPHDB_REPO}/statements",
@@ -67,6 +78,7 @@ def run_update_query(filename):
         headers=headers
     )
     response.raise_for_status()
+
 
 
 def run_select_query(filename):

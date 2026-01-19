@@ -27,12 +27,12 @@ WHERE {
 
       # Undefined unless class or subclass is declared in ontology
       FILTER NOT EXISTS {
-        GRAPH <https://example.org/section121/Ontology> {
+        GRAPH <http://example.org/section121/Ontology> {
           ?undefined a owl:Class .
         }
       }
       FILTER NOT EXISTS {
-        GRAPH <https://example.org/section121/Ontology> {
+        GRAPH <http://example.org/section121/Ontology> {
           ?undefined rdfs:subClassOf ?anySuperclass .
         }
       }
@@ -59,12 +59,12 @@ WHERE {
 
       # Undefined unless declared as property in ontology
       FILTER NOT EXISTS {
-        GRAPH <https://example.org/section121/Ontology> {
+        GRAPH <http://example.org/section121/Ontology> {
           ?undefined a owl:ObjectProperty .
         }
       }
       FILTER NOT EXISTS {
-        GRAPH <https://example.org/section121/Ontology> {
+        GRAPH <http://example.org/section121/Ontology> {
           ?undefined a owl:DatatypeProperty .
         }
       }
