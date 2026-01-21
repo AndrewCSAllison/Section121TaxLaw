@@ -13,8 +13,8 @@ from App.graphdb_client import (
 def clear_repository():
     try:
         run_update_query("CLEAR ALL", from_file=False)
-        shaclShapes = load_file_contents("Prompting_Files\Section 121 SHACL Shapes.ttl")
-        ontology = load_file_contents("Prompting_Files\Section 121 Taxpayer Ontology.ttl")
+        shaclShapes = load_file_contents("Prompting_Files\Section_121_SHACL_Shapes.ttl")
+        ontology = load_file_contents("Prompting_Files\Section_121_Taxpayer_Ontology.ttl")
         upload_ttl(shaclShapes, target_graph=SHACL_GRAPH)
         upload_ttl(ontology, target_graph=ONTOLOGY_GRAPH)
     except Exception as e:
@@ -50,9 +50,14 @@ def submit(ttl_text, output_text):
         results = run_select_query("NYICheck.sparql")
         output_text.configure(state="normal")
         output_text.insert("end", "=== NYI Check Results ===\n")
-        output_text.insert("end", json.dumps(results, indent=2) + "\n\n")
+        
+        if not results.get("results", {}).get("bindings"):
+            # If no undefined classes/properties, just show a checkmark
+            output_text.insert("end", "✔ No undefined entities found\n\n")
+        else:
+            output_text.insert("end", json.dumps(results, indent=2) + "\n\n")
 
-        # Execute updates / rules
+        # Run determination queries
         run_update_query("DerivedInfoQuery.sparql")
         run_update_query("InterpretationQuery.sparql")
 
