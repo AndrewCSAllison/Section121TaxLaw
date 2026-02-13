@@ -1,0 +1,47 @@
+:TaxpayerI a :Taxpayer ;
+    :owns :OUI_Alabama , :OUI_Nevada ;
+    :uses :RUI_Alabama_97_98 , :RUI_Nevada_99_00 , :RUI_Alabama_01 ;
+    :disposesOf :Disposition_Alabama , :Disposition_Nevada .
+
+:Property_Alabama a :Property .
+:Property_Nevada a :Property .
+
+:OUI_Alabama a :OwnershipUseInterval ;
+    :hasOwnershipOf :Property_Alabama ;
+    :ownershipStart "1997-01-01"^^xsd:date ;
+    :ownershipEnd "2001-12-31"^^xsd:date .
+
+:OUI_Nevada a :OwnershipUseInterval ;
+    :hasOwnershipOf :Property_Nevada ;
+    :ownershipStart "1997-01-01"^^xsd:date ;
+    :ownershipEnd "2001-12-31"^^xsd:date .
+
+:RUI_Alabama_97_98 a :ResidenceUseInterval ;
+    :hasResidenceOf :Property_Alabama ;
+    :residenceStart "1997-01-01"^^xsd:date ;
+    :residenceEnd "1998-12-31"^^xsd:date .
+
+:RUI_Nevada_99_00 a :ResidenceUseInterval ;
+    :hasResidenceOf :Property_Nevada ;
+    :residenceStart "1999-01-01"^^xsd:date ;
+    :residenceEnd "2000-12-31"^^xsd:date .
+
+:RUI_Alabama_01 a :ResidenceUseInterval ;
+    :hasResidenceOf :Property_Alabama ;
+    :residenceStart "2001-01-01"^^xsd:date ;
+    :residenceEnd "2001-12-31"^^xsd:date .
+
+:Disposition_Alabama a :Disposition ;
+    :involves :Property_Alabama ;
+    :sellDate "2001-12-20"^^xsd:date ;
+    :potentialGain 225000 .
+
+:Disposition_Nevada a :Disposition ;
+    :involves :Property_Nevada ;
+    :sellDate "2001-12-20"^^xsd:date ;
+    :potentialGain 205000 .
+
+:SingleReturn_2001 a :SingleReturn ;
+    :associates :TaxpayerI ;
+    :linkedTo :Disposition_Alabama , :Disposition_Nevada ;
+    :exclusionCap 250000 .

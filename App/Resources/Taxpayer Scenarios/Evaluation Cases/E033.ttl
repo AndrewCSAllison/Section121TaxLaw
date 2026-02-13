@@ -1,0 +1,54 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:K a :Taxpayer .
+
+:ArizonaResidence a :Property .
+:VirginiaResidence a :Property .
+
+:OwnershipIntervalArizona a :OwnershipUseInterval ;
+    :hasOwnershipOf :ArizonaResidence ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2007-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:OwnershipIntervalVirginia a :OwnershipUseInterval ;
+    :hasOwnershipOf :VirginiaResidence ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2007-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:ResidenceIntervalArizona1 a :ResidenceUseInterval ;
+    :hasResidenceOf :ArizonaResidence ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+:ResidenceIntervalVirginia a :ResidenceUseInterval ;
+    :hasResidenceOf :VirginiaResidence ;
+    :residenceStart "2005-01-01"^^xsd:date ;
+    :residenceEnd "2006-12-31"^^xsd:date .
+
+:ResidenceIntervalArizona2 a :ResidenceUseInterval ;
+    :hasResidenceOf :ArizonaResidence ;
+    :residenceStart "2007-01-01"^^xsd:date ;
+    :residenceEnd "2007-12-31"^^xsd:date .
+
+:DispositionArizona a :Disposition ;
+    :involves :ArizonaResidence ;
+    :sellDate "2007-12-20"^^xsd:date ;
+    :potentialGain 240000 .
+
+:DispositionVirginia a :Disposition ;
+    :involves :VirginiaResidence ;
+    :sellDate "2007-12-20"^^xsd:date ;
+    :potentialGain 215000 .
+
+:SingleReturn2007 a :SingleReturn ;
+    :exclusionCap 250000 ;
+    :associates :K ;
+    :linkedTo :DispositionArizona, :DispositionVirginia .
+
+:K :owns :OwnershipIntervalArizona, :OwnershipIntervalVirginia ;
+   :uses :ResidenceIntervalArizona1, :ResidenceIntervalVirginia, :ResidenceIntervalArizona2 ;
+   :disposesOf :DispositionArizona, :DispositionVirginia .

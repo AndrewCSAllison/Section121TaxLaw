@@ -1,0 +1,42 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:TaxpayerA a :Taxpayer ;
+    :owns :NYOwnershipInterval ,
+          :FLOwnershipInterval ;
+    :uses :NYResidenceInterval ,
+          :FLResidenceInterval ;
+    :disposesOf :NYDisposition .
+
+:NewYorkProperty a :Property .
+:FloridaProperty a :Property .
+
+:NYOwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :NewYorkProperty ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date .
+
+:FLOwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :FloridaProperty ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date .
+
+:NYResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :NewYorkProperty ;
+    :residenceStart "1999-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+:FLResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :FloridaProperty ;
+    :residenceStart "1999-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+:NYDisposition a :Disposition ;
+    :involves :NewYorkProperty ;
+    :sellDate "2004-12-31"^^xsd:date ;
+    :potentialGain 300000 .
+
+:ReturnA a :SingleReturn ;
+    :associates :TaxpayerA ;
+    :linkedTo :NYDisposition ;
+    :exclusionCap 250000 .

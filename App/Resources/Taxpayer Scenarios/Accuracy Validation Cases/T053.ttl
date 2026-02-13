@@ -11,7 +11,7 @@
 ### Ownership Intervals
 :Own_T053_1 a :OwnershipUseInterval ;
     :ownershipStart "2000-01-01"^^xsd:date ;
-    :ownershipEnd   "2001-12-31"^^xsd:date ;
+    :ownershipEnd   "2003-12-31"^^xsd:date ;
     :hasOwnershipOf :Property_T053_1 .
 
 :Own_T053_2 a :OwnershipUseInterval ;

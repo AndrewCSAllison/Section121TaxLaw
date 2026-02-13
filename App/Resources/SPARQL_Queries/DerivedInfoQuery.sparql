@@ -10,6 +10,8 @@ INSERT {
                  :singleExclusionCap ?singleCap ;
                  :jointReturnFlag ?isJointReturn ;
                  :jointExclusionCap ?jointCap ;
+        		     :percentageOwned ?percentageOwnedSafe ;
+                 :allocableGain ?allocableGain ;
                  :spouseOwnDays ?spouseOwnDaysSafe ;
                  :spouseResDays ?spouseResDaysSafe ;
                  :spouseDaysSincePrevQualifyingSale ?spouseDaysSincePrevQualifyingSale ;
@@ -35,6 +37,13 @@ WHERE {
 
   OPTIONAL { ?disposition :partialExclusionReason ?reason }
   BIND(?reason AS ?reasonType)
+    
+  # --- Ownership percentage ---
+  OPTIONAL {
+    ?taxpayer :owns ?ownIntervalPct .
+    ?ownIntervalPct :hasOwnershipOf ?property ;
+                    :percentageOwned ?percentageOwned .
+  }
 
   # Compute five-year cutoff as xsd:date once at outer scope (used for insertion)
   BIND(year(?sellDate) - 5 AS ?cutYear)
@@ -329,6 +338,9 @@ WHERE {
   BIND(xsd:integer(COALESCE(?spouseOwnDays, 0)) AS ?spouseOwnDaysSafe)
   BIND(xsd:integer(COALESCE(?spouseResDays, 0)) AS ?spouseResDaysSafe)
   BIND(xsd:integer(COALESCE(?spouseDaysSincePrevQualifyingSale, -1)) AS ?spouseDaysSincePrevQualifyingSaleSafe)
+    
+  BIND(xsd:decimal(COALESCE(?percentageOwned, 1.0)) AS ?percentageOwnedSafe)
+  BIND(xsd:decimal(?gain) * ?percentageOwnedSafe AS ?allocableGain)
 
   # Derived node
   BIND(IRI(CONCAT(

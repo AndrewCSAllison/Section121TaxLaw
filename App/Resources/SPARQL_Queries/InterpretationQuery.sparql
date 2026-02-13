@@ -42,6 +42,7 @@ WHERE {
     OPTIONAL { ?derivedNode :singleExclusionCap ?singleCap }
     OPTIONAL { ?derivedNode :jointReturnFlag ?isJointReturn }
     OPTIONAL { ?derivedNode :jointExclusionCap ?jointCap }
+    OPTIONAL { ?derivedNode :allocableGain ?allocableGain }
     OPTIONAL { ?derivedNode :spouseOwnDays ?spouseOwnDays }
     OPTIONAL { ?derivedNode :spouseResDays ?spouseResDays }
     OPTIONAL { ?derivedNode :spouseDaysSincePrevQualifyingSale ?spouseDaysSincePrevQualifyingSale }
@@ -56,7 +57,7 @@ WHERE {
   BIND(IF(bound(?spouseOwnDays), ?spouseOwnDays, 0) AS ?spouseOwnDaysSafe)
   BIND(IF(bound(?spouseResDays), ?spouseResDays, 0) AS ?spouseResDaysSafe)
   BIND(IF(bound(?spouseDaysSincePrevQualifyingSale), ?spouseDaysSincePrevQualifyingSale, -1) AS ?spouseDaysSincePrevQualifyingSaleSafe)
-  BIND(IF(bound(?gain), xsd:integer(?gain), xsd:integer(0)) AS ?realizedGain)
+  BIND(IF(bound(?allocableGain), xsd:decimal(?allocableGain), xsd:decimal(0)) AS ?realizedGain)
 
   # --- §121(a): ownership/use for 2 years ---
   BIND(IF(?ownDays >= 730 && ?resDays >= 730, true, false) AS ?Rule121aSatisfiedSafe)
@@ -109,24 +110,17 @@ WHERE {
   ) AS ?Rule121b2BExcluded
 )
 
-
-
-  # --- Determine cap dynamically based on filing type ---
-BIND(
-  IF(?isJointReturnSafe, ?jointCapSafe, ?singleCapSafe) AS ?applicableCap
-)
-
 # --- §121(c): Partial exclusion for qualifying reasons, using dynamic cap ---
 BIND(
   IF(bound(?numeratorDays) && bound(?reasonType) &&
      !?Rule121aFinal &&
      ?numeratorDays > 0 && ?numeratorDays < 730 &&
      ?reasonType IN (:EmploymentRelatedReason, :HealthRelatedReason, :UnforeseenCircumstanceReason),
-     ROUND((?numeratorDays / 730.0 * ?applicableCap) * 100) / 100,
+     ROUND((?numeratorDays / 730.0 * 250000) * 100) / 100,
      xsd:decimal(0)
   ) AS ?Rule121cExcluded
 )
-
+    
   BIND(?reasonType AS ?reason)
 
   # --- §121(d)(1) applies if either spouse qualifies for joint return ---

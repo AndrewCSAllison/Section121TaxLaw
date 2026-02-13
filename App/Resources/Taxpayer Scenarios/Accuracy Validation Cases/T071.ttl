@@ -15,12 +15,12 @@
 
 :T071_OwnInterval a :OwnershipUseInterval ;
     :ownershipStart "2003-01-01"^^xsd:date ;
-    :ownershipEnd   "2004-12-31"^^xsd:date ;
+    :ownershipEnd   "2004-01-01"^^xsd:date ;
     :hasOwnershipOf :T071_Property .
 
 :T071_ResInterval a :ResidenceUseInterval ;
     :residenceStart "2003-01-01"^^xsd:date ;
-    :residenceEnd   "2004-12-31"^^xsd:date ;
+    :residenceEnd   "2004-01-01"^^xsd:date ;
     :hasResidenceOf :T071_Property .
 
 :T071a :owns :T071_OwnInterval ;

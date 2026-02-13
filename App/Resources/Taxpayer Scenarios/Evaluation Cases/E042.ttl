@@ -1,0 +1,42 @@
+:TaxpayerN a :Taxpayer ;
+    :owns :OwnershipIntervalHouse , :OwnershipIntervalLand ;
+    :uses :ResidenceIntervalHouse , :ResidenceIntervalLand ;
+    :disposesOf :DispositionHouse , :DispositionLand .
+
+:MainHouse a :Property .
+:ParcelLand a :Property .
+
+:OwnershipIntervalHouse a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainHouse ;
+    :ownershipStart "1995-01-01"^^xsd:date ;
+    :ownershipEnd "2000-12-31"^^xsd:date .
+
+:OwnershipIntervalLand a :OwnershipUseInterval ;
+    :hasOwnershipOf :ParcelLand ;
+    :ownershipStart "1996-01-01"^^xsd:date ;
+    :ownershipEnd "2000-12-31"^^xsd:date .
+
+:ResidenceIntervalHouse a :ResidenceUseInterval ;
+    :hasResidenceOf :MainHouse ;
+    :residenceStart "1995-01-01"^^xsd:date ;
+    :residenceEnd "2000-12-31"^^xsd:date .
+
+:ResidenceIntervalLand a :ResidenceUseInterval ;
+    :hasResidenceOf :ParcelLand ;
+    :residenceStart "1996-01-01"^^xsd:date ;
+    :residenceEnd "2000-12-31"^^xsd:date .
+
+:DispositionHouse a :Disposition ;
+    :involves :MainHouse ;
+    :sellDate "2000-05-20"^^xsd:date ;
+    :potentialGain -10000 .
+
+:DispositionLand a :Disposition ;
+    :involves :ParcelLand ;
+    :sellDate "2000-05-20"^^xsd:date ;
+    :potentialGain 250000 .
+
+:SingleReturnN a :SingleReturn ;
+    :associates :TaxpayerN ;
+    :linkedTo :DispositionHouse , :DispositionLand ;
+    :exclusionCap 250000 .

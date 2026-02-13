@@ -1,0 +1,49 @@
+:TaxpayerG a :Taxpayer ;
+    :owns :OwnershipIntervalOregon, :OwnershipIntervalMassachusetts ;
+    :uses :ResidenceIntervalOregon1999_2000, :ResidenceIntervalMassachusetts2001_2002, :ResidenceIntervalOregon2003 ;
+    :disposesOf :DispositionOregon, :DispositionMassachusetts .
+
+:PropertyOregon a :Property .
+:PropertyMassachusetts a :Property .
+
+:OwnershipIntervalOregon a :OwnershipUseInterval ;
+    :hasOwnershipOf :PropertyOregon ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2003-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:OwnershipIntervalMassachusetts a :OwnershipUseInterval ;
+    :hasOwnershipOf :PropertyMassachusetts ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2003-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:ResidenceIntervalOregon1999_2000 a :ResidenceUseInterval ;
+    :hasResidenceOf :PropertyOregon ;
+    :residenceStart "1999-01-01"^^xsd:date ;
+    :residenceEnd "2000-12-31"^^xsd:date .
+
+:ResidenceIntervalMassachusetts2001_2002 a :ResidenceUseInterval ;
+    :hasResidenceOf :PropertyMassachusetts ;
+    :residenceStart "2001-01-01"^^xsd:date ;
+    :residenceEnd "2002-12-31"^^xsd:date .
+
+:ResidenceIntervalOregon2003 a :ResidenceUseInterval ;
+    :hasResidenceOf :PropertyOregon ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2003-12-31"^^xsd:date .
+
+:DispositionOregon a :Disposition ;
+    :involves :PropertyOregon ;
+    :sellDate "2003-12-20"^^xsd:date ;
+    :potentialGain 225000 .
+
+:DispositionMassachusetts a :Disposition ;
+    :involves :PropertyMassachusetts ;
+    :sellDate "2003-12-20"^^xsd:date ;
+    :potentialGain 205000 .
+
+:SingleReturnG a :SingleReturn ;
+    :associates :TaxpayerG ;
+    :linkedTo :DispositionOregon, :DispositionMassachusetts ;
+    :exclusionCap 250000 .

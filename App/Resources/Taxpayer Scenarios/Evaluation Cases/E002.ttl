@@ -1,0 +1,44 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:TaxpayerA a :Taxpayer ;
+    :owns :NYOwnershipInterval ,
+          :FLOwnershipInterval ;
+    :uses :NYResidenceInterval ,
+          :FLResidenceInterval ;
+    :disposesOf :NYDisposition .
+
+:NYProperty a :Property .
+:FLProperty a :Property .
+
+:NYOwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :NYProperty ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date ;
+    :percentageOwned "1.0"^^xsd:decimal .
+
+:FLOwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :FLProperty ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date ;
+    :percentageOwned "1.0"^^xsd:decimal .
+
+:NYResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :NYProperty ;
+    :residenceStart "1999-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+:FLResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :FLProperty ;
+    :residenceStart "1999-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+:NYDisposition a :Disposition ;
+    :involves :NYProperty ;
+    :sellDate "2004-12-31"^^xsd:date ;
+    :potentialGain 300000 .
+
+:ReturnA a :SingleReturn ;
+    :associates :TaxpayerA ;
+    :linkedTo :NYDisposition ;
+    :exclusionCap 250000 .

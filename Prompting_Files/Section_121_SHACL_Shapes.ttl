@@ -42,6 +42,14 @@
 	sh:datatype xsd:date ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
+    ] ;
+    sh:property [
+    sh:path :percentageOwned ;
+    sh:datatype xsd:decimal ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 1 ;
     ] .
 
 :ResidenceUseIntervalShape

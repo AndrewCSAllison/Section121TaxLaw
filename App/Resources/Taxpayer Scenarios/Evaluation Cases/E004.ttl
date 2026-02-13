@@ -1,0 +1,50 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:TaxpayerB a :Taxpayer ;
+    :owns :OwnershipVA , :OwnershipME ;
+    :uses :UseVA1999_2000 , :UseME2001_2002 , :UseVA2003 ;
+    :disposesOf :DispositionVA , :DispositionME .
+
+:PropertyVA a :Property .
+:PropertyME a :Property .
+
+:OwnershipVA a :OwnershipUseInterval ;
+    :hasOwnershipOf :PropertyVA ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2003-12-31"^^xsd:date .
+
+:OwnershipME a :OwnershipUseInterval ;
+    :hasOwnershipOf :PropertyME ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2003-12-31"^^xsd:date .
+
+:UseVA1999_2000 a :ResidenceUseInterval ;
+    :hasResidenceOf :PropertyVA ;
+    :residenceStart "1999-01-01"^^xsd:date ;
+    :residenceEnd "2000-12-31"^^xsd:date .
+
+:UseME2001_2002 a :ResidenceUseInterval ;
+    :hasResidenceOf :PropertyME ;
+    :residenceStart "2001-01-01"^^xsd:date ;
+    :residenceEnd "2002-12-31"^^xsd:date .
+
+:UseVA2003 a :ResidenceUseInterval ;
+    :hasResidenceOf :PropertyVA ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2003-12-31"^^xsd:date .
+
+:DispositionVA a :Disposition ;
+    :involves :PropertyVA ;
+    :sellDate "2003-12-31"^^xsd:date ;
+    :potentialGain 250000 .
+
+:DispositionME a :Disposition ;
+    :involves :PropertyME ;
+    :sellDate "2003-12-31"^^xsd:date ;
+    :potentialGain 150000 .
+
+:ReturnB a :SingleReturn ;
+    :associates :TaxpayerB ;
+    :linkedTo :DispositionVA , :DispositionME ;
+    :exclusionCap 250000 .

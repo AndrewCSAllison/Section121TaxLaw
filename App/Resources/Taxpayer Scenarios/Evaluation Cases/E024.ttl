@@ -1,0 +1,47 @@
+:TaxpayerH a :Taxpayer ;
+    :owns :H_CO_Ownership , :H_ME_Ownership ;
+    :uses :H_CO_Residency1 , :H_ME_Residency , :H_CO_Residency2 ;
+    :disposesOf :H_CO_Disposition , :H_ME_Disposition .
+
+:H_CO_Property a :Property .
+:H_ME_Property a :Property .
+
+:H_CO_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :H_CO_Property ;
+    :ownershipStart "2001-01-01"^^xsd:date ;
+    :ownershipEnd "2005-12-31"^^xsd:date .
+
+:H_ME_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :H_ME_Property ;
+    :ownershipStart "2001-01-01"^^xsd:date ;
+    :ownershipEnd "2005-12-31"^^xsd:date .
+
+:H_CO_Residency1 a :ResidenceUseInterval ;
+    :hasResidenceOf :H_CO_Property ;
+    :residenceStart "2001-01-01"^^xsd:date ;
+    :residenceEnd "2002-12-31"^^xsd:date .
+
+:H_ME_Residency a :ResidenceUseInterval ;
+    :hasResidenceOf :H_ME_Property ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+:H_CO_Residency2 a :ResidenceUseInterval ;
+    :hasResidenceOf :H_CO_Property ;
+    :residenceStart "2005-01-01"^^xsd:date ;
+    :residenceEnd "2005-12-31"^^xsd:date .
+
+:H_CO_Disposition a :Disposition ;
+    :involves :H_CO_Property ;
+    :sellDate "2005-12-18"^^xsd:date ;
+    :potentialGain 240000 .
+
+:H_ME_Disposition a :Disposition ;
+    :involves :H_ME_Property ;
+    :sellDate "2005-12-18"^^xsd:date ;
+    :potentialGain 215000 .
+
+:H_SingleReturn a :SingleReturn ;
+    :associates :TaxpayerH ;
+    :linkedTo :H_CO_Disposition , :H_ME_Disposition ;
+    :exclusionCap 250000 .

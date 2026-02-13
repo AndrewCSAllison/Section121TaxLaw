@@ -1,0 +1,47 @@
+:TaxpayerH a :Taxpayer ;
+    :owns :H_Ownership_CO , :H_Ownership_ME ;
+    :uses :H_Residence_CO_01_02 , :H_Residence_ME_03_04 , :H_Residence_CO_05 ;
+    :disposesOf :H_Disposition_CO , :H_Disposition_ME .
+
+:ColoradoProperty a :Property .
+:MaineProperty a :Property .
+
+:H_Ownership_CO a :OwnershipUseInterval ;
+    :hasOwnershipOf :ColoradoProperty ;
+    :ownershipStart "2001-01-01"^^xsd:date ;
+    :ownershipEnd "2005-12-31"^^xsd:date .
+
+:H_Ownership_ME a :OwnershipUseInterval ;
+    :hasOwnershipOf :MaineProperty ;
+    :ownershipStart "2001-01-01"^^xsd:date ;
+    :ownershipEnd "2005-12-31"^^xsd:date .
+
+:H_Residence_CO_01_02 a :ResidenceUseInterval ;
+    :hasResidenceOf :ColoradoProperty ;
+    :residenceStart "2001-01-01"^^xsd:date ;
+    :residenceEnd "2002-12-31"^^xsd:date .
+
+:H_Residence_ME_03_04 a :ResidenceUseInterval ;
+    :hasResidenceOf :MaineProperty ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+:H_Residence_CO_05 a :ResidenceUseInterval ;
+    :hasResidenceOf :ColoradoProperty ;
+    :residenceStart "2005-01-01"^^xsd:date ;
+    :residenceEnd "2005-12-31"^^xsd:date .
+
+:H_Disposition_CO a :Disposition ;
+    :involves :ColoradoProperty ;
+    :sellDate "2005-12-18"^^xsd:date ;
+    :potentialGain 240000 .
+
+:H_Disposition_ME a :Disposition ;
+    :involves :MaineProperty ;
+    :sellDate "2005-12-18"^^xsd:date ;
+    :potentialGain 215000 .
+
+:H_SingleReturn a :SingleReturn ;
+    :associates :TaxpayerH ;
+    :linkedTo :H_Disposition_CO , :H_Disposition_ME ;
+    :exclusionCap 250000 .

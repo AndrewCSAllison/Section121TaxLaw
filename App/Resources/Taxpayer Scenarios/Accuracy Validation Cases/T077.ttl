@@ -49,7 +49,7 @@
 
 :T077_Sale a :Disposition ;
     :sellDate "2000-01-15"^^xsd:date ;
-    :potentialGain "400000"^^xsd:integer ;
+    :potentialGain "500000"^^xsd:integer ;
     :involves :T077_Property ;
     :partialExclusionReason :EmploymentRelatedReason .
 

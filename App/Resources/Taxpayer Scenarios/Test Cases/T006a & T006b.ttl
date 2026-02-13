@@ -13,11 +13,12 @@
 :T006a a :Taxpayer ;
     :owns :Ownership_T006a ;
     :uses :Residence_T006a ;
-    :disposesOf :Disposition_T006a .
+    :disposesOf :Disposition_T006 .
 
 :Ownership_T006a a :OwnershipUseInterval ;
     :ownershipStart "2001-01-01"^^xsd:date ;
     :ownershipEnd "2003-01-01"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal ;
     :hasOwnershipOf :Property_SharedHouse .
 
 :Residence_T006a a :ResidenceUseInterval ;
@@ -25,26 +26,21 @@
     :residenceEnd "2003-01-01"^^xsd:date ;
     :hasResidenceOf :Property_SharedHouse .
 
-:Disposition_T006a a :Disposition ;
-    :sellDate "2003-01-01"^^xsd:date ;
-    :potentialGain "128000"^^xsd:integer ;
-    :involves :Property_SharedHouse .
-
 :Return_T006a a :SingleReturn ;
     :exclusionCap "250000"^^xsd:integer ;
     :associates :T006a ;
-    :linkedTo :Disposition_T006a .
-
+    :linkedTo :Disposition_T006 .
 
 ### --- Taxpayer B ---
 :T006b a :Taxpayer ;
     :owns :Ownership_T006b ;
     :uses :Residence_T006b ;
-    :disposesOf :Disposition_T006b .
+    :disposesOf :Disposition_T006 .
 
 :Ownership_T006b a :OwnershipUseInterval ;
     :ownershipStart "2001-01-01"^^xsd:date ;
     :ownershipEnd "2003-01-01"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal ;
     :hasOwnershipOf :Property_SharedHouse .
 
 :Residence_T006b a :ResidenceUseInterval ;
@@ -52,16 +48,15 @@
     :residenceEnd "2003-01-01"^^xsd:date ;
     :hasResidenceOf :Property_SharedHouse .
 
-:Disposition_T006b a :Disposition ;
-    :sellDate "2003-01-01"^^xsd:date ;
-    :potentialGain "128000"^^xsd:integer ;
-    :involves :Property_SharedHouse .
-
 :Return_T006b a :SingleReturn ;
     :exclusionCap "250000"^^xsd:integer ;
     :associates :T006b ;
-    :linkedTo :Disposition_T006b .
+    :linkedTo :Disposition_T006 .
 
+:Disposition_T006 a :Disposition ;
+    :sellDate "2003-01-01"^^xsd:date ;
+    :potentialGain "256000"^^xsd:integer ;
+    :involves :Property_SharedHouse .
 
 ### --- Shared Property ---
 :Property_SharedHouse a :Property ;

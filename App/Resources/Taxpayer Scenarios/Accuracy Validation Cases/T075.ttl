@@ -14,12 +14,12 @@
 
 :T075_OwnInterval a :OwnershipUseInterval ;
     :ownershipStart "2003-01-01"^^xsd:date ;
-    :ownershipEnd   "2003-12-31"^^xsd:date ;
+    :ownershipEnd   "2004-01-01"^^xsd:date ;
     :hasOwnershipOf :T075_Property .
 
 :T075_ResInterval a :ResidenceUseInterval ;
     :residenceStart "2003-01-01"^^xsd:date ;
-    :residenceEnd   "2003-12-31"^^xsd:date ;
+    :residenceEnd   "2004-01-01"^^xsd:date ;
     :hasResidenceOf :T075_Property .
 
 :T075 :owns :T075_OwnInterval ;
@@ -30,7 +30,7 @@
 #####################
 
 :T075_Sale a :Disposition ;
-    :sellDate "2003-12-31"^^xsd:date ;
+    :sellDate "2004-01-01"^^xsd:date ;
     :potentialGain "120000"^^xsd:integer ;
     :involves :T075_Property ;
     :partialExclusionReason :NonQualifyingReason .

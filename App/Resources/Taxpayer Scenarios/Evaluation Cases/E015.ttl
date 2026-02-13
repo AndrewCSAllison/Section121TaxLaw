@@ -1,0 +1,51 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:E a :Taxpayer .
+
+:MichiganProperty a :Property .
+:SouthCarolinaProperty a :Property .
+
+:OwnershipIntervalMI a :OwnershipUseInterval ;
+    :hasOwnershipOf :MichiganProperty ;
+    :ownershipStart "2001-01-01"^^xsd:date ;
+    :ownershipEnd "2005-12-31"^^xsd:date .
+
+:OwnershipIntervalSC a :OwnershipUseInterval ;
+    :hasOwnershipOf :SouthCarolinaProperty ;
+    :ownershipStart "2001-01-01"^^xsd:date ;
+    :ownershipEnd "2005-12-31"^^xsd:date .
+
+:ResidenceIntervalMI_2001_2002 a :ResidenceUseInterval ;
+    :hasResidenceOf :MichiganProperty ;
+    :residenceStart "2001-01-01"^^xsd:date ;
+    :residenceEnd "2002-12-31"^^xsd:date .
+
+:ResidenceIntervalSC_2003_2004 a :ResidenceUseInterval ;
+    :hasResidenceOf :SouthCarolinaProperty ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+:ResidenceIntervalMI_2005 a :ResidenceUseInterval ;
+    :hasResidenceOf :MichiganProperty ;
+    :residenceStart "2005-01-01"^^xsd:date ;
+    :residenceEnd "2005-12-31"^^xsd:date .
+
+:DispositionMI a :Disposition ;
+    :involves :MichiganProperty ;
+    :sellDate "2005-12-18"^^xsd:date ;
+    :potentialGain "230000"^^xsd:integer .
+
+:DispositionSC a :Disposition ;
+    :involves :SouthCarolinaProperty ;
+    :sellDate "2005-12-18"^^xsd:date ;
+    :potentialGain "210000"^^xsd:integer .
+
+:SingleReturnE a :SingleReturn ;
+    :associates :E ;
+    :linkedTo :DispositionMI, :DispositionSC ;
+    :exclusionCap "250000"^^xsd:integer .
+
+:E :owns :OwnershipIntervalMI, :OwnershipIntervalSC ;
+   :uses :ResidenceIntervalMI_2001_2002, :ResidenceIntervalSC_2003_2004, :ResidenceIntervalMI_2005 ;
+   :disposesOf :DispositionMI, :DispositionSC .

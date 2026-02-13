@@ -1,0 +1,363 @@
+**RDF/Turtle Generation Assistant Instructions (Section 121)** 
+*Role and Scope*
+- You are an assistant whose sole task is to generate and repair RDF/Turtle (.ttl) files based on natural language descriptions of taxpayer scenarios for a Section 121 knowledge graph according to a predefined ontology. 
+You are not allowed to: 
+- Interpret tax law
+- Apply legal reasoning
+- Compute exclusion amounts
+- Infer missing facts
+All legal reasoning and calculations are performed externally using SPARQL and SHACL.
+
+*Allowed Tasks*
+1. Convert natural language taxpayer descriptions into RDF/Turtle files.
+2. Repair RDF/Turtle files to satisfy SHACL or other validation errors.
+3. Preserve all existing correct triples unless explicity told to change them directly or via validation error messages.
+4. Ask the user for clarification regarding specific factual details that are needed for constructing RDF/Turtle files. 
+
+*Output Requirements*
+- Output only valid RDF/Turtle syntax 
+- No JSON
+- No extra whitespace beyond Turtle formatting
+- Every IRI requires plain prefix declarations, not Markdown-style links
+- Literals must have the correct datatypes
+- Output the RDF/Turtle inside a Markdown code block (triple backticks ```).
+- Do not include any additional prose or explanation outside the code block.
+
+*Ontology Compliance*
+- Use only classes and properties explicitly defined in the provided ontology
+- Do not invent new predicates, classes, or IRIs not specifically listed in the predefined ontology
+- Use enumerated values exactly as provided
+- Do not create triples for DerivedInfo & Interpretation classes (this is done by SPARQL)
+
+*Datatypes*
+Use correct XSD datatypes:
+- Dates -> xsd:date
+- Booleans -> xsd:boolean
+- Currency / numeric values -> xsd:decimal OR xsd:integer (refer to provided ontology)
+- Strings -> xsd:string
+Never omit datatypes.
+
+*Specific Section 121 Modeling Rules*
+- Property Linking Requirement: Every instance of :OwnershipUseInterval, :ResidenceUseInterval, and :Disposition MUST be explicitly linked to a :Property instance using the correct predicate (:hasOwnershipOf, :hasResidenceOf, or :involves respectively).- In addition to following everything listed in 'Ontology Compliance', also review the SHACL shapes to ensure all necessary data has been collected before attempting to generate a RDF/Turtle file for a taxpayer scenario. 
+- Instantiation Requirement: You must explicitly declare the property instance (e.g., :MainResidence a :Property .) before linking to it.
+- Realized gains should be positive integers, losses should be modeled as negative values.
+- If the taxpayer mentions multiple non-continuous intervals of ownership/residence use, model EACH interval as its own OwnershipInterval/ResidenceUseInterval.
+- The exclusion cap for a SingleReturn is always 250,000 and for a JointReturn is always 500,000.
+- If the taxpayer scenario mentions multiple joint owners that are splitting the realized gain, link each individual taxpayer to the same JointReturn, just making sure to add their precentageOwned under OwnershipUseInterval.
+- If the taxpayer scenario mentions multiple joint owners that are NOT splitting the realized gain, link both taxpayers to a singular JointReturn.
+- Only include a partialExclusionReason if the scenario refers to one in the taxpayer description or Section 121c specifically (refer to the predefined reasons listed in the ontology).
+
+*Missing or Ambiguous Information*
+If you have determined required information is missing:
+- Do not guess values.
+- Do not infer dates or amounts.
+- Instead, ask the user for clarification about specific facts that are missing.
+
+*SHACL & SPARQL NYI Error Handling*
+When error messages are provided indicating incorrect RDF/Turtle file creation:
+1. Modify only the triples necessary to resolve the violation(s).
+2. Do not remove unrelated triples.
+3. Ensure the repaired Turtle satisfies all other rules, ontology, and SHACL constraints.
+4. If undefined classes, datatype attributes, or relations are introduced, review the ontology and SHACL shapes and map undefined object to a predefined one. 
+
+*Validation Goal*
+Your output must:
+- Parse successfully as Turtle
+- Pass SHACL validation
+- Contain only factual assertions provided by the user
+
+*Failure Mode*
+If the input is inconsistent, contradictory, or impossible to resolve:
+- Ask the user to restart their explanation, clearly including all basic information that is required. 
+
+**End of Instructions**
+
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+#########################
+# Ontology Declaration
+#########################
+: a owl:Ontology ;
+   rdfs:comment "Section 121 Taxpayer Tax Law Ontology in OWL 2 DL." .
+
+#########################
+# Classes
+#########################
+:Taxpayer a owl:Class .
+:OwnershipUseInterval a owl:Class .
+:ResidenceUseInterval a owl:Class .
+:Property a owl:Class .
+:Disposition a owl:Class .
+:ReasonType a owl:Class .
+:Return a owl:Class .
+:JointReturn rdfs:subClassOf :Return .
+:SingleReturn rdfs:subClassOf :Return .
+:DerivedInfo a owl:Class .
+:Interpretation a owl:Class .
+
+#########################
+# Datatype Properties
+#########################
+:percentageOwned a owl:DatatypeProperty ; 
+    rdfs:domain :OwnershipUseInterval ;
+    rdfs:range xsd:decimal .
+    
+:ownershipStart a owl:DatatypeProperty ;
+    rdfs:domain :OwnershipUseInterval ;
+    rdfs:range xsd:date .
+
+:ownershipEnd a owl:DatatypeProperty ;
+    rdfs:domain :OwnershipUseInterval ;
+    rdfs:range xsd:date .
+
+:residenceStart a owl:DatatypeProperty ;
+    rdfs:domain :ResidenceUseInterval ;
+    rdfs:range xsd:date .
+
+:residenceEnd a owl:DatatypeProperty ;
+    rdfs:domain :ResidenceUseInterval ;
+    rdfs:range xsd:date .
+
+:sellDate a owl:DatatypeProperty ;
+    rdfs:domain :Disposition ;
+    rdfs:range xsd:date .
+
+:potentialGain a owl:DatatypeProperty ;
+    rdfs:domain :Disposition ;
+    rdfs:range xsd:integer .
+
+:exclusionCap a owl:DatatypeProperty ;
+    rdfs:domain :Return ;
+    rdfs:range xsd:integer .
+
+#########################
+# Object Properties
+#########################
+:disposesOf a owl:ObjectProperty ;
+    rdfs:domain :Taxpayer ;
+    rdfs:range :Disposition .
+
+:owns a owl:ObjectProperty ;
+    rdfs:domain :Taxpayer ;
+    rdfs:range :OwnershipUseInterval .
+
+:uses a owl:ObjectProperty ;
+    rdfs:domain :Taxpayer ;
+    rdfs:range :ResidenceUseInterval .
+
+:hasOwnershipOf a owl:ObjectProperty ;
+    rdfs:domain :OwnershipUseInterval ;
+    rdfs:range :Property .
+
+:hasResidenceOf a owl:ObjectProperty ;
+    rdfs:domain :ResidenceUseInterval ;
+    rdfs:range :Property .
+
+:involves a owl:ObjectProperty ;
+    rdfs:domain :Disposition ;
+    rdfs:range :Property .
+
+:associates a owl:ObjectProperty ;
+    rdfs:domain :Return ;
+    rdfs:range :Taxpayer .
+
+:linkedTo a owl:ObjectProperty ;
+    rdfs:domain :Return ;
+    rdfs:range :Disposition .
+
+:partialExclusionReason a owl:ObjectProperty ;
+    rdfs:domain :Disposition ;
+    rdfs:range :ReasonType .
+
+:hasDerivedInfo a owl:ObjectProperty ;
+    rdfs:domain :DerivedInfo ;
+    rdfs:range :Disposition .
+
+:hasInterpretation a owl:ObjectProperty ;
+    rdfs:domain :DerivedInfo ;
+    rdfs:range :Disposition .
+
+#########################
+# Individuals — §121(c) Generalized Reason Flags
+#########################
+
+### --- Qualifying (Valid) Reasons For Partial Exclusions ---
+:EmploymentRelatedReason a :ReasonType .
+
+:HealthRelatedReason a :ReasonType .
+
+:UnforeseenCircumstanceReason a :ReasonType .
+
+### --- Non-Qualifying (Invalid) Reason ---
+:NonQualifyingReason a :ReasonType .
+
+@prefix : <http://example.org/section121#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#########################
+# SHACL Shapes
+#########################
+
+:TaxpayerShape
+    a sh:NodeShape ;
+    sh:targetClass :Taxpayer ;
+    sh:property [
+	sh:path :disposesOf ;
+	sh:class :Disposition ;
+    ] ;
+    sh:property [
+	sh:path :owns ;
+	sh:class :OwnershipUseInterval ;
+    ] ;
+    sh:property [
+	sh:path :uses ;
+	sh:class :ResidenceUseInterval ;
+    ] .
+
+:OwnershipUseIntervalShape
+    a sh:NodeShape ;
+    sh:targetClass :OwnershipUseInterval ;
+    sh:property [
+	sh:path :hasOwnershipOf ;
+	sh:class :Property ;
+	sh:minCount 1 ;
+	sh:maxCount 1 ;
+    ] ;
+    sh:property [
+	sh:path :ownershipStart ;
+	sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+	sh:path :ownershipEnd ;
+	sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+    sh:path :percentageOwned ;
+    sh:datatype xsd:decimal ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 1 ;
+    ] .
+
+:ResidenceUseIntervalShape
+    a sh:NodeShape ;
+    sh:targetClass :ResidenceUseInterval ;
+    sh:property [
+	sh:path :hasResidenceOf ;
+	sh:class :Property ;
+	sh:minCount 1 ;
+	sh:maxCount 1 ;
+    ] ;
+    sh:property [
+	sh:path :residenceStart ;
+	sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+	sh:path :residenceEnd ;
+	sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] .
+
+:DispositionShape
+    a sh:NodeShape ;
+    sh:targetClass :Disposition ;
+
+    # Must involve a Property
+    sh:property [
+        sh:path :involves ;
+        sh:class :Property ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Every disposition must involve exactly one property." ;
+    ] ;
+
+    # Must have a sell date (required, must be xsd:date)
+    sh:property [
+        sh:path :sellDate ;
+        sh:datatype xsd:date ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Disposition must have a valid sellDate (xsd:date)." ;
+    ] ;
+
+    # Must have a potential gain (integer)
+    sh:property [
+        sh:path :potentialGain ;
+        sh:datatype xsd:integer ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Disposition must specify potentialGain as an integer." ;
+    ] ;
+
+    # Optional: partial exclusion reason, but if present it must be a ReasonType
+    sh:property [
+        sh:path :partialExclusionReason ;
+        sh:class :ReasonType ;
+	sh:in (
+	    :EmploymentRelatedReason
+        :HealthRelatedReason
+        :UnforeseenCircumstanceReason
+	    :NonQualifyingReason
+	) ;
+        sh:maxCount 1 ;
+        sh:message "partialExclusionReason must reference a valid ReasonType." ;
+    ] .
+
+:ReturnShape
+    a sh:NodeShape ;
+    sh:targetClass :Return ;
+
+    # Must associate with at least one Taxpayer
+    sh:property [
+        sh:path :associates ;
+        sh:class :Taxpayer ;
+        sh:minCount 1 ;
+        sh:message "A Return must have at least one associated Taxpayer." ;
+    ] ;
+
+    # Must be linked to at least one Disposition
+    sh:property [
+        sh:path :linkedTo ;
+        sh:class :Disposition ;
+        sh:minCount 1 ;
+        sh:message "A Return must be linked to at least one Disposition." ;
+    ] .
+
+:SingleReturnShape
+    a sh:NodeShape ;
+    sh:targetClass :SingleReturn ;
+    sh:property [
+        sh:path :exclusionCap ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 250000 ;
+        sh:maxInclusive 250000 ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "SingleReturn exclusionCap must be exactly $250,000." ;
+    ] .
+
+:JointReturnShape
+    a sh:NodeShape ;
+    sh:targetClass :JointReturn ;
+    sh:property [
+        sh:path :exclusionCap ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 500000 ;
+        sh:maxInclusive 500000 ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "JointReturn exclusionCap must be exactly $500,000." ;
+    ] .

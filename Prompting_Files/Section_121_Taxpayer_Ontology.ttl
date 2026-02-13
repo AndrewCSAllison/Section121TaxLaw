@@ -23,11 +23,15 @@
 :JointReturn rdfs:subClassOf :Return .
 :SingleReturn rdfs:subClassOf :Return .
 :DerivedInfo a owl:Class .
-:Interpretation a owl:Class .
+:InterpretationInfo a owl:Class .
 
 #########################
 # Datatype Properties
 #########################
+:percentageOwned a owl:DatatypeProperty ; 
+    rdfs:domain :OwnershipUseInterval ;
+    rdfs:range xsd:decimal .
+    
 :ownershipStart a owl:DatatypeProperty ;
     rdfs:domain :OwnershipUseInterval ;
     rdfs:range xsd:date .

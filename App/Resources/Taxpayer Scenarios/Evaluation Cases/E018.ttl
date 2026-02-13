@@ -1,0 +1,50 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:Taxpayer_F a :Taxpayer ;
+    :owns :OwnershipInterval_Nevada , :OwnershipInterval_Washington ;
+    :uses :ResidenceInterval_NV_2002_2003 , :ResidenceInterval_WA_2004_2005 , :ResidenceInterval_NV_2006 ;
+    :disposesOf :Disposition_Nevada , :Disposition_Washington .
+
+:NevadaProperty a :Property .
+:WashingtonProperty a :Property .
+
+:OwnershipInterval_Nevada a :OwnershipUseInterval ;
+    :hasOwnershipOf :NevadaProperty ;
+    :ownershipStart "2002-01-01"^^xsd:date ;
+    :ownershipEnd "2006-12-31"^^xsd:date .
+
+:OwnershipInterval_Washington a :OwnershipUseInterval ;
+    :hasOwnershipOf :WashingtonProperty ;
+    :ownershipStart "2002-01-01"^^xsd:date ;
+    :ownershipEnd "2006-12-31"^^xsd:date .
+
+:ResidenceInterval_NV_2002_2003 a :ResidenceUseInterval ;
+    :hasResidenceOf :NevadaProperty ;
+    :residenceStart "2002-01-01"^^xsd:date ;
+    :residenceEnd "2003-12-31"^^xsd:date .
+
+:ResidenceInterval_WA_2004_2005 a :ResidenceUseInterval ;
+    :hasResidenceOf :WashingtonProperty ;
+    :residenceStart "2004-01-01"^^xsd:date ;
+    :residenceEnd "2005-12-31"^^xsd:date .
+
+:ResidenceInterval_NV_2006 a :ResidenceUseInterval ;
+    :hasResidenceOf :NevadaProperty ;
+    :residenceStart "2006-01-01"^^xsd:date ;
+    :residenceEnd "2006-12-31"^^xsd:date .
+
+:Disposition_Nevada a :Disposition ;
+    :involves :NevadaProperty ;
+    :sellDate "2006-12-15"^^xsd:date ;
+    :potentialGain 235000 .
+
+:Disposition_Washington a :Disposition ;
+    :involves :WashingtonProperty ;
+    :sellDate "2006-12-15"^^xsd:date ;
+    :potentialGain 210000 .
+
+:Return_F_2006 a :SingleReturn ;
+    :associates :Taxpayer_F ;
+    :linkedTo :Disposition_Nevada , :Disposition_Washington ;
+    :exclusionCap 250000 .

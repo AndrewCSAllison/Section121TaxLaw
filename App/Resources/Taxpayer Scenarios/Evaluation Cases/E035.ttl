@@ -1,0 +1,42 @@
+:TaxpayerL a :Taxpayer ;
+    :owns :Ownership_House, :Ownership_Land ;
+    :uses :Residence_House, :Residence_Land ;
+    :disposesOf :Disposition_House, :Disposition_Land .
+
+:Property_House a :Property .
+:Property_Land a :Property .
+
+:Ownership_House a :OwnershipUseInterval ;
+    :hasOwnershipOf :Property_House ;
+    :ownershipStart "1998-01-01"^^xsd:date ;
+    :ownershipEnd "2003-12-31"^^xsd:date .
+
+:Ownership_Land a :OwnershipUseInterval ;
+    :hasOwnershipOf :Property_Land ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2003-12-31"^^xsd:date .
+
+:Residence_House a :ResidenceUseInterval ;
+    :hasResidenceOf :Property_House ;
+    :residenceStart "1998-01-01"^^xsd:date ;
+    :residenceEnd "2003-12-31"^^xsd:date .
+
+:Residence_Land a :ResidenceUseInterval ;
+    :hasResidenceOf :Property_Land ;
+    :residenceStart "1998-01-01"^^xsd:date ;
+    :residenceEnd "2003-12-31"^^xsd:date .
+
+:Disposition_House a :Disposition ;
+    :involves :Property_House ;
+    :sellDate "2003-06-15"^^xsd:date ;
+    :potentialGain -25000 .
+
+:Disposition_Land a :Disposition ;
+    :involves :Property_Land ;
+    :sellDate "2003-06-15"^^xsd:date ;
+    :potentialGain 270000 .
+
+:Return_L a :SingleReturn ;
+    :exclusionCap 250000 ;
+    :associates :TaxpayerL ;
+    :linkedTo :Disposition_House, :Disposition_Land .
