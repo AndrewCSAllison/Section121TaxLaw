@@ -1,0 +1,44 @@
+:AK_1 a :Taxpayer .
+:AK_2 a :Taxpayer .
+
+:MainResidence a :Property .
+
+:OwnershipInterval_AK1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "2018-02-01"^^xsd:date ;
+    :ownershipEnd "2020-02-28"^^xsd:date ;
+    :percentageOwned 0.5 .
+
+:OwnershipInterval_AK2 a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "2018-02-01"^^xsd:date ;
+    :ownershipEnd "2020-02-28"^^xsd:date ;
+    :percentageOwned 0.5 .
+
+:ResidenceInterval_AK1 a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
+    :residenceStart "2018-02-01"^^xsd:date ;
+    :residenceEnd "2020-02-28"^^xsd:date .
+
+:ResidenceInterval_AK2 a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
+    :residenceStart "2018-02-01"^^xsd:date ;
+    :residenceEnd "2020-02-28"^^xsd:date .
+
+:Disposition_MainResidence a :Disposition ;
+    :involves :MainResidence ;
+    :sellDate "2020-02-28"^^xsd:date ;
+    :potentialGain 300000 .
+
+:JointReturn_2020 a :JointReturn ;
+    :exclusionCap 500000 ;
+    :associates :AK_1, :AK_2 ;
+    :linkedTo :Disposition_MainResidence .
+
+:AK_1 :owns :OwnershipInterval_AK1 ;
+       :uses :ResidenceInterval_AK1 ;
+       :disposesOf :Disposition_MainResidence .
+
+:AK_2 :owns :OwnershipInterval_AK2 ;
+       :uses :ResidenceInterval_AK2 ;
+       :disposesOf :Disposition_MainResidence . 

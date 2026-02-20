@@ -1,0 +1,31 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:X a :Taxpayer ;
+    :owns :X_OwnershipInterval1 ;
+    :uses :X_ResidenceInterval1 ;
+    :disposesOf :Disposition1 .
+
+:MainResidence a :Property .
+
+:X_OwnershipInterval1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "1988-03-01"^^xsd:date ;
+    :ownershipEnd "2003-01-15"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:X_ResidenceInterval1 a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
+    :residenceStart "1988-03-01"^^xsd:date ;
+    :residenceEnd "1998-01-04"^^xsd:date .
+
+:Disposition1 a :Disposition ;
+    :involves :MainResidence ;
+    :sellDate "2003-01-15"^^xsd:date ;
+    :potentialGain 210000 .
+
+:Return1 a :SingleReturn ;
+    :associates :X ;
+    :linkedTo :Disposition1 ;
+    :exclusionCap 250000 .

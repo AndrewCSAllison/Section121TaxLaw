@@ -1,0 +1,49 @@
+:AH_1 a :Taxpayer .
+:AH_2 a :Taxpayer .
+
+:MainResidence a :Property .
+
+:OwnershipInterval_AH1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "2012-09-01"^^xsd:date ;
+    :ownershipEnd "2014-08-31"^^xsd:date ;
+    :percentageOwned 0.5 .
+    
+:OwnershipInterval_AH2 a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "2012-09-01"^^xsd:date ;
+    :ownershipEnd "2014-08-31"^^xsd:date ;
+    :percentageOwned 0.5 .
+
+:ResidenceInterval_AH1 a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
+    :residenceStart "2012-09-01"^^xsd:date ;
+    :residenceEnd "2014-08-31"^^xsd:date .
+
+:ResidenceInterval_AH2 a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
+    :residenceStart "2012-09-01"^^xsd:date ;
+    :residenceEnd "2014-08-31"^^xsd:date .
+
+:Disposition_AH a :Disposition ;
+    :involves :MainResidence ;
+    :sellDate "2014-08-31"^^xsd:date ;
+    :potentialGain 720000 .
+
+:AH_1 :owns :OwnershipInterval_AH1 ;
+       :uses :ResidenceInterval_AH1 ;
+       :disposesOf :Disposition_AH .
+
+:AH_2 :owns :OwnershipInterval_AH2 ;
+       :uses :ResidenceInterval_AH2 ;
+       :disposesOf :Disposition_AH .
+
+:Return_AH1 a :SingleReturn ;
+    :associates :AH_1 ;
+    :linkedTo :Disposition_AH ;
+    :exclusionCap 250000 .
+
+:Return_AH2 a :SingleReturn ;
+    :associates :AH_2 ;
+    :linkedTo :Disposition_AH ;
+    :exclusionCap 250000 .

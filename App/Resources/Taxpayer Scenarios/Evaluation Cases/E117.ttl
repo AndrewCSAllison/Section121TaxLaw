@@ -1,0 +1,44 @@
+:AM_1 a :Taxpayer .
+:AM_2 a :Taxpayer .
+
+:MainResidence a :Property .
+
+:OwnershipUseInterval_AM_1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "2012-09-01"^^xsd:date ;
+    :ownershipEnd "2014-08-31"^^xsd:date ;
+    :percentageOwned 0.5 .
+
+:OwnershipUseInterval_AM_2 a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "2012-09-01"^^xsd:date ;
+    :ownershipEnd "2014-08-31"^^xsd:date ;
+    :percentageOwned 0.5 .
+
+:ResidenceUseInterval_AM_1 a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
+    :residenceStart "2012-09-01"^^xsd:date ;
+    :residenceEnd "2014-08-31"^^xsd:date .
+
+:ResidenceUseInterval_AM_2 a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
+    :residenceStart "2012-09-01"^^xsd:date ;
+    :residenceEnd "2014-08-31"^^xsd:date .
+
+:Disposition_AM a :Disposition ;
+    :involves :MainResidence ;
+    :sellDate "2014-08-31"^^xsd:date ;
+    :potentialGain 600000 .
+
+:JointReturn_AM a :JointReturn ;
+    :exclusionCap 500000 ;
+    :associates :AM_1, :AM_2 ;
+    :linkedTo :Disposition_AM .
+
+:AM_1 :owns :OwnershipUseInterval_AM_1 ;
+       :uses :ResidenceUseInterval_AM_1 ;
+       :disposesOf :Disposition_AM .
+
+:AM_2 :owns :OwnershipUseInterval_AM_2 ;
+       :uses :ResidenceUseInterval_AM_2 ;
+       :disposesOf :Disposition_AM .

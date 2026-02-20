@@ -1,0 +1,27 @@
+:AC a :Taxpayer ;
+    :owns :AC_OwnershipInterval1 ;
+    :uses :AC_ResidenceInterval1 ;
+    :disposesOf :AC_Disposition1 .
+
+:Townhouse a :Property .
+
+:AC_OwnershipInterval1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :Townhouse ;
+    :ownershipStart "1997-04-01"^^xsd:date ;
+    :ownershipEnd "2000-09-09"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:AC_ResidenceInterval1 a :ResidenceUseInterval ;
+    :hasResidenceOf :Townhouse ;
+    :residenceStart "1995-09-09"^^xsd:date ;
+    :residenceEnd "1998-06-15"^^xsd:date .
+
+:AC_Disposition1 a :Disposition ;
+    :involves :Townhouse ;
+    :sellDate "2000-09-09"^^xsd:date ;
+    :potentialGain 245000 .
+
+:AC_Return a :SingleReturn ;
+    :associates :AC ;
+    :linkedTo :AC_Disposition1 ;
+    :exclusionCap 250000 .

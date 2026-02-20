@@ -1,0 +1,29 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:MainResidence a :Property .
+
+:Taxpayer_V a :Taxpayer ;
+    :owns :OwnershipInterval_V ;
+    :uses :ResidenceInterval_V ;
+    :disposesOf :Disposition_V .
+
+:OwnershipInterval_V a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "1987-02-01"^^xsd:date ;
+    :ownershipEnd "2002-06-15"^^xsd:date .
+
+:ResidenceInterval_V a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
+    :residenceStart "1987-02-01"^^xsd:date ;
+    :residenceEnd "1998-01-04"^^xsd:date .
+
+:Disposition_V a :Disposition ;
+    :involves :MainResidence ;
+    :sellDate "2002-06-15"^^xsd:date ;
+    :potentialGain 220000 .
+
+:SingleReturn_V a :SingleReturn ;
+    :associates :Taxpayer_V ;
+    :linkedTo :Disposition_V ;
+    :exclusionCap 250000 .

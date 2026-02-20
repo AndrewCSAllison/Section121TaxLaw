@@ -43,8 +43,7 @@ Never omit datatypes.
 - Realized gains should be positive integers, losses should be modeled as negative values.
 - If the taxpayer mentions multiple non-continuous intervals of ownership/residence use, model EACH interval as its own OwnershipInterval/ResidenceUseInterval.
 - The exclusion cap for a SingleReturn is always 250,000 and for a JointReturn is always 500,000.
-- If the taxpayer scenario mentions multiple joint owners that are splitting the realized gain, link each individual taxpayer to the same JointReturn, just making sure to add their precentageOwned under OwnershipUseInterval.
-- If the taxpayer scenario mentions multiple joint owners that are NOT splitting the realized gain, link both taxpayers to a singular JointReturn.
+- If the taxpayer scenario mentions multiple joint owners that are splitting the realized gain, link each individual taxpayer to the same disposition with the total potential gain realized and separate them into different SingleReturns, making sure to add their precentageOwned under OwnershipUseInterval.
 - Only include a partialExclusionReason if the scenario refers to one in the taxpayer description or Section 121c specifically (refer to the predefined reasons listed in the ontology).
 
 *Missing or Ambiguous Information*

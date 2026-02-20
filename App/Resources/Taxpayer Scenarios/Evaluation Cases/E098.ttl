@@ -1,0 +1,49 @@
+:AG_1 a :Taxpayer .
+:AG_2 a :Taxpayer .
+
+:MainResidence a :Property .
+
+:OUI_AG1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "2015-05-15"^^xsd:date ;
+    :ownershipEnd "2017-05-14"^^xsd:date ;
+    :percentageOwned 0.5 .
+
+:OUI_AG2 a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "2015-05-15"^^xsd:date ;
+    :ownershipEnd "2017-05-14"^^xsd:date ;
+    :percentageOwned 0.5 .
+
+:RUI_AG1 a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
+    :residenceStart "2015-05-15"^^xsd:date ;
+    :residenceEnd "2017-05-14"^^xsd:date .
+
+:RUI_AG2 a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
+    :residenceStart "2015-05-15"^^xsd:date ;
+    :residenceEnd "2017-05-14"^^xsd:date .
+
+:Disposition_MainResidence a :Disposition ;
+    :involves :MainResidence ;
+    :sellDate "2017-05-14"^^xsd:date ;
+    :potentialGain 540000 .
+
+:Return_AG1 a :SingleReturn ;
+    :associates :AG_1 ;
+    :linkedTo :Disposition_MainResidence ;
+    :exclusionCap 250000 .
+
+:Return_AG2 a :SingleReturn ;
+    :associates :AG_2 ;
+    :linkedTo :Disposition_MainResidence ;
+    :exclusionCap 250000 .
+
+:AG_1 :owns :OUI_AG1 ;
+       :uses :RUI_AG1 ;
+       :disposesOf :Disposition_MainResidence .
+
+:AG_2 :owns :OUI_AG2 ;
+       :uses :RUI_AG2 ;
+       :disposesOf :Disposition_MainResidence .

@@ -1,0 +1,36 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+### Property
+:ADsTownhouse a :Property .
+
+### Taxpayer
+:AD a :Taxpayer ;
+    :owns :AD_OwnershipInterval ;
+    :uses :AD_ResidenceInterval ;
+    :disposesOf :AD_Disposition .
+
+### Ownership Interval
+:AD_OwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :ADsTownhouse ;
+    :ownershipStart "1996-12-12"^^xsd:date ;
+    :ownershipEnd "2000-04-21"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+### Residence Use Interval
+:AD_ResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :ADsTownhouse ;
+    :residenceStart "1995-04-21"^^xsd:date ;
+    :residenceEnd "1998-02-10"^^xsd:date .
+
+### Disposition
+:AD_Disposition a :Disposition ;
+    :involves :ADsTownhouse ;
+    :sellDate "2000-04-21"^^xsd:date ;
+    :potentialGain 235000 .
+
+### Return
+:AD_Return a :SingleReturn ;
+    :associates :AD ;
+    :linkedTo :AD_Disposition ;
+    :exclusionCap 250000 .

@@ -1,0 +1,44 @@
+:AJ_1 a :Taxpayer .
+:AJ_2 a :Taxpayer .
+
+:MainResidence a :Property .
+
+:OwnershipInterval_AJ1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "2020-01-01"^^xsd:date ;
+    :ownershipEnd "2022-12-31"^^xsd:date ;
+    :percentageOwned 0.5 .
+
+:OwnershipInterval_AJ2 a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "2020-01-01"^^xsd:date ;
+    :ownershipEnd "2022-12-31"^^xsd:date ;
+    :percentageOwned 0.5 .
+
+:ResidenceInterval_AJ1 a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
+    :residenceStart "2020-01-01"^^xsd:date ;
+    :residenceEnd "2022-12-31"^^xsd:date .
+
+:ResidenceInterval_AJ2 a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
+    :residenceStart "2020-01-01"^^xsd:date ;
+    :residenceEnd "2022-12-31"^^xsd:date .
+
+:Disposition_1 a :Disposition ;
+    :involves :MainResidence ;
+    :sellDate "2022-12-31"^^xsd:date ;
+    :potentialGain 256000 .
+
+:AJ_1 :owns :OwnershipInterval_AJ1 ;
+       :uses :ResidenceInterval_AJ1 ;
+       :disposesOf :Disposition_1 .
+
+:AJ_2 :owns :OwnershipInterval_AJ2 ;
+       :uses :ResidenceInterval_AJ2 ;
+       :disposesOf :Disposition_1 .
+
+:JointReturn_1 a :JointReturn ;
+    :exclusionCap 500000 ;
+    :associates :AJ_1 , :AJ_2 ;
+    :linkedTo :Disposition_1 .

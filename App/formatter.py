@@ -2,13 +2,12 @@ from collections import defaultdict
 
 def format_results_nl(results_json):
     """
-    Converts JSON results from SPARQL queries into human-readable messages.
-    Realized gains remain per property. Excluded gains offset each other
-    in the aggregated summary if there is a mix of positive and negative values.
+    Aggregates results per taxpayer per property, sums realized/excluded gains per property,
+    caps exclusions (500k joint, 250k single), handles negative realized gains,
+    and displays numeric exclusions concisely for joint filers.
     """
+    # Step 1: group rows by property + sellDate
     groups = defaultdict(list)
-
-    # Group by property + sellDate
     for row in results_json.get("results", {}).get("bindings", []):
         prop = row.get("property", {}).get("value", "Unknown property").split("#")[-1]
         sell_date = row.get("sellDate", {}).get("value", "Unknown date")
@@ -26,78 +25,76 @@ def format_results_nl(results_json):
         "Rule121d1Applies": "§121(d)(1) applies",
     }
 
-    property_results = []
-
-    # First pass: collect per-property realized and excluded gains
     for (prop, sell_date), rows in groups.items():
-        all_full_ownership = all(
-            float(row.get("percentageOwned", {}).get("value", 0)) == 1.0
-            for row in rows
-        )
+        # Step 2: aggregate per taxpayer per property
+        taxpayer_data = defaultdict(lambda: {"realized": 0, "excluded": 0, "rules": defaultdict(list)})
+        for row in rows:
+            taxpayer = row.get("taxpayer", {}).get("value", "").split("#")[-1]
+            realized = float(row.get("realizedGain", {}).get("value", 0))
+            excluded = float(row.get("excludedGain", {}).get("value", 0))
+            taxpayer_data[taxpayer]["realized"] += realized
+            taxpayer_data[taxpayer]["excluded"] += excluded
 
-        if len(rows) > 1 and all_full_ownership:
-            taxpayers = ", ".join(
-                row.get("taxpayer", {}).get("value", "").split("#")[-1]
-                for row in rows
-            )
-            lines = [f"Taxpayers {taxpayers} sold property {prop} on {sell_date}."]
-
+            # collect all rule info per taxpayer
             for key, label in rules_map.items():
-                values = [
-                    row.get(key, {}).get("value")
-                    for row in rows
-                    if row.get(key, {}).get("value")
-                ]
-                if not values:
-                    continue
-                if any(v.lower() in ["true", "1"] for v in values):
-                    lines.append(f"- {label}")
-                else:
-                    numeric_values = [
-                        float(v) for v in values if v.lower() not in ["false", "0", "0.0"]
-                    ]
-                    for nv in numeric_values:
-                        lines.append(f"- {label}: {nv}")
+                value = row.get(key, {}).get("value")
+                if value:
+                    taxpayer_data[taxpayer]["rules"][label].append(value)
 
-            realized = sum(float(r.get("realizedGain", {}).get("value", 0)) for r in rows)
-            excluded = sum(float(r.get("excludedGain", {}).get("value", 0)) for r in rows)
+        taxpayers = list(taxpayer_data.keys())
+        joint_filing = len(taxpayers) > 1
 
-            property_results.append({
-                "lines": lines,
-                "realized": realized,
-                "excluded": excluded
-            })
+        # Step 3: sum totals across taxpayers for this property
+        total_realized = sum(t["realized"] for t in taxpayer_data.values())
+        total_excluded_raw = sum(t["excluded"] for t in taxpayer_data.values())
 
+        max_exclusion = 500000 if joint_filing else 250000
+        if total_realized < 0:
+            total_excluded = max(total_excluded_raw, -max_exclusion)
         else:
-            for row in rows:
-                taxpayer = row.get("taxpayer", {}).get("value", "").split("#")[-1]
-                lines = [f"Taxpayer {taxpayer} sold property {prop} on {sell_date}."]
+            total_excluded = min(total_excluded_raw, max_exclusion)
 
-                for key, label in rules_map.items():
-                    value = row.get(key, {}).get("value")
-                    if not value:
-                        continue
-                    if value.lower() in ["true", "1"]:
-                        lines.append(f"- {label}")
-                    elif value.lower() not in ["false", "0", "0.0"]:
-                        lines.append(f"- {label}: {float(value)}")
+        lines = [
+            f"Taxpayers {', '.join(taxpayers)} sold property {prop} on {sell_date}."
+            if joint_filing else f"Taxpayer {taxpayers[0]} sold property {prop} on {sell_date}."
+        ]
 
-                realized = float(row.get("realizedGain", {}).get("value", 0))
-                excluded = float(row.get("excludedGain", {}).get("value", 0))
+        # Step 4: process rules and numeric exclusions
+        for label, values in rules_map.items():
+            # collect numeric values for this rule
+            numeric_values = []
+            bool_applies = False
+            for t in taxpayers:
+                v_list = taxpayer_data[t]["rules"].get(values)
+                if v_list:
+                    for v in v_list:
+                        if str(v).lower() in ["true", "1"]:
+                            bool_applies = True
+                        elif str(v).lower() not in ["false", "0", "0.0"]:
+                            numeric_values.append(float(v))
 
-                property_results.append({
-                    "lines": lines,
-                    "realized": realized,
-                    "excluded": excluded
-                })
+            if bool_applies:
+                lines.append(f"- {values}")
+            elif numeric_values:
+                numeric_total = sum(numeric_values)
+                scale = total_excluded / numeric_total if numeric_total != 0 else 0
+                scaled_values = [round(v*scale,2) for v in numeric_values]
 
-    # Second pass: format per-property messages
-    for res in property_results:
-        res_lines = res["lines"]
-        taxable = max(round(res["realized"] - res["excluded"], 2), 0)
-        res_lines.append(
-            f"Realized gain: {res['realized']}, Excluded gain: {res['excluded']}, Taxable gain: {taxable}"
+                if joint_filing:
+                    # concise joint display if all scaled values equal
+                    if all(v == scaled_values[0] for v in scaled_values):
+                        lines.append(f"- {values}: {scaled_values[0]} each")
+                    else:
+                        for t, v in zip(taxpayers, scaled_values):
+                            lines.append(f"- {values} for {t}: {v}")
+                else:
+                    lines.append(f"- {values}: {scaled_values[0]}")
+
+        taxable = max(round(total_realized - total_excluded, 2), 0)
+        lines.append(
+            f"Realized gain: {round(total_realized,2)}, Excluded gain: {round(total_excluded,2)}, Taxable gain: {taxable}"
         )
-        messages.append("\n".join(res_lines))
+
+        messages.append("\n".join(lines))
 
     return "\n\n".join(messages)
