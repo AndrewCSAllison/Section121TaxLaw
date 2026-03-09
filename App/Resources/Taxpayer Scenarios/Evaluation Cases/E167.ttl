@@ -1,0 +1,75 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#########################
+# Properties
+#########################
+:Townhouse a :Property .
+:House a :Property .
+
+#########################
+# Taxpayer
+#########################
+:BD a :Taxpayer .
+
+#########################
+# Ownership Intervals
+#########################
+:BD_Townhouse_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :Townhouse ;
+    :ownershipStart "2002-01-01"^^xsd:date ;
+    :ownershipEnd "2003-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:BD_House_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
+    :ownershipStart "2004-01-01"^^xsd:date ;
+    :ownershipEnd "2006-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+#########################
+# Residence Use Intervals
+#########################
+:BD_Townhouse_Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :Townhouse ;
+    :residenceStart "2002-01-01"^^xsd:date ;
+    :residenceEnd "2003-12-31"^^xsd:date .
+
+:BD_House_Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
+    :residenceStart "2004-01-01"^^xsd:date ;
+    :residenceEnd "2006-12-31"^^xsd:date .
+
+#########################
+# Dispositions
+#########################
+:BD_Townhouse_Sale a :Disposition ;
+    :involves :Townhouse ;
+    :sellDate "2005-12-31"^^xsd:date ;
+    :potentialGain 250000 .
+
+:BD_House_Sale a :Disposition ;
+    :involves :House ;
+    :sellDate "2006-12-31"^^xsd:date ;
+    :potentialGain 300000 .
+
+#########################
+# Single Returns
+#########################
+:BD_Townhouse_Return a :SingleReturn ;
+    :exclusionCap 250000 ;
+    :associates :BD ;
+    :linkedTo :BD_Townhouse_Sale .
+
+:BD_House_Return a :SingleReturn ;
+    :exclusionCap 250000 ;
+    :associates :BD ;
+    :linkedTo :BD_House_Sale .
+
+#########################
+# Links between taxpayer and intervals/dispositions
+#########################
+:BD :owns :BD_Townhouse_Ownership, :BD_House_Ownership ;
+    :uses :BD_Townhouse_Residence, :BD_House_Residence ;
+    :disposesOf :BD_Townhouse_Sale, :BD_House_Sale .

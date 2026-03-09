@@ -1,0 +1,40 @@
+:MainResidence a :Property .
+
+:AW_1 a :Taxpayer .
+:AW_2 a :Taxpayer .
+
+:AW_1_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "2002-02-01"^^xsd:date ;
+    :ownershipEnd "2005-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:AW_2_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "2002-02-01"^^xsd:date ;
+    :ownershipEnd "2005-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:AW_2_Use a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
+    :residenceStart "2002-02-01"^^xsd:date ;
+    :residenceEnd "2005-12-31"^^xsd:date .
+
+:Disposition_Main a :Disposition ;
+    :involves :MainResidence ;
+    :sellDate "2005-12-31"^^xsd:date ;
+    :potentialGain 400000 .
+
+:AW_1 a :Taxpayer ;
+    :disposesOf :Disposition_Main ;
+    :owns :AW_1_Ownership .
+
+:AW_2 a :Taxpayer ;
+    :disposesOf :Disposition_Main ;
+    :owns :AW_2_Ownership ;
+    :uses :AW_2_Use .
+
+:JointReturn_2005 a :JointReturn ;
+    :exclusionCap 500000 ;
+    :associates :AW_1, :AW_2 ;
+    :linkedTo :Disposition_Main .

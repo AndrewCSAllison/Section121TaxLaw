@@ -1,0 +1,30 @@
+:BV a :Taxpayer .
+
+:BV_Condo a :Property .
+:BV_House a :Property .
+
+:BV_Ownership_Condo a :OwnershipUseInterval ;
+    :hasOwnershipOf :BV_Condo ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2004-06-01"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:BV_Residence_Condo a :ResidenceUseInterval ;
+    :hasResidenceOf :BV_Condo ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-06-01"^^xsd:date .
+
+:BV_Disposition_Condo a :Disposition ;
+    :involves :BV_Condo ;
+    :sellDate "2004-06-01"^^xsd:date ;
+    :potentialGain 190000 ;
+    :partialExclusionReason :UnforeseenCircumstanceReason .
+
+:BV :owns :BV_Ownership_Condo .
+:BV :uses :BV_Residence_Condo .
+:BV :disposesOf :BV_Disposition_Condo .
+
+:BV_Return a :SingleReturn ;
+    :associates :BV ;
+    :linkedTo :BV_Disposition_Condo ;
+    :exclusionCap 250000 .

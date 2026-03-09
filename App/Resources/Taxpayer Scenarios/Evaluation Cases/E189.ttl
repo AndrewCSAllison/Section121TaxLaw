@@ -1,0 +1,47 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#########################
+# Taxpayer
+#########################
+:BK a :Taxpayer .
+
+#########################
+# Property
+#########################
+:BKHouse a :Property .
+
+#########################
+# Ownership & Residence Intervals
+#########################
+:BKOwnership1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :BKHouse ;
+    :ownershipStart "2002-02-01"^^xsd:date ;
+    :ownershipEnd "2005-08-01"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:BKResidence1 a :ResidenceUseInterval ;
+    :hasResidenceOf :BKHouse ;
+    :residenceStart "2002-02-01"^^xsd:date ;
+    :residenceEnd "2003-05-01"^^xsd:date .
+
+:BKResidence2 a :ResidenceUseInterval ;
+    :hasResidenceOf :BKHouse ;
+    :residenceStart "2003-05-01"^^xsd:date ;
+    :residenceEnd "2005-06-01"^^xsd:date .
+
+#########################
+# Disposition
+#########################
+:BKDisposition1 a :Disposition ;
+    :involves :BKHouse ;
+    :sellDate "2005-08-01"^^xsd:date ;
+    :potentialGain 200000 ;
+    :partialExclusionReason :EmploymentRelatedReason .
+
+#########################
+# Linking
+#########################
+:BK :owns :BKOwnership1 ;
+    :uses :BKResidence1, :BKResidence2 ;
+    :disposesOf :BKDisposition1 .

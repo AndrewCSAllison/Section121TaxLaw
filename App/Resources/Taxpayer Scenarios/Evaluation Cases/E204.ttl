@@ -1,0 +1,48 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:BP_1 a :Taxpayer .
+:BP_2 a :Taxpayer .
+
+:MichiganHome a :Property .
+
+:OwnershipInterval1 a :OwnershipUseInterval ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2004-01-01"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal ;
+    :hasOwnershipOf :MichiganHome .
+
+:OwnershipInterval2 a :OwnershipUseInterval ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2004-01-01"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal ;
+    :hasOwnershipOf :MichiganHome .
+
+:ResidenceInterval1 a :ResidenceUseInterval ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-01-01"^^xsd:date ;
+    :hasResidenceOf :MichiganHome .
+
+:ResidenceInterval2 a :ResidenceUseInterval ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-01-01"^^xsd:date ;
+    :hasResidenceOf :MichiganHome .
+
+:Disposition1 a :Disposition ;
+    :sellDate "2004-01-01"^^xsd:date ;
+    :potentialGain "120000"^^xsd:integer ;
+    :involves :MichiganHome ;
+    :partialExclusionReason :NonQualifyingReason .
+
+:BP_1 :owns :OwnershipInterval1 ;
+      :uses :ResidenceInterval1 ;
+      :disposesOf :Disposition1 .
+
+:BP_2 :owns :OwnershipInterval2 ;
+      :uses :ResidenceInterval2 ;
+      :disposesOf :Disposition1 .
+
+:JointReturn1 a :JointReturn ;
+    :associates :BP_1, :BP_2 ;
+    :linkedTo :Disposition1 ;
+    :exclusionCap "500000"^^xsd:integer .

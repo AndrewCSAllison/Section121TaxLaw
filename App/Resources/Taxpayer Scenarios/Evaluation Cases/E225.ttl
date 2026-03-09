@@ -1,0 +1,49 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#########################
+# Property
+#########################
+:SmallHouse a :Property .
+
+#########################
+# Taxpayer
+#########################
+:BW a :Taxpayer .
+
+#########################
+# Ownership & Residence Intervals
+#########################
+:BW_Ownership_1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :SmallHouse ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2004-01-01"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:BW_Residence_1 a :ResidenceUseInterval ;
+    :hasResidenceOf :SmallHouse ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-01-01"^^xsd:date .
+
+:BW :owns :BW_Ownership_1 ;
+    :uses :BW_Residence_1 .
+
+#########################
+# Disposition
+#########################
+:BW_Disposition_1 a :Disposition ;
+    :involves :SmallHouse ;
+    :sellDate "2004-01-01"^^xsd:date ;
+    :potentialGain 120000 ;
+    :partialExclusionReason :NonQualifyingReason .
+
+:BW :disposesOf :BW_Disposition_1 .
+
+#########################
+# Tax Return
+#########################
+:BW_SingleReturn a :SingleReturn ;
+    :exclusionCap 250000 ;
+    :associates :BW ;
+    :linkedTo :BW_Disposition_1 .

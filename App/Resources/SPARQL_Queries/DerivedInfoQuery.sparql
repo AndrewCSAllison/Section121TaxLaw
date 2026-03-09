@@ -338,8 +338,32 @@ WHERE {
   BIND(xsd:integer(COALESCE(?spouseOwnDays, 0)) AS ?spouseOwnDaysSafe)
   BIND(xsd:integer(COALESCE(?spouseResDays, 0)) AS ?spouseResDaysSafe)
   BIND(xsd:integer(COALESCE(?spouseDaysSincePrevQualifyingSale, -1)) AS ?spouseDaysSincePrevQualifyingSaleSafe)
-    
-  BIND(xsd:decimal(COALESCE(?percentageOwned, 1.0)) AS ?percentageOwnedSafe)
+  # --- Check if spouse is selling the same property in this joint return ---
+  # --- Determine allocable ownership percentage safely ---
+  BIND(
+    xsd:decimal(
+      IF(bound(?percentageOwned),
+        ?percentageOwned,  # use explicit ownership if present
+        IF(
+          ?isJointReturn,
+          IF(
+            EXISTS {
+              ?jointReturn a :JointReturn ;
+                            :linkedTo ?disposition ;
+                            :associates ?spouse .
+              FILTER(?spouse != ?taxpayer)
+              ?spouse :owns ?spouseOwnPct .
+              ?spouseOwnPct :hasOwnershipOf ?property ;
+                            :percentageOwned 1.0 .
+            },
+            0,               # spouse already owns 1.0, assign 0 to this taxpayer
+            0.5              # otherwise, split 50/50
+          ),
+          1.0                # not a joint return, assign full ownership
+        )
+      )
+    ) AS ?percentageOwnedSafe
+  )
   BIND(xsd:decimal(?gain) * ?percentageOwnedSafe AS ?allocableGain)
 
   # Derived node

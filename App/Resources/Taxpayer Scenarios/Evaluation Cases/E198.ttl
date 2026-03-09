@@ -1,0 +1,47 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:MainResidence a :Property .
+
+:BN_1 a :Taxpayer ;
+    :owns :BN_Ownership_1 ;
+    :uses :BN_Residence_1 ;
+    :disposesOf :BN_Disposition_1 .
+
+:BN_2 a :Taxpayer ;
+    :owns :BN_Ownership_2 ;
+    :uses :BN_Residence_2 ;
+    :disposesOf :BN_Disposition_1 .
+
+:BN_Ownership_1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2004-01-01"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal .
+
+:BN_Ownership_2 a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2004-01-01"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal .
+
+:BN_Residence_1 a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-01-01"^^xsd:date .
+
+:BN_Residence_2 a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-01-01"^^xsd:date .
+
+:BN_Disposition_1 a :Disposition ;
+    :involves :MainResidence ;
+    :sellDate "2004-01-01"^^xsd:date ;
+    :potentialGain "300000"^^xsd:integer ;
+    :partialExclusionReason :HealthRelatedReason .
+
+:BN_JointReturn_1 a :JointReturn ;
+    :associates :BN_1 , :BN_2 ;
+    :linkedTo :BN_Disposition_1 ;
+    :exclusionCap "500000"^^xsd:integer .

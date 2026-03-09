@@ -1,0 +1,54 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:BE a :Taxpayer .
+
+:Townhouse a :Property .
+:House a :Property .
+
+:BE_Townhouse_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :Townhouse ;
+    :ownershipStart "1997-01-01"^^xsd:date ;
+    :ownershipEnd "1998-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:BE_Townhouse_Use a :ResidenceUseInterval ;
+    :hasResidenceOf :Townhouse ;
+    :residenceStart "1997-01-01"^^xsd:date ;
+    :residenceEnd "1998-12-31"^^xsd:date .
+
+:BE_House_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2002-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:BE_House_Use a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
+    :residenceStart "1999-01-01"^^xsd:date ;
+    :residenceEnd "2002-12-31"^^xsd:date .
+
+:Disposition_Townhouse a :Disposition ;
+    :involves :Townhouse ;
+    :sellDate "2001-12-31"^^xsd:date ;
+    :potentialGain 120000 .
+
+:Disposition_House a :Disposition ;
+    :involves :House ;
+    :sellDate "2002-12-31"^^xsd:date ;
+    :potentialGain 270000 .
+
+:BE_SingleReturn_Townhouse a :SingleReturn ;
+    :associates :BE ;
+    :linkedTo :Disposition_Townhouse ;
+    :exclusionCap 250000 .
+
+:BE_SingleReturn_House a :SingleReturn ;
+    :associates :BE ;
+    :linkedTo :Disposition_House ;
+    :exclusionCap 250000 .
+
+:BE :owns :BE_Townhouse_Ownership, :BE_House_Ownership ;
+    :uses :BE_Townhouse_Use, :BE_House_Use ;
+    :disposesOf :Disposition_Townhouse, :Disposition_House .

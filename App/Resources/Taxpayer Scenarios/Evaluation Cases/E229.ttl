@@ -1,0 +1,38 @@
+:BY_1 a :Taxpayer .
+:BY_2 a :Taxpayer .
+
+:House a :Property .
+
+:OUI_BY_1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
+    :ownershipStart "1996-01-01"^^xsd:date ;
+    :ownershipEnd "2000-01-15"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:RUI_BY_1 a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
+    :residenceStart "1996-01-01"^^xsd:date ;
+    :residenceEnd "2000-01-15"^^xsd:date .
+
+:RUI_BY_2 a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
+    :residenceStart "1999-01-15"^^xsd:date ;
+    :residenceEnd "2000-01-15"^^xsd:date .
+
+:Disposition_House a :Disposition ;
+    :involves :House ;
+    :sellDate "2000-01-15"^^xsd:date ;
+    :potentialGain 500000 ;
+    :partialExclusionReason :EmploymentRelatedReason .
+
+:JointReturn_House a :JointReturn ;
+    :exclusionCap 500000 ;
+    :associates :BY_1 , :BY_2 ;
+    :linkedTo :Disposition_House .
+
+:BY_1 :owns :OUI_BY_1 ;
+       :uses :RUI_BY_1 ;
+       :disposesOf :Disposition_House .
+
+:BY_2 :uses :RUI_BY_2 ;
+       :disposesOf :Disposition_House .

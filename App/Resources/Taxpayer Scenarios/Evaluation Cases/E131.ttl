@@ -1,0 +1,52 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:Property_AR1 a :Property .
+:Property_AR2 a :Property .
+
+:AR_1 a :Taxpayer ;
+    :owns :AR1_Ownership ;
+    :uses :AR1_Residence ;
+    :disposesOf :Disposition_AR1 .
+
+:AR_2 a :Taxpayer ;
+    :owns :AR2_Ownership ;
+    :uses :AR2_Residence ;
+    :disposesOf :Disposition_AR2 .
+
+:AR1_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :Property_AR1 ;
+    :ownershipStart "2001-02-01"^^xsd:date ;
+    :ownershipEnd "2003-12-31"^^xsd:date ;
+    :percentageOwned "1.0"^^xsd:decimal .
+
+:AR1_Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :Property_AR1 ;
+    :residenceStart "2001-02-01"^^xsd:date ;
+    :residenceEnd "2003-12-31"^^xsd:date .
+
+:AR2_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :Property_AR2 ;
+    :ownershipStart "2001-02-01"^^xsd:date ;
+    :ownershipEnd "2003-12-31"^^xsd:date ;
+    :percentageOwned "1.0"^^xsd:decimal .
+
+:AR2_Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :Property_AR2 ;
+    :residenceStart "2001-02-01"^^xsd:date ;
+    :residenceEnd "2003-12-31"^^xsd:date .
+
+:Disposition_AR1 a :Disposition ;
+    :involves :Property_AR1 ;
+    :sellDate "2003-12-31"^^xsd:date ;
+    :potentialGain "200000"^^xsd:integer .
+
+:Disposition_AR2 a :Disposition ;
+    :involves :Property_AR2 ;
+    :sellDate "2003-12-31"^^xsd:date ;
+    :potentialGain "310000"^^xsd:integer .
+
+:JointReturn_2003 a :JointReturn ;
+    :associates :AR_1 , :AR_2 ;
+    :linkedTo :Disposition_AR1 , :Disposition_AR2 ;
+    :exclusionCap "500000"^^xsd:integer .

@@ -1,0 +1,62 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Taxpayer
+:AZ a :Taxpayer .
+
+# Properties
+:Townhouse a :Property .
+:House a :Property .
+
+# Ownership Use Intervals
+:AZ_Townhouse_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :Townhouse ;
+    :ownershipStart "1998-01-01"^^xsd:date ;
+    :ownershipEnd "1999-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:AZ_House_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
+    :ownershipStart "2000-01-01"^^xsd:date ;
+    :ownershipEnd "2003-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+# Residence Use Intervals
+:AZ_Townhouse_Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :Townhouse ;
+    :residenceStart "1998-01-01"^^xsd:date ;
+    :residenceEnd "1999-12-31"^^xsd:date .
+
+:AZ_House_Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
+    :residenceStart "2000-01-01"^^xsd:date ;
+    :residenceEnd "2003-12-31"^^xsd:date .
+
+# Dispositions
+:AZ_Townhouse_Sale a :Disposition ;
+    :involves :Townhouse ;
+    :sellDate "2002-12-31"^^xsd:date ;
+    :potentialGain 150000 .
+
+:AZ_House_Sale a :Disposition ;
+    :involves :House ;
+    :sellDate "2003-12-31"^^xsd:date ;
+    :potentialGain 300000 ;
+    :partialExclusionReason :NonQualifyingReason .
+
+# Single Returns
+:AZ_Townhouse_Return a :SingleReturn ;
+    :associates :AZ ;
+    :linkedTo :AZ_Townhouse_Sale ;
+    :exclusionCap 250000 .
+
+:AZ_House_Return a :SingleReturn ;
+    :associates :AZ ;
+    :linkedTo :AZ_House_Sale ;
+    :exclusionCap 250000 .
+
+# Taxpayer links
+:AZ :owns :AZ_Townhouse_Ownership, :AZ_House_Ownership ;
+    :uses :AZ_Townhouse_Residence, :AZ_House_Residence ;
+    :disposesOf :AZ_Townhouse_Sale, :AZ_House_Sale .

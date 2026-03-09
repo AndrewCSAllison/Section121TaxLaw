@@ -1,0 +1,72 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#########################
+# Taxpayer
+#########################
+:BG a :Taxpayer .
+
+#########################
+# Properties
+#########################
+:Townhouse a :Property .
+:House a :Property .
+
+#########################
+# Ownership and Residence Use Intervals
+#########################
+:BG_Townhouse_OwnUse a :OwnershipUseInterval ;
+    :hasOwnershipOf :Townhouse ;
+    :ownershipStart "2001-01-01"^^xsd:date ;
+    :ownershipEnd "2005-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:BG_Townhouse_ResUse a :ResidenceUseInterval ;
+    :hasResidenceOf :Townhouse ;
+    :residenceStart "2001-01-01"^^xsd:date ;
+    :residenceEnd "2003-12-31"^^xsd:date .
+
+:BG_House_OwnUse a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2006-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:BG_House_ResUse a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2006-12-31"^^xsd:date .
+
+#########################
+# Dispositions
+#########################
+:BG_Townhouse_Sale a :Disposition ;
+    :involves :Townhouse ;
+    :sellDate "2005-12-31"^^xsd:date ;
+    :potentialGain 190000 .
+
+:BG_House_Sale a :Disposition ;
+    :involves :House ;
+    :sellDate "2006-12-31"^^xsd:date ;
+    :potentialGain 310000 .
+
+#########################
+# Returns
+#########################
+:BG_Townhouse_Return a :SingleReturn ;
+    :associates :BG ;
+    :linkedTo :BG_Townhouse_Sale ;
+    :exclusionCap 250000 .
+
+:BG_House_Return a :SingleReturn ;
+    :associates :BG ;
+    :linkedTo :BG_House_Sale ;
+    :exclusionCap 250000 .
+
+#########################
+# Linking Taxpayer to Intervals and Dispositions
+#########################
+:BG :owns :BG_Townhouse_OwnUse, :BG_House_OwnUse ;
+    :uses :BG_Townhouse_ResUse, :BG_House_ResUse ;
+    :disposesOf :BG_Townhouse_Sale, :BG_House_Sale .

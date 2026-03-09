@@ -1,0 +1,52 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:MainResidence a :Property .
+
+:BS_1 a :Taxpayer ;
+    :owns :BS1_Ownership ;
+    :uses :BS1_Residence ;
+    :disposesOf :Sale2004 .
+
+:BS_2 a :Taxpayer ;
+    :owns :BS2_Ownership ;
+    :uses :BS2_Residence ;
+    :disposesOf :Sale2004 .
+
+:BS1_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2004-01-01"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal .
+
+:BS2_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2004-01-01"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal .
+
+:BS1_Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-01-01"^^xsd:date .
+
+:BS2_Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2003-11-30"^^xsd:date .
+
+:Sale2004 a :Disposition ;
+    :involves :MainResidence ;
+    :sellDate "2004-01-01"^^xsd:date ;
+    :potentialGain 140000 ;
+    :partialExclusionReason :UnforeseenCircumstanceReason .
+
+:BS1_Return a :SingleReturn ;
+    :associates :BS_1 ;
+    :linkedTo :Sale2004 ;
+    :exclusionCap 250000 .
+
+:BS2_Return a :SingleReturn ;
+    :associates :BS_2 ;
+    :linkedTo :Sale2004 ;
+    :exclusionCap 250000 .

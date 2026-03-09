@@ -1,0 +1,72 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#########################
+# Properties
+#########################
+:Townhouse a :Property .
+:NewHouse a :Property .
+
+#########################
+# Taxpayer
+#########################
+:BA a :Taxpayer .
+
+#########################
+# Ownership and Residence Intervals
+#########################
+:BA_Townhouse_OwnUse a :OwnershipUseInterval ;
+    :hasOwnershipOf :Townhouse ;
+    :ownershipStart "2000-01-01"^^xsd:date ;
+    :ownershipEnd "2001-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:BA_Townhouse_ResUse a :ResidenceUseInterval ;
+    :hasResidenceOf :Townhouse ;
+    :residenceStart "2000-01-01"^^xsd:date ;
+    :residenceEnd "2001-12-31"^^xsd:date .
+
+:BA_NewHouse_OwnUse a :OwnershipUseInterval ;
+    :hasOwnershipOf :NewHouse ;
+    :ownershipStart "2002-01-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:BA_NewHouse_ResUse a :ResidenceUseInterval ;
+    :hasResidenceOf :NewHouse ;
+    :residenceStart "2002-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+#########################
+# Dispositions
+#########################
+:BA_Townhouse_Sale a :Disposition ;
+    :involves :Townhouse ;
+    :sellDate "2003-12-31"^^xsd:date ;
+    :potentialGain 180000 .
+
+:BA_NewHouse_Sale a :Disposition ;
+    :involves :NewHouse ;
+    :sellDate "2004-12-31"^^xsd:date ;
+    :potentialGain 320000 .
+
+#########################
+# Returns
+#########################
+:BA_Townhouse_Return a :SingleReturn ;
+    :associates :BA ;
+    :linkedTo :BA_Townhouse_Sale ;
+    :exclusionCap 250000 .
+
+:BA_NewHouse_Return a :SingleReturn ;
+    :associates :BA ;
+    :linkedTo :BA_NewHouse_Sale ;
+    :exclusionCap 250000 .
+
+#########################
+# Links between taxpayer and intervals/dispositions
+#########################
+:BA :owns :BA_Townhouse_OwnUse, :BA_NewHouse_OwnUse ;
+    :uses :BA_Townhouse_ResUse, :BA_NewHouse_ResUse ;
+    :disposesOf :BA_Townhouse_Sale, :BA_NewHouse_Sale .

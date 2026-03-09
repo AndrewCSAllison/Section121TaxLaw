@@ -1,0 +1,45 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:AN_1 a :Taxpayer .
+:AN_2 a :Taxpayer .
+
+:MainProperty a :Property .
+
+:OwnershipInterval_AN1 a :OwnershipUseInterval ;
+    :ownershipStart "2010-06-01"^^xsd:date ;
+    :ownershipEnd "2012-05-31"^^xsd:date ;
+    :hasOwnershipOf :MainProperty .
+
+:OwnershipInterval_AN2 a :OwnershipUseInterval ;
+    :ownershipStart "2010-06-01"^^xsd:date ;
+    :ownershipEnd "2012-05-31"^^xsd:date ;
+    :hasOwnershipOf :MainProperty .
+
+:ResidenceInterval_AN1 a :ResidenceUseInterval ;
+    :residenceStart "2010-06-01"^^xsd:date ;
+    :residenceEnd "2012-05-31"^^xsd:date ;
+    :hasResidenceOf :MainProperty .
+
+:ResidenceInterval_AN2 a :ResidenceUseInterval ;
+    :residenceStart "2010-06-01"^^xsd:date ;
+    :residenceEnd "2012-05-31"^^xsd:date ;
+    :hasResidenceOf :MainProperty .
+
+:Disposition_Main a :Disposition ;
+    :sellDate "2012-05-31"^^xsd:date ;
+    :potentialGain 200000 ;
+    :involves :MainProperty .
+
+:AN_1 :owns :OwnershipInterval_AN1 ;
+    :uses :ResidenceInterval_AN1 ;
+    :disposesOf :Disposition_Main .
+
+:AN_2 :owns :OwnershipInterval_AN2 ;
+    :uses :ResidenceInterval_AN2 ;
+    :disposesOf :Disposition_Main .
+
+:JointReturn_2012 a :JointReturn ;
+    :associates :AN_1, :AN_2 ;
+    :linkedTo :Disposition_Main ;
+    :exclusionCap 500000 .

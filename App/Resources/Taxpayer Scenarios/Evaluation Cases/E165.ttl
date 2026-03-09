@@ -1,0 +1,59 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:BC a :Taxpayer .
+
+:Townhouse a :Property .
+:House a :Property .
+
+:TownhouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :Townhouse ;
+    :ownershipStart "2001-01-01"^^xsd:date ;
+    :ownershipEnd "2002-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:TownhouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :Townhouse ;
+    :residenceStart "2001-01-01"^^xsd:date ;
+    :residenceEnd "2002-12-31"^^xsd:date .
+
+:HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2005-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2005-12-31"^^xsd:date .
+
+:TownhouseDisposition a :Disposition ;
+    :involves :Townhouse ;
+    :sellDate "2004-12-31"^^xsd:date ;
+    :potentialGain 220000 .
+
+:HouseDisposition a :Disposition ;
+    :involves :House ;
+    :sellDate "2005-12-31"^^xsd:date ;
+    :potentialGain 350000 ;
+    :partialExclusionReason :NonQualifyingReason .
+
+:BC a :Taxpayer ;
+    :owns :TownhouseOwnership ;
+    :owns :HouseOwnership ;
+    :uses :TownhouseResidence ;
+    :uses :HouseResidence ;
+    :disposesOf :TownhouseDisposition ;
+    :disposesOf :HouseDisposition .
+
+:TownhouseReturn a :SingleReturn ;
+    :exclusionCap 250000 ;
+    :associates :BC ;
+    :linkedTo :TownhouseDisposition .
+
+:HouseReturn a :SingleReturn ;
+    :exclusionCap 250000 ;
+    :associates :BC ;
+    :linkedTo :HouseDisposition .

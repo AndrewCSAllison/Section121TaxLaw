@@ -1,0 +1,45 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:AN_1 a :Taxpayer .
+:AN_2 a :Taxpayer .
+
+:MainProperty a :Property .
+
+:OwnershipInterval_AN1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainProperty ;
+    :ownershipStart "2010-06-01"^^xsd:date ;
+    :ownershipEnd "2012-05-31"^^xsd:date .
+
+:OwnershipInterval_AN2 a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainProperty ;
+    :ownershipStart "2010-06-01"^^xsd:date ;
+    :ownershipEnd "2012-05-31"^^xsd:date .
+
+:ResidenceInterval_AN1 a :ResidenceUseInterval ;
+    :hasResidenceOf :MainProperty ;
+    :residenceStart "2010-06-01"^^xsd:date ;
+    :residenceEnd "2012-05-31"^^xsd:date .
+
+:ResidenceInterval_AN2 a :ResidenceUseInterval ;
+    :hasResidenceOf :MainProperty ;
+    :residenceStart "2010-06-01"^^xsd:date ;
+    :residenceEnd "2012-05-31"^^xsd:date .
+
+:SaleDisposition a :Disposition ;
+    :involves :MainProperty ;
+    :sellDate "2012-05-31"^^xsd:date ;
+    :potentialGain 200000 .
+
+:JointReturn_2012 a :JointReturn ;
+    :associates :AN_1 , :AN_2 ;
+    :linkedTo :SaleDisposition ;
+    :exclusionCap 500000 .
+
+:AN_1 :owns :OwnershipInterval_AN1 ;
+      :uses :ResidenceInterval_AN1 ;
+      :disposesOf :SaleDisposition .
+
+:AN_2 :owns :OwnershipInterval_AN2 ;
+      :uses :ResidenceInterval_AN2 ;
+      :disposesOf :SaleDisposition .

@@ -1,0 +1,73 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#########################
+# Properties
+#########################
+:Townhouse a :Property .
+:House2003 a :Property .
+
+#########################
+# Taxpayer
+#########################
+:BC a :Taxpayer .
+
+#########################
+# Ownership and Residence Intervals
+#########################
+:BC_Townhouse_OwnUse a :OwnershipUseInterval ;
+    :hasOwnershipOf :Townhouse ;
+    :ownershipStart "2001-01-01"^^xsd:date ;
+    :ownershipEnd "2002-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:BC_Townhouse_ResUse a :ResidenceUseInterval ;
+    :hasResidenceOf :Townhouse ;
+    :residenceStart "2001-01-01"^^xsd:date ;
+    :residenceEnd "2002-12-31"^^xsd:date .
+
+:BC_House2003_OwnUse a :OwnershipUseInterval ;
+    :hasOwnershipOf :House2003 ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2005-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:BC_House2003_ResUse a :ResidenceUseInterval ;
+    :hasResidenceOf :House2003 ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2005-12-31"^^xsd:date .
+
+#########################
+# Dispositions
+#########################
+:BC_Townhouse_Disposition a :Disposition ;
+    :involves :Townhouse ;
+    :sellDate "2004-12-31"^^xsd:date ;
+    :potentialGain 220000 .
+
+:BC_House2003_Disposition a :Disposition ;
+    :involves :House2003 ;
+    :sellDate "2005-12-31"^^xsd:date ;
+    :potentialGain 350000 ;
+    :partialExclusionReason :NonQualifyingReason .
+
+#########################
+# Returns
+#########################
+:BC_Townhouse_Return a :SingleReturn ;
+    :associates :BC ;
+    :linkedTo :BC_Townhouse_Disposition ;
+    :exclusionCap 250000 .
+
+:BC_House2003_Return a :SingleReturn ;
+    :associates :BC ;
+    :linkedTo :BC_House2003_Disposition ;
+    :exclusionCap 250000 .
+
+#########################
+# Link taxpayer to intervals and dispositions
+#########################
+:BC :owns :BC_Townhouse_OwnUse , :BC_House2003_OwnUse ;
+    :uses :BC_Townhouse_ResUse , :BC_House2003_ResUse ;
+    :disposesOf :BC_Townhouse_Disposition , :BC_House2003_Disposition .

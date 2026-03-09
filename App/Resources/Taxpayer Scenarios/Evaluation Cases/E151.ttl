@@ -1,0 +1,55 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:AY a :Taxpayer .
+
+:Townhouse a :Property .
+:House2000 a :Property .
+
+:AY_Townhouse_OwnUse a :OwnershipUseInterval ;
+    :hasOwnershipOf :Townhouse ;
+    :ownershipStart "1998-01-01"^^xsd:date ;
+    :ownershipEnd "1999-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:AY_Townhouse_ResUse a :ResidenceUseInterval ;
+    :hasResidenceOf :Townhouse ;
+    :residenceStart "1998-01-01"^^xsd:date ;
+    :residenceEnd "1999-12-31"^^xsd:date .
+
+:AY_House_OwnUse a :OwnershipUseInterval ;
+    :hasOwnershipOf :House2000 ;
+    :ownershipStart "2000-01-01"^^xsd:date ;
+    :ownershipEnd "2003-12-31"^^xsd:date ;
+    :percentageOwned 1.0 .
+
+:AY_House_ResUse a :ResidenceUseInterval ;
+    :hasResidenceOf :House2000 ;
+    :residenceStart "2000-01-01"^^xsd:date ;
+    :residenceEnd "2003-12-31"^^xsd:date .
+
+:Disposition_Townhouse a :Disposition ;
+    :involves :Townhouse ;
+    :sellDate "2002-12-31"^^xsd:date ;
+    :potentialGain 150000 .
+
+:Disposition_House a :Disposition ;
+    :involves :House2000 ;
+    :sellDate "2003-12-31"^^xsd:date ;
+    :potentialGain 300000 ;
+    :partialExclusionReason :NonQualifyingReason .
+
+:Return_Townhouse a :SingleReturn ;
+    :exclusionCap 250000 ;
+    :associates :AY ;
+    :linkedTo :Disposition_Townhouse .
+
+:Return_House a :SingleReturn ;
+    :exclusionCap 250000 ;
+    :associates :AY ;
+    :linkedTo :Disposition_House .
+
+:AY :owns :AY_Townhouse_OwnUse, :AY_House_OwnUse ;
+    :uses :AY_Townhouse_ResUse, :AY_House_ResUse ;
+    :disposesOf :Disposition_Townhouse, :Disposition_House .
