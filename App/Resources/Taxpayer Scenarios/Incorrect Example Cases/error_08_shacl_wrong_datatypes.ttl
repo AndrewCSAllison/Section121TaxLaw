@@ -1,0 +1,69 @@
+# ERROR TYPE: SHACL Datatype Violation
+# SCENARIO: Taxpayer C (T003) — two residences, Texas and California
+# BUG 1: :sellDate values are typed as xsd:string instead of xsd:date
+#         SHACL constraint: sh:datatype xsd:date on :sellDate
+# BUG 2: :potentialGain is typed as xsd:decimal instead of xsd:integer
+#         SHACL constraint: sh:datatype xsd:integer on :potentialGain
+# BUG 3: :ownershipStart on one interval is xsd:string instead of xsd:date
+#
+# These will produce SHACL violations on the DispositionShape and
+# OwnershipUseIntervalShape for datatype mismatch.
+
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:TaxpayerC a :Taxpayer ;
+    :owns :C_TexasOwnership ;
+    :owns :C_CalOwnership ;
+    :uses :C_TexasResidence1 ;
+    :uses :C_CalResidence ;
+    :uses :C_TexasResidence2 ;
+    :disposesOf :C_TexasDisposition ;
+    :disposesOf :C_CalDisposition .
+
+:TexasResidence a :Property .
+:CaliforniaResidence a :Property .
+
+# BUG 3: ownershipStart is a plain string, not xsd:date
+:C_TexasOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :TexasResidence ;
+    :ownershipStart "2000-01-01" ;
+    :ownershipEnd "2004-12-31"^^xsd:date .
+
+:C_CalOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :CaliforniaResidence ;
+    :ownershipStart "2000-01-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date .
+
+:C_TexasResidence1 a :ResidenceUseInterval ;
+    :hasResidenceOf :TexasResidence ;
+    :residenceStart "2000-01-01"^^xsd:date ;
+    :residenceEnd "2001-12-31"^^xsd:date .
+
+:C_CalResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :CaliforniaResidence ;
+    :residenceStart "2002-01-01"^^xsd:date ;
+    :residenceEnd "2003-12-31"^^xsd:date .
+
+:C_TexasResidence2 a :ResidenceUseInterval ;
+    :hasResidenceOf :TexasResidence ;
+    :residenceStart "2004-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+# BUG 1: sellDate is xsd:string — must be xsd:date
+# BUG 2: potentialGain is xsd:decimal — must be xsd:integer
+:C_TexasDisposition a :Disposition ;
+    :involves :TexasResidence ;
+    :sellDate "2004-12-15" ;
+    :potentialGain "220000"^^xsd:decimal .
+
+:C_CalDisposition a :Disposition ;
+    :involves :CaliforniaResidence ;
+    :sellDate "2004-12-15" ;
+    :potentialGain "200000"^^xsd:decimal .
+
+:C_SingleReturn a :SingleReturn ;
+    :associates :TaxpayerC ;
+    :linkedTo :C_TexasDisposition ;
+    :linkedTo :C_CalDisposition ;
+    :exclusionCap 250000 .

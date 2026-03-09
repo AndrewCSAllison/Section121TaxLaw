@@ -1,0 +1,43 @@
+# ERROR TYPE: NYI Check (Undefined Entities)
+# SCENARIO: Taxpayer Q (T017) — single taxpayer, house owned 1990-2000, sold 2000-08-15
+# BUG: Three invented predicates/classes are used that do not exist in the ontology:
+#   1. :PrincipalResidence  — used instead of :Property
+#   2. :realizedGain        — does not exist; ontology uses :potentialGain
+#   3. :filedReturn         — does not exist; ontology uses :associates (on Return) and :linkedTo
+#
+# The NYI SPARQL check will flag all three as undefined entities.
+# The pipeline output will show:
+#   ⚠ Undefined entities found: [ :PrincipalResidence, :realizedGain, :filedReturn ]
+
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:TaxpayerQ a :Taxpayer ;
+    :owns :Q_HouseOwnership ;
+    :uses :Q_HouseResidence ;
+    :disposesOf :Q_HouseDisposition .
+
+# BUG 1: :PrincipalResidence is not defined in the ontology — should be :Property
+:QHouse a :PrincipalResidence .
+
+:Q_HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :QHouse ;
+    :ownershipStart "1990-05-01"^^xsd:date ;
+    :ownershipEnd "2000-08-15"^^xsd:date .
+
+:Q_HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :QHouse ;
+    :residenceStart "1990-05-01"^^xsd:date ;
+    :residenceEnd "1997-12-31"^^xsd:date .
+
+:Q_HouseDisposition a :Disposition ;
+    :involves :QHouse ;
+    :sellDate "2000-08-15"^^xsd:date ;
+    # BUG 2: :realizedGain is not in the ontology — should be :potentialGain
+    :realizedGain 180000 .
+
+:Q_SingleReturn a :SingleReturn ;
+    # BUG 3: :filedReturn is not in the ontology — should be :associates on the Return
+    :filedReturn :TaxpayerQ ;
+    :linkedTo :Q_HouseDisposition ;
+    :exclusionCap 250000 .

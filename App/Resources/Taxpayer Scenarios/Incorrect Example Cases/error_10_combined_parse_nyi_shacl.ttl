@@ -1,0 +1,71 @@
+# ERROR TYPE: Combined — Parse Error + SHACL Violations
+# SCENARIO: Taxpayers AM_1 and AM_2 (T039) — married joint return, $600k gain,
+#           both meet ownership/use tests.
+# 
+# This file has THREE layered errors to show how the pipeline catches them sequentially:
+#
+# ERROR 1 (Upload/Parse):
+#   Line 30 uses a Markdown-style IRI <`http://example.org/section121#AMHouse`>
+#   with backtick inside angle brackets — illegal Turtle syntax.
+#   GraphDB will reject the upload before any SHACL check runs.
+#
+# ERROR 2 (NYI — would surface after fixing Error 1):
+#   :AMHouse is never declared as "a :Property ." 
+#   The NYI SPARQL check will flag :AMHouse as an undefined entity type.
+#
+# ERROR 3 (SHACL — would surface after fixing Errors 1 & 2):
+#   :AM_JointReturn has :exclusionCap 250000, but JointReturnShape requires
+#   exactly 500000. This violates sh:minInclusive 500000.
+
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:TaxpayerAM1 a :Taxpayer ;
+    :owns :AM1_HouseOwnership ;
+    :uses :AM1_HouseResidence ;
+    :disposesOf :AM_HouseDisposition .
+
+:TaxpayerAM2 a :Taxpayer ;
+    :owns :AM2_HouseOwnership ;
+    :uses :AM2_HouseResidence ;
+    :disposesOf :AM_HouseDisposition .
+
+# ERROR 2: :AMHouse is used throughout but never declared as a :Property instance.
+# (The declaration line below is commented out intentionally.)
+# :AMHouse a :Property .
+
+:AM1_HouseOwnership a :OwnershipUseInterval ;
+    # ERROR 1: Backtick inside angle brackets — illegal Turtle IRI syntax.
+    :hasOwnershipOf <`http://example.org/section121#AMHouse`> ;
+    :ownershipStart "2000-01-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal .
+
+:AM2_HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :AMHouse ;
+    :ownershipStart "2000-01-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal .
+
+:AM1_HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :AMHouse ;
+    :residenceStart "2000-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+:AM2_HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :AMHouse ;
+    :residenceStart "2000-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+:AM_HouseDisposition a :Disposition ;
+    :involves :AMHouse ;
+    :sellDate "2004-12-31"^^xsd:date ;
+    :potentialGain 600000 .
+
+# ERROR 3: JointReturn must have exclusionCap of exactly 500000.
+# Using 250000 here (the SingleReturn cap) violates JointReturnShape.
+:AM_JointReturn a :JointReturn ;
+    :associates :TaxpayerAM1 ;
+    :associates :TaxpayerAM2 ;
+    :linkedTo :AM_HouseDisposition ;
+    :exclusionCap 250000 .

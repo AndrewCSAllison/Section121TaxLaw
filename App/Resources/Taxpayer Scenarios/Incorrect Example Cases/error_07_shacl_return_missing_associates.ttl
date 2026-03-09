@@ -1,0 +1,61 @@
+# ERROR TYPE: SHACL Violation
+# SCENARIO: Taxpayers AJ_1 and AJ_2 (T036) — married, joint return, $256k gain
+# BUG: :AJ_JointReturn has :linkedTo but is missing :associates for both taxpayers.
+#
+# The ReturnShape SHACL constraint enforces:
+#   sh:path :associates  sh:class :Taxpayer  sh:minCount 1
+#   "A Return must have at least one associated Taxpayer."
+#
+# This will produce:
+#   sh:focusNode :AJ_JointReturn
+#   sh:resultPath :associates
+#   sh:sourceConstraintComponent sh:MinCountConstraintComponent
+#   "A Return must have at least one associated Taxpayer."
+
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:TaxpayerAJ1 a :Taxpayer ;
+    :owns :AJ1_HouseOwnership ;
+    :uses :AJ1_HouseResidence ;
+    :disposesOf :AJ_HouseDisposition .
+
+:TaxpayerAJ2 a :Taxpayer ;
+    :owns :AJ2_HouseOwnership ;
+    :uses :AJ2_HouseResidence ;
+    :disposesOf :AJ_HouseDisposition .
+
+:AJHouse a :Property .
+
+:AJ1_HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :AJHouse ;
+    :ownershipStart "1998-01-01"^^xsd:date ;
+    :ownershipEnd "2002-12-31"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal .
+
+:AJ2_HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :AJHouse ;
+    :ownershipStart "1998-01-01"^^xsd:date ;
+    :ownershipEnd "2002-12-31"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal .
+
+:AJ1_HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :AJHouse ;
+    :residenceStart "1998-01-01"^^xsd:date ;
+    :residenceEnd "2002-12-31"^^xsd:date .
+
+:AJ2_HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :AJHouse ;
+    :residenceStart "1998-01-01"^^xsd:date ;
+    :residenceEnd "2002-12-31"^^xsd:date .
+
+:AJ_HouseDisposition a :Disposition ;
+    :involves :AJHouse ;
+    :sellDate "2002-12-31"^^xsd:date ;
+    :potentialGain 256000 .
+
+# BUG: :associates is omitted — the Return has no connection to either Taxpayer.
+# Without :associates, SHACL cannot validate Return ownership.
+:AJ_JointReturn a :JointReturn ;
+    :linkedTo :AJ_HouseDisposition ;
+    :exclusionCap 500000 .

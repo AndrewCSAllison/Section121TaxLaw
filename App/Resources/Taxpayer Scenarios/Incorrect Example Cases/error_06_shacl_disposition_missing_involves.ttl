@@ -1,0 +1,67 @@
+# ERROR TYPE: SHACL Violation
+# SCENARIO: Taxpayers AE_1 and AE_2 (T031) — unmarried joint owners, 50/50 split,
+#           house sold after 2+ years, $256,000 realized gain.
+# BUG: :AE_HouseDisposition is missing :involves :AEHouse
+#
+# The DispositionShape SHACL constraint enforces:
+#   sh:path :involves  sh:minCount 1  sh:maxCount 1
+#   "Every disposition must involve exactly one property."
+#
+# This will produce:
+#   sh:focusNode :AE_HouseDisposition
+#   sh:resultPath :involves
+#   sh:sourceConstraintComponent sh:MinCountConstraintComponent
+#   "Every disposition must involve exactly one property."
+
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:TaxpayerAE1 a :Taxpayer ;
+    :owns :AE1_HouseOwnership ;
+    :uses :AE1_HouseResidence ;
+    :disposesOf :AE_HouseDisposition .
+
+:TaxpayerAE2 a :Taxpayer ;
+    :owns :AE2_HouseOwnership ;
+    :uses :AE2_HouseResidence ;
+    :disposesOf :AE_HouseDisposition .
+
+:AEHouse a :Property .
+
+:AE1_HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :AEHouse ;
+    :ownershipStart "2000-01-01"^^xsd:date ;
+    :ownershipEnd "2002-12-31"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal .
+
+:AE2_HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :AEHouse ;
+    :ownershipStart "2000-01-01"^^xsd:date ;
+    :ownershipEnd "2002-12-31"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal .
+
+:AE1_HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :AEHouse ;
+    :residenceStart "2000-01-01"^^xsd:date ;
+    :residenceEnd "2002-12-31"^^xsd:date .
+
+:AE2_HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :AEHouse ;
+    :residenceStart "2000-01-01"^^xsd:date ;
+    :residenceEnd "2002-12-31"^^xsd:date .
+
+# BUG: :involves :AEHouse is intentionally omitted.
+# Without this triple, SHACL cannot confirm which Property is being disposed of.
+:AE_HouseDisposition a :Disposition ;
+    :sellDate "2002-12-31"^^xsd:date ;
+    :potentialGain 256000 .
+
+:AE1_SingleReturn a :SingleReturn ;
+    :associates :TaxpayerAE1 ;
+    :linkedTo :AE_HouseDisposition ;
+    :exclusionCap 250000 .
+
+:AE2_SingleReturn a :SingleReturn ;
+    :associates :TaxpayerAE2 ;
+    :linkedTo :AE_HouseDisposition ;
+    :exclusionCap 250000 .

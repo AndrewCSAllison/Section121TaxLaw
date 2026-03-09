@@ -1,0 +1,40 @@
+# ERROR TYPE: SHACL Violation
+# SCENARIO: Taxpayer P (T016) — single taxpayer, principal residence owned since 1986
+# BUG: :exclusionCap is set to 250001 instead of the required 250000.
+#
+# The SingleReturnShape SHACL constraint enforces:
+#   sh:minInclusive 250000  AND  sh:maxInclusive 250000
+# Any value other than exactly 250000 causes a violation:
+#   sh:focusNode :P_SingleReturn  sh:resultPath :exclusionCap  RangeConstraintComponent
+#   "SingleReturn exclusionCap must be exactly $250,000."
+
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:TaxpayerP a :Taxpayer ;
+    :owns :P_HouseOwnership ;
+    :uses :P_HouseResidence ;
+    :disposesOf :P_HouseDisposition .
+
+:PHouse a :Property .
+
+:P_HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :PHouse ;
+    :ownershipStart "1986-01-01"^^xsd:date ;
+    :ownershipEnd "2000-04-18"^^xsd:date .
+
+:P_HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :PHouse ;
+    :residenceStart "1986-01-01"^^xsd:date ;
+    :residenceEnd "1998-01-31"^^xsd:date .
+
+:P_HouseDisposition a :Disposition ;
+    :involves :PHouse ;
+    :sellDate "2000-04-18"^^xsd:date ;
+    :potentialGain 200000 .
+
+# BUG: exclusionCap is 250001 — off by one, but still fails SHACL range check.
+:P_SingleReturn a :SingleReturn ;
+    :associates :TaxpayerP ;
+    :linkedTo :P_HouseDisposition ;
+    :exclusionCap 250001 .

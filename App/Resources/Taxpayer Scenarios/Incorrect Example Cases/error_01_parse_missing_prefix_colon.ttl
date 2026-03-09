@@ -1,0 +1,51 @@
+# ERROR TYPE: TTL Parse Error
+# SCENARIO: Taxpayer A (T001) — single taxpayer, New York + Florida residences
+# BUG: Line 23 — bare name "OwnershipUseInterval" used without prefix colon.
+#      GraphDB will throw: MALFORMED DATA: Expected '.', found ':' [line 23]
+#      This mirrors the real error seen in evaluation case E221.
+
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:TaxpayerA a :Taxpayer ;
+    :owns :A_NYOwnership ;
+    :owns :A_FLOwnership ;
+    :uses :A_NYResidence ;
+    :uses :A_FLResidence ;
+    :disposesOf :A_NYDisposition .
+
+:NewYorkResidence a :Property .
+:FloridaResidence a :Property .
+
+# BUG IS HERE: "OwnershipUseInterval" should be ":OwnershipUseInterval"
+# The missing colon makes the parser see a bare name followed by a colon,
+# which is illegal Turtle syntax.
+:A_NYOwnership a OwnershipUseInterval ;
+    :hasOwnershipOf :NewYorkResidence ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date .
+
+:A_FLOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :FloridaResidence ;
+    :ownershipStart "1999-01-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date .
+
+:A_NYResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :NewYorkResidence ;
+    :residenceStart "1999-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+:A_FLResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :FloridaResidence ;
+    :residenceStart "1999-01-01"^^xsd:date ;
+    :residenceEnd "2004-12-31"^^xsd:date .
+
+:A_NYDisposition a :Disposition ;
+    :involves :NewYorkResidence ;
+    :sellDate "2004-12-31"^^xsd:date ;
+    :potentialGain 300000 .
+
+:A_SingleReturn a :SingleReturn ;
+    :associates :TaxpayerA ;
+    :linkedTo :A_NYDisposition ;
+    :exclusionCap 250000 .

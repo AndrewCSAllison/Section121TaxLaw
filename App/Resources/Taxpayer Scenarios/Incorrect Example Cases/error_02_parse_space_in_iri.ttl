@@ -1,0 +1,40 @@
+# ERROR TYPE: TTL Parse Error
+# SCENARIO: Taxpayer BX (T076) — single taxpayer, employment-related partial exclusion
+# BUG: Line 27 — a space was inserted inside a prefixed name ": FLResidence" instead
+#      of ":FLResidence". GraphDB will throw:
+#      MALFORMED DATA: Expected ':', found ' ' [line 27]
+#      This mirrors the real parse error seen in evaluation cases E227 and E228.
+
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:TaxpayerBX a :Taxpayer ;
+    :owns :BX_HouseOwnership ;
+    :uses :BX_HouseResidence ;
+    :disposesOf :BX_HouseDisposition .
+
+:BXHouse a :Property .
+
+:BX_HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :BXHouse ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2004-01-01"^^xsd:date .
+
+# BUG IS HERE: ": BX_HouseResidence" has a space after the colon.
+# The Turtle parser interprets ":" as the default prefix and then hits a space
+# where it expects the local name — causing a fatal parse error.
+:BX_HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf : BXHouse ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-01-01"^^xsd:date .
+
+:BX_HouseDisposition a :Disposition ;
+    :involves :BXHouse ;
+    :sellDate "2004-01-01"^^xsd:date ;
+    :potentialGain 300000 ;
+    :partialExclusionReason :EmploymentRelatedReason .
+
+:BX_SingleReturn a :SingleReturn ;
+    :associates :TaxpayerBX ;
+    :linkedTo :BX_HouseDisposition ;
+    :exclusionCap 250000 .

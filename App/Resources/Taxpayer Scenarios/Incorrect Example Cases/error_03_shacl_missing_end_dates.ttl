@@ -1,0 +1,43 @@
+# ERROR TYPE: SHACL Violation
+# SCENARIO: Taxpayer BL (T064) — employment-related partial exclusion, single taxpayer
+# BUG: :BL_TownhouseOwnership is missing :ownershipEnd
+#      :BL_TownhouseResidence is missing :residenceEnd
+#
+# This will produce two SHACL violations:
+#   sh:focusNode :BL_TownhouseOwnership  sh:resultPath :ownershipEnd  MinCountConstraintComponent
+#   sh:focusNode :BL_TownhouseResidence  sh:resultPath :residenceEnd  MinCountConstraintComponent
+#
+# This exactly replicates the real SHACL failure recorded in evaluation case E192.
+
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:TaxpayerBL a :Taxpayer ;
+    :owns :BL_TownhouseOwnership ;
+    :uses :BL_TownhouseResidence ;
+    :disposesOf :BL_TownhouseDisposition .
+
+:BLTownhouse a :Property .
+
+# BUG: :ownershipEnd is intentionally omitted (SHACL requires minCount 1)
+:BL_TownhouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :BLTownhouse ;
+    :ownershipStart "2003-07-01"^^xsd:date .
+    # :ownershipEnd "2004-02-01"^^xsd:date .   <-- MISSING
+
+# BUG: :residenceEnd is intentionally omitted (SHACL requires minCount 1)
+:BL_TownhouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :BLTownhouse ;
+    :residenceStart "2003-07-01"^^xsd:date .
+    # :residenceEnd "2004-02-01"^^xsd:date .   <-- MISSING
+
+:BL_TownhouseDisposition a :Disposition ;
+    :involves :BLTownhouse ;
+    :sellDate "2004-02-01"^^xsd:date ;
+    :potentialGain 150000 ;
+    :partialExclusionReason :EmploymentRelatedReason .
+
+:BL_SingleReturn a :SingleReturn ;
+    :associates :TaxpayerBL ;
+    :linkedTo :BL_TownhouseDisposition ;
+    :exclusionCap 250000 .

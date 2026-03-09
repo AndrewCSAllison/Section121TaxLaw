@@ -1,0 +1,52 @@
+# ERROR TYPE: SHACL Violation — Invalid partialExclusionReason
+# SCENARIO: Taxpayer BT (T072) — sold condo after receiving a salary promotion
+# BUG: :partialExclusionReason is set to :FinancialImprovementReason, which is
+#      NOT one of the four allowed ReasonType individuals in the ontology.
+#
+# The DispositionShape SHACL constraint enforces:
+#   sh:in ( :EmploymentRelatedReason :HealthRelatedReason
+#           :UnforeseenCircumstanceReason :NonQualifyingReason )
+#   "partialExclusionReason must reference a valid ReasonType."
+#
+# This will produce:
+#   sh:focusNode :BT_CondoDisposition
+#   sh:resultPath :partialExclusionReason
+#   sh:sourceConstraintComponent sh:InConstraintComponent
+#   "partialExclusionReason must reference a valid ReasonType."
+#
+# Note: The correct modeling for BT's scenario (T072) is actually :NonQualifyingReason,
+#       since a promotion and higher salary do not meet §121(c) criteria.
+
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:TaxpayerBT a :Taxpayer ;
+    :owns :BT_CondoOwnership ;
+    :uses :BT_CondoResidence ;
+    :disposesOf :BT_CondoDisposition .
+
+:BTCondo a :Property .
+
+:BT_CondoOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :BTCondo ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2004-06-01"^^xsd:date .
+
+:BT_CondoResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :BTCondo ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2004-06-01"^^xsd:date .
+
+# BUG: :FinancialImprovementReason is not defined in the ontology.
+# The LLM invented a new ReasonType individual instead of using one of the
+# four enumerated values. This violates the sh:in constraint.
+:BT_CondoDisposition a :Disposition ;
+    :involves :BTCondo ;
+    :sellDate "2004-06-01"^^xsd:date ;
+    :potentialGain 200000 ;
+    :partialExclusionReason :FinancialImprovementReason .
+
+:BT_SingleReturn a :SingleReturn ;
+    :associates :TaxpayerBT ;
+    :linkedTo :BT_CondoDisposition ;
+    :exclusionCap 250000 .
