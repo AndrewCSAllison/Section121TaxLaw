@@ -6,25 +6,37 @@ INSERT {
     ?interpNode a :Interpretation ;
                 :forTaxpayer ?taxpayer ;
                 :forDisposition ?disposition ;
-        		:sellDate ?sellDate ;
+                :sellDate ?sellDate ;
                 :involves ?property ;
                 :Rule121aFinal ?Rule121aFinal ;
-                :Rule121aSatisfied ?Rule121aSatisfied ;
+                :Rule121aSatisfied ?Rule121aSatisfiedSafe ;
                 :Rule121b1Excluded ?Rule121b1Excluded ;
                 :Rule121b2AExcluded ?Rule121b2AExcluded ;
                 :Rule121b2BExcluded ?Rule121b2BExcluded ;
                 :Rule121b3Applies ?Rule121b3Applies ;
                 :Rule121cExcluded ?Rule121cExcluded ;
-        		:Rule121d1Applies ?Rule121d1Applies ;
+                :Rule121d1Applies ?Rule121d1Applies ;
                 :partialExclusionReason ?reason ;
                 :excludedGain ?excludedGain ;
                 :taxableGain ?taxableGain ;
-                :potentialGain ?realizedGain .
+                :potentialGain ?realizedGain ;
+                :debug_concurrentCount ?concurrentCount ;
+                :debug_netConcurrentGain ?netConcurrentGain ;
+                :debug_lossCount ?lossCount ;
+                :debug_betterCount ?betterCount ;
+                :debug_effectiveSingleCap ?effectiveSingleCap ;
+                :debug_rule121b3ConcurrentBlock ?Rule121b3ConcurrentBlock ;
+                :debug_rule121b3PriorSale ?Rule121b3PriorSale ;
+                :debug_realizedGain ?realizedGain ;
+                :debug_ownDays ?ownDays ;
+                :debug_resDays ?resDays .
     ?disposition :hasInterpretation ?interpNode .
   }
 }
 WHERE {
+  # sellDate lives on the disposition in the DEFAULT graph
   ?disposition :sellDate ?sellDate .
+
   GRAPH :DerivedInfo {
     ?disposition :hasDerivedInfo ?derivedNode .
     ?derivedNode a :DerivedInfo ;
@@ -49,37 +61,149 @@ WHERE {
     OPTIONAL { ?derivedNode :hasReason ?reasonType }
   }
 
+  # ── Subquery 1: concurrent same-date sale stats ───────────────────────────
+  # Anchors on ?disposition (projected, joins to outer).
+  # sellDate looked up in DEFAULT graph on the sibling disposition IRIs.
+  OPTIONAL {
+    SELECT ?disposition
+           (COUNT(DISTINCT ?sibDisp) AS ?concurrentCount)
+           (SUM(?sibGain) AS ?netConcurrentGain)
+    WHERE {
+      # Get this disposition's taxpayer from DerivedInfo
+      GRAPH :DerivedInfo {
+        ?disposition :hasDerivedInfo ?anchorNode .
+        ?anchorNode :forTaxpayer ?anchorTaxpayer .
+      }
+      # sellDate from default graph
+      ?disposition :sellDate ?anchorDate .
+
+      # Find all sibling dispositions for same taxpayer on same date
+      GRAPH :DerivedInfo {
+        ?sibNode a :DerivedInfo ;
+                 :forTaxpayer ?anchorTaxpayer ;
+                 :forDisposition ?sibDisp ;
+                 :allocableGain ?sibGain .
+      }
+      # sibling sellDate also from default graph
+      ?sibDisp :sellDate ?anchorDate .
+    }
+    GROUP BY ?disposition
+  }
+
+  # ── Subquery 2a: loss guard ───────────────────────────────────────────────
+  OPTIONAL {
+    SELECT ?disposition (COUNT(?lossDisp) AS ?lossCount)
+    WHERE {
+      GRAPH :DerivedInfo {
+        ?disposition :hasDerivedInfo ?anchorNode .
+        ?anchorNode :forTaxpayer ?anchorTaxpayer .
+      }
+      ?disposition :sellDate ?anchorDate .
+
+      GRAPH :DerivedInfo {
+        ?lossNode a :DerivedInfo ;
+                  :forTaxpayer ?anchorTaxpayer ;
+                  :forDisposition ?lossDisp ;
+                  :allocableGain ?lossGain .
+        FILTER(?lossGain < 0)
+      }
+      ?lossDisp :sellDate ?anchorDate .
+    }
+    GROUP BY ?disposition
+  }
+
+  # ── Subquery 2b: better sibling check ────────────────────────────────────
+  OPTIONAL {
+    SELECT ?disposition (COUNT(?betterDisp) AS ?betterCount)
+    WHERE {
+      GRAPH :DerivedInfo {
+        ?disposition :hasDerivedInfo ?anchorNode .
+        ?anchorNode :forTaxpayer ?anchorTaxpayer ;
+                    :allocableGain ?thisGain .
+      }
+      ?disposition :sellDate ?anchorDate .
+
+      GRAPH :DerivedInfo {
+        ?otherNode a :DerivedInfo ;
+                   :forTaxpayer ?anchorTaxpayer ;
+                   :forDisposition ?betterDisp ;
+                   :allocableGain ?otherGain .
+        FILTER(?betterDisp != ?disposition)
+        FILTER(
+          ?otherGain > ?thisGain ||
+          (?otherGain = ?thisGain && STR(?betterDisp) > STR(?disposition))
+        )
+      }
+      ?betterDisp :sellDate ?anchorDate .
+    }
+    GROUP BY ?disposition
+  }
+
   # --- Null-safe variables ---
-  BIND(IF(bound(?singleCap), xsd:decimal(?singleCap), xsd:decimal(250000)) AS ?singleCapSafe)
-  BIND(IF(bound(?jointCap), xsd:decimal(?jointCap), xsd:decimal(500000)) AS ?jointCapSafe)
+  BIND(IF(bound(?singleCap),  xsd:decimal(?singleCap),  xsd:decimal(250000)) AS ?singleCapSafe)
+  BIND(IF(bound(?jointCap),   xsd:decimal(?jointCap),   xsd:decimal(500000)) AS ?jointCapSafe)
   BIND(IF(bound(?isSingleReturn), ?isSingleReturn, false) AS ?isSingleReturnSafe)
-  BIND(IF(bound(?isJointReturn), ?isJointReturn, false) AS ?isJointReturnSafe)
-  BIND(IF(bound(?spouseOwnDays), ?spouseOwnDays, 0) AS ?spouseOwnDaysSafe)
-  BIND(IF(bound(?spouseResDays), ?spouseResDays, 0) AS ?spouseResDaysSafe)
-  BIND(IF(bound(?spouseDaysSincePrevQualifyingSale), ?spouseDaysSincePrevQualifyingSale, -1) AS ?spouseDaysSincePrevQualifyingSaleSafe)
+  BIND(IF(bound(?isJointReturn),  ?isJointReturn,  false) AS ?isJointReturnSafe)
+  BIND(IF(bound(?spouseOwnDays),  ?spouseOwnDays,  0)     AS ?spouseOwnDaysSafe)
+  BIND(IF(bound(?spouseResDays),  ?spouseResDays,  0)     AS ?spouseResDaysSafe)
+  BIND(IF(bound(?spouseDaysSincePrevQualifyingSale),
+          ?spouseDaysSincePrevQualifyingSale, -1)          AS ?spouseDaysSincePrevQualifyingSaleSafe)
   BIND(IF(bound(?allocableGain), xsd:decimal(?allocableGain), xsd:decimal(0)) AS ?realizedGain)
 
-  # --- §121(a): ownership/use for 2 years ---
+  # --- §121(a) ---
   BIND(IF(?ownDays >= 730 && ?resDays >= 730, true, false) AS ?Rule121aSatisfiedSafe)
   BIND(IF(?spouseOwnDaysSafe >= 730 && ?spouseResDaysSafe >= 730, true, false) AS ?spouseRule121aSatisfiedSafe)
 
-  # --- §121(b)(3) lookback ---
-  BIND(IF(bound(?daysSincePrevQualifyingSale) && ?daysSincePrevQualifyingSale >= 0 && ?daysSincePrevQualifyingSale < 730, true, false) AS ?Rule121b3Applies)
-  BIND(IF(bound(?spouseDaysSincePrevQualifyingSaleSafe) && ?spouseDaysSincePrevQualifyingSaleSafe >= 0 && ?spouseDaysSincePrevQualifyingSaleSafe < 730, true, false) AS ?spouseRule121b3Applies)
+  # --- §121(b)(3) prior-sale lookback ---
+  BIND(
+    IF(bound(?daysSincePrevQualifyingSale) &&
+       ?daysSincePrevQualifyingSale >= 0 &&
+       ?daysSincePrevQualifyingSale < 730,
+       true, false)
+  AS ?Rule121b3PriorSale)
 
-  # --- Override §121(a) if §121(b)(3) applies ---
-  BIND(IF(COALESCE(?Rule121b3Applies,false), false, COALESCE(?Rule121aSatisfiedSafe,false)) AS ?Rule121aFinal)
-  BIND(IF(COALESCE(?spouseRule121b3Applies,false), false, COALESCE(?spouseRule121aSatisfiedSafe,false)) AS ?spouseRule121aFinal)
+  BIND(
+    IF(?spouseDaysSincePrevQualifyingSaleSafe >= 0 &&
+       ?spouseDaysSincePrevQualifyingSaleSafe < 730,
+       true, false)
+  AS ?spouseRule121b3Applies)
 
-  # --- §121(b)(1): Single filer exclusion ---
+  # --- §121(b)(3) concurrent block ---
+  BIND(
+    (COALESCE(?lossCount, 0) = 0 && COALESCE(?betterCount, 0) > 0)
+  AS ?Rule121b3ConcurrentBlock)
+
+  BIND((?Rule121b3PriorSale || ?Rule121b3ConcurrentBlock) AS ?Rule121b3Applies)
+
+  # --- Override §121(a) ---
+  BIND(IF(COALESCE(?Rule121b3Applies, false), false, COALESCE(?Rule121aSatisfiedSafe, false)) AS ?Rule121aFinal)
+  BIND(IF(COALESCE(?spouseRule121b3Applies, false), false, COALESCE(?spouseRule121aSatisfiedSafe, false)) AS ?spouseRule121aFinal)
+
+  # --- Loss-offset effective cap ---
+  BIND(
+    IF(COALESCE(?lossCount, 0) > 0 && COALESCE(?concurrentCount, 1) > 1,
+       IF(COALESCE(?netConcurrentGain, 0) <= 0,
+          xsd:decimal(0),
+          IF(?netConcurrentGain < ?singleCapSafe,
+             xsd:decimal(?netConcurrentGain),
+             ?singleCapSafe)
+       ),
+       ?singleCapSafe
+    ) AS ?effectiveSingleCap
+  )
+
+  # --- §121(b)(1) ---
   BIND(
     IF(?isSingleReturnSafe && ?Rule121aFinal,
-       IF(?realizedGain > ?singleCapSafe, ?singleCapSafe, ?realizedGain),
+       IF(?realizedGain <= 0,
+          xsd:decimal(0),
+          IF(?realizedGain > ?effectiveSingleCap, ?effectiveSingleCap, ?realizedGain)
+       ),
        xsd:decimal(0)
     ) AS ?Rule121b1Excluded
   )
 
-  # --- §121(b)(2)(A): Joint exclusion, both spouses qualify ---
+  # --- §121(b)(2)(A) ---
   BIND(
     IF(
       ?isJointReturnSafe &&
@@ -91,54 +215,48 @@ WHERE {
     ) AS ?Rule121b2AExcluded
   )
 
-  # --- §121(b)(2)(B): Only one spouse qualifies ---
+  # --- §121(b)(2)(B) ---
   BIND(
-  IF(
-    ?isJointReturnSafe &&
-   	!(?Rule121b2AExcluded > 0) &&
-    COALESCE(?Rule121aFinal, false) &&
-    (
-      (COALESCE(?Rule121aFinal, false) && !COALESCE(?spouseRule121aFinal, false)) ||
-      (!COALESCE(?Rule121aFinal, false) && COALESCE(?spouseRule121aFinal, false))
-    ),
     IF(
-      ?realizedGain > (?jointCapSafe / 2),
-      (?jointCapSafe / 2),
-      ?realizedGain
-    ),
-    xsd:decimal(0)
-  ) AS ?Rule121b2BExcluded
-)
+      ?isJointReturnSafe &&
+      !(?Rule121b2AExcluded > 0) &&
+      COALESCE(?Rule121aFinal, false) &&
+      (
+        (COALESCE(?Rule121aFinal, false) && !COALESCE(?spouseRule121aFinal, false)) ||
+        (!COALESCE(?Rule121aFinal, false) && COALESCE(?spouseRule121aFinal, false))
+      ),
+      IF(?realizedGain > (?jointCapSafe / 2), (?jointCapSafe / 2), ?realizedGain),
+      xsd:decimal(0)
+    ) AS ?Rule121b2BExcluded
+  )
 
-# --- §121(c): Partial exclusion for qualifying reasons, using dynamic cap ---
-BIND(
-  IF(bound(?numeratorDays) && bound(?reasonType) &&
-     !?Rule121aFinal &&
-     ?numeratorDays > 0 && ?numeratorDays < 730 &&
-     ?reasonType IN (:EmploymentRelatedReason, :HealthRelatedReason, :UnforeseenCircumstanceReason),
-     ROUND((?numeratorDays / 730.0 * 250000) * 100) / 100,
-     xsd:decimal(0)
-  ) AS ?Rule121cExcluded
-)
-    
+  # --- §121(c) ---
+  BIND(
+    IF(bound(?numeratorDays) && bound(?reasonType) &&
+       !?Rule121aFinal &&
+       ?numeratorDays > 0 && ?numeratorDays < 730 &&
+       ?reasonType IN (:EmploymentRelatedReason, :HealthRelatedReason, :UnforeseenCircumstanceReason),
+       ROUND((?numeratorDays / 730.0 * 250000) * 100) / 100,
+       xsd:decimal(0)
+    ) AS ?Rule121cExcluded
+  )
+
   BIND(?reasonType AS ?reason)
 
-  # --- §121(d)(1) applies if either spouse qualifies for joint return ---
-BIND(
-  IF(
-    ?isJointReturnSafe &&
-    (?Rule121aFinal || ?spouseRule121aFinal),
-    true,
-    false
-  ) AS ?Rule121d1Applies
-)
-  # --- Combine exclusions (use smallest applicable) ---
+  # --- §121(d)(1) ---
+  BIND(
+    IF(
+      ?isJointReturnSafe && (?Rule121aFinal || ?spouseRule121aFinal),
+      true, false
+    ) AS ?Rule121d1Applies
+  )
+
+  # --- Combine exclusions ---
   BIND(
     IF(bound(?Rule121b2BExcluded) && ?Rule121b2BExcluded > 0,
        IF(bound(?Rule121cExcluded) && ?Rule121cExcluded > 0,
           IF(?Rule121cExcluded < ?Rule121b2BExcluded, ?Rule121cExcluded, ?Rule121b2BExcluded),
-          ?Rule121b2BExcluded
-       ),
+          ?Rule121b2BExcluded),
        ?Rule121cExcluded
     ) AS ?finalExcludedGain
   )
@@ -149,17 +267,20 @@ BIND(
        ?Rule121b1Excluded,
        IF(bound(?Rule121b2AExcluded) && ?Rule121b2AExcluded > 0,
           ?Rule121b2AExcluded,
-          ?finalExcludedGain
-       )
+          ?finalExcludedGain)
     ) AS ?rawExcludedGain
   )
 
   # --- Cap at realized gain ---
   BIND(IF(?rawExcludedGain > ?realizedGain, ?realizedGain, ?rawExcludedGain) AS ?excludedGain)
 
-  # --- Compute taxable gain ---
+  # --- Taxable gain ---
   BIND(?realizedGain - COALESCE(?excludedGain, 0) AS ?taxableGain)
 
   # --- Unique interpretation node ---
-  BIND(IRI(CONCAT(str(:), "Interpretation_", STRAFTER(STR(?taxpayer), "#"), "_", STRAFTER(STR(?disposition), "#"))) AS ?interpNode)
+  BIND(IRI(CONCAT(
+    STR(:), "Interpretation_",
+    STRAFTER(STR(?taxpayer), "#"), "_",
+    STRAFTER(STR(?disposition), "#")
+  )) AS ?interpNode)
 }

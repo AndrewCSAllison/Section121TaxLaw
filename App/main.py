@@ -45,25 +45,23 @@ SCENARIO_INSTRUCTIONS = (
     "  \u2022 Whether taxpayers are married or unmarried\n"
     "  \u2022 Whether they are filing jointly or separately\n\n"
     "PROPERTY / PROPERTIES\n"
-    "  \u2022 Name or identifier for each property (e.g. \"Main Residence\", \"Florida Condo\")\n"
-    "  \u2022 Type of property if relevant (house, condo, townhouse, land parcel, etc.)\n\n"
+    "  \u2022 Name or identifier for each property (e.g. \"Main Residence\", \"Florida Condo\")\n\n"
     "OWNERSHIP\n"
     "  \u2022 Ownership start date per taxpayer per property\n"
     "  \u2022 Ownership end date per taxpayer per property\n"
     "  \u2022 Percentage owned if split between co-owners (e.g. \"50/50\")\n"
-    "  \u2022 Whether ownership was continuous or had separate intervals\n\n"
+    "  \u2022 Whether ownership was continuous or consisted of separate intervals\n\n"
     "RESIDENCE / USE\n"
     "  \u2022 Residence start date per taxpayer per property\n"
     "  \u2022 Residence end date per taxpayer per property\n"
-    "  \u2022 Whether residence was continuous or had separate intervals\n"
-    "  \u2022 Which property was the principal residence during which periods\n\n"
+    "  \u2022 Whether residence was continuous or had separate intervals\n\n"
     "DISPOSITION (SALE)\n"
     "  \u2022 Sale date for each property\n"
     "  \u2022 Realized gain (positive) or loss (negative) for each property\n\n"
     "TAX RETURN\n"
     "  \u2022 Return type: Single or Joint\n"
-    "  \u2022 Which taxpayer(s) are on which return\n"
-    "  \u2022 Which property sale(s) are linked to the return\n\n"
+    "  \u2022 Which taxpayer(s) are apart of which return\n"
+    "  \u2022 Which property sale is linked to the return\n\n"
     "PARTIAL EXCLUSION REASON (only if applicable)\n"
     "  \u2022 Employment-related  \u2014 job change / reassignment / distance \u2265 50 miles\n"
     "  \u2022 Health-related      \u2014 illness, injury, or care for a family member\n"
@@ -86,7 +84,7 @@ GUIDE_STEPS = [
             "  Include: taxpayer names, property names, ownership dates, residence dates,",
             "  sale date, realized gain/loss, return type (Single or Joint), and any",
             "  partial exclusion reason if one applies (employment, health, unforeseen).",
-            "  Tip: dates and amounts can be written naturally — the LLM will format them.",
+            "  Tip: dates and amounts can be written naturally — the LLM will format them as needed.",
             "Click '⚙ Build Prompt' to assemble the full instruction prompt + your scenario.",
         ],
     ),
@@ -96,8 +94,9 @@ GUIDE_STEPS = [
         [
             "Click one of the LLM buttons (↗ ChatGPT, ↗ Claude, ↗ Gemini) to open it.",
             "Click '📋 Copy Full Prompt' then paste the prompt into the LLM chat.",
-            "The LLM will return a Turtle (.ttl) file inside a code block.",
-            "Copy the entire TTL output from the LLM (including all @prefix lines).",
+            "If the LLM has all the necessary information to proceed, it will return a Turtle (.ttl) file instide a code block.",
+            "Otherwise, it may ask you follow-up questions to clarify missing or ambiguous details in your scenario — answer these as best you can until the LLM has what it needs.",
+            "Then, copy the entire TTL output from the LLM (including all @prefix lines).",
         ],
     ),
     (
@@ -111,7 +110,7 @@ GUIDE_STEPS = [
             "  ✔ Green  — step passed successfully.",
             "  ✘ Red    — an error occurred (see message for details).",
             "  ⚠ Yellow — a warning (e.g. undefined entities found in NYI check).",
-            "The final exclusion results will appear at the bottom of the output panel.",
+            "The final exclusion results will appear at the bottom of the output panel if no errors occur.",
         ],
     ),
     (
@@ -135,6 +134,7 @@ GUIDE_STEPS = [
             "base ontology and SHACL shapes, giving you a clean slate.",
             "You will be asked to confirm before the reset runs.",
             "After resetting, you can paste a new TTL and submit immediately.",
+            "This step is important to prevent data from previous scenarios interfering with new ones.",
         ],
     ),
     (
@@ -581,7 +581,7 @@ def build_footer(root):
     footer.pack_propagate(False)
     tk.Label(footer, text="Ctrl+Enter to Submit  ·  Ctrl+O to Load File",
              bg=PANEL, fg=SUBTEXT, font=("Segoe UI", 8)).pack(side="left", padx=12)
-    tk.Label(footer, text="§121 Tax Exclusion Reasoning System",
+    tk.Label(footer, text="§121 Tax Exclusion Calculation System",
              bg=PANEL, fg=SUBTEXT, font=("Segoe UI", 8)).pack(side="right", padx=12)
 
 
