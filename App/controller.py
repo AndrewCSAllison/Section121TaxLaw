@@ -1,5 +1,5 @@
 """
-controller.py — Business logic layer.
+controller.py — Backend logic layer.
 
 Responsibilities:
   - File I/O (load_file, load_file_contents)

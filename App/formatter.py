@@ -35,6 +35,7 @@ def format_results_nl(results_json):
     joint_rules_set = {
         "§121(b)(2)(A) exclusion",
         "§121(b)(2)(B) exclusion",
+        "§121(c) exclusion",
         "§121(d)(1) applies",
     }
 

@@ -13,12 +13,14 @@
 :Own_T043a_1 a :OwnershipUseInterval ;
     :ownershipStart "1998-02-01"^^xsd:date ;
     :ownershipEnd   "2001-12-31"^^xsd:date ;
-    :hasOwnershipOf :Property_T043a .
+    :hasOwnershipOf :Property_T043a ;
+    :percentageOwned "1.0"^^xsd:decimal .
 
 :Own_T043b_1 a :OwnershipUseInterval ;
     :ownershipStart "1998-02-01"^^xsd:date ;
     :ownershipEnd   "2001-12-31"^^xsd:date ;
-    :hasOwnershipOf :Property_T043b .
+    :hasOwnershipOf :Property_T043b ;
+    :percentageOwned "1.0"^^xsd:decimal .
 
 ### Residence Use
 :Use_T043a_1 a :ResidenceUseInterval ;

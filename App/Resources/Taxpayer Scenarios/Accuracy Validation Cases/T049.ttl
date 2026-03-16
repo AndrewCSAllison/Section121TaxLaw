@@ -12,13 +12,15 @@
 :Own_T049a_1 a :OwnershipUseInterval ;
     :ownershipStart "2002-02-01"^^xsd:date ;
     :ownershipEnd   "2005-12-31"^^xsd:date ;
-    :hasOwnershipOf :Property_T049 .
+    :hasOwnershipOf :Property_T049 ;
+    :percentageOwned 1.0 .
 
 :Own_T049b_1 a :OwnershipUseInterval ;
     :ownershipStart "2002-02-01"^^xsd:date ;
     :ownershipEnd   "2005-12-31"^^xsd:date ;
-    :hasOwnershipOf :Property_T049 .
-
+    :hasOwnershipOf :Property_T049 ;
+    :percentageOwned 1.0 .
+    
 ### Residence Use
 # Only T049b qualifies
 :Use_T049b_1 a :ResidenceUseInterval ;

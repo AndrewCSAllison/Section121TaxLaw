@@ -12,12 +12,14 @@
 :Own_T050a_1 a :OwnershipUseInterval ;
     :ownershipStart "2003-02-01"^^xsd:date ;
     :ownershipEnd   "2006-12-31"^^xsd:date ;
-    :hasOwnershipOf :Property_T050 .
-
+    :hasOwnershipOf :Property_T050 ;
+    :percentageOwned 1.0 .
+    
 :Own_T050b_1 a :OwnershipUseInterval ;
     :ownershipStart "2003-02-01"^^xsd:date ;
     :ownershipEnd   "2006-12-31"^^xsd:date ;
-    :hasOwnershipOf :Property_T050 .
+    :hasOwnershipOf :Property_T050 ;
+    :percentageOwned 1.0 . 
 
 ### Residence Use
 # Only T050b qualifies
