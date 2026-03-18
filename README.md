@@ -387,7 +387,7 @@ SHACL validation is run before any SPARQL reasoning. Violations halt the pipelin
 
 ### SPARQL Queries
 
-All SPARQL files live in `Resources/SPARQL_Queries/`.
+All SPARQL files live in `App/Resources/SPARQL_Queries/`.
 
 #### `NYICheck.sparql` — Undefined Entity Check (SELECT)
 
@@ -471,7 +471,7 @@ Realized gain: 600000.0, Excluded gain: 500000.0, Taxable gain: 100000.0
 
 ## 12. Evaluation & Testing
 
-The `Testing/` directory contains four suites of cases:
+The `App\Resources\Taxpayer Scenarios` directory contains four suites of cases:
 
 ### Federal Regulations Test Cases (30 cases)
 
@@ -495,6 +495,22 @@ The 77 Accuracy Validation Cases run **three times each** (231 total runs). Each
 - **End-to-end accuracy** — does the full NL → LLM → TTL → SPARQL → Output pipeline produce the correct final answer?
 
 This is the primary benchmark for overall system performance.
+
+Each evaluation case was scored on three metrics:
+
+- **Overall correctness** — triggered rules and calculated exclusion match hand-verified targets
+- **Initial SHACL errors** — whether the generated TTL was rejected on import before any reasoning ran
+- **Additional prompting** — whether the case required follow-up clarification from the LLM or error-correction passes
+
+**Results across 231 cases:**
+
+| Metric | Count | Rate |
+| --- | --- | --- |
+| Overall correct | 222 / 231 | 96.10% |
+| Initial SHACL errors | 4 / 231 | 1.73% |
+| Required additional prompting | 17 / 231 | 7.36% |
+
+The 96.10% accuracy figure reflects final correctness after error correction — 4 cases required SHACL fixes and 17 required additional prompting before producing correct output. No incorrect TTL file was unrecoverable through the built-in error-correction loop (meaning SHACL violations and NYI warnings were sufficient to guide the LLM towards correct fixes).
 
 ### Incorrect Example Cases
 
