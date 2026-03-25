@@ -132,12 +132,12 @@ Plain-English Scenario
 
 ## 4. Prerequisites
 
-| Requirement  | Version             | Notes                                  |
-| ------------ | ------------------- | -------------------------------------- |
-| Python       | 3.9 +               | 3.11+ recommended [Download](https://www.python.org/downloads/)                     |
-| tkinter      | bundled with Python | Confirm with `python -m tkinter`     |
-| GraphDB Free | 10.x                | [Download](https://graphdb.ontotext.com/) |
-| requests     | ≥ 2.28             | `pip install requests`               |
+| Requirement  | Version             | Notes                                                       |
+| ------------ | ------------------- | ----------------------------------------------------------- |
+| Python       | 3.9 +               | 3.11+ recommended[Download](https://www.python.org/downloads/) |
+| tkinter      | bundled with Python | Confirm with `python -m tkinter`                          |
+| GraphDB Free | 10.x                | [Download](https://graphdb.ontotext.com/)                      |
+| requests     | ≥ 2.28             | `pip install requests`                                    |
 
 No other third-party Python libraries are required.
 
@@ -213,6 +213,8 @@ python -m App.main
 ```
 
 The application window opens at 1100 × 700 px (minimum 900 × 600). It consists of three tabs: **TTL Editor**, **Prompt Builder**, and **How to Use**.
+
+*Note - GraphDB must be configured & running in the background PRIOR to running the application.*
 
 ---
 
@@ -330,12 +332,12 @@ The ontology declares the following OWL classes:
 
 Key individuals of `:ReasonType`:
 
-| Individual                        | Meaning                                                   |
-| --------------------------------- | --------------------------------------------------------- |
-| `:EmploymentRelatedReason`      | Job change, reassignment, job loss |
-| `:HealthRelatedReason`          | Illness, injury, or care for a family member              |
-| `:UnforeseenCircumstanceReason` | Divorce, death, financial hardship, etc.                  |
-| `:NonQualifyingReason`          | Explicitly does not qualify for partial exclusion         |
+| Individual                        | Meaning                                           |
+| --------------------------------- | ------------------------------------------------- |
+| `:EmploymentRelatedReason`      | Job change, reassignment, job loss                |
+| `:HealthRelatedReason`          | Illness, injury, or care for a family member      |
+| `:UnforeseenCircumstanceReason` | Divorce, death, financial hardship, etc.          |
+| `:NonQualifyingReason`          | Explicitly does not qualify for partial exclusion |
 
 Key datatype properties:
 
@@ -477,8 +479,8 @@ The `App\Resources\Taxpayer Scenarios` directory contains four suites of cases:
 
 Initial prototype cases directly taken from [ecfr.gov](ecfr.gov) used to verify that the NL → Turtle → SPARQL pipeline worked end-to-end. These served as proof-of-concept before systematic accuracy evaluation.
 
-[Section §1.121-1](https://www.ecfr.gov/current/title-26/chapter-I/subchapter-A/part-1/subject-group-ECFRb467872627553f1/section-1.121-1)\
-[Section §1.121-2](https://www.ecfr.gov/current/title-26/chapter-I/subchapter-A/part-1/subject-group-ECFRb467872627553f1/section-1.121-2)\
+[Section §1.121-1](https://www.ecfr.gov/current/title-26/chapter-I/subchapter-A/part-1/subject-group-ECFRb467872627553f1/section-1.121-1)
+[Section §1.121-2](https://www.ecfr.gov/current/title-26/chapter-I/subchapter-A/part-1/subject-group-ECFRb467872627553f1/section-1.121-2)
 [Section §1.121-3](https://www.ecfr.gov/current/title-26/chapter-I/subchapter-A/part-1/subject-group-ECFRb467872627553f1/section-1.121-3)
 
 ### Accuracy Validation Cases (77 cases)
@@ -504,11 +506,11 @@ Each evaluation case was scored on three metrics:
 
 **Results across 231 cases:**
 
-| Metric | Count | Rate |
-| --- | --- | --- |
-| Overall correct | 222 / 231 | 96.10% |
-| Initial SHACL errors | 4 / 231 | 1.73% |
-| Required additional prompting | 17 / 231 | 7.36% |
+| Metric                        | Count     | Rate   |
+| ----------------------------- | --------- | ------ |
+| Overall correct               | 222 / 231 | 96.10% |
+| Initial SHACL errors          | 4 / 231   | 1.73%  |
+| Required additional prompting | 17 / 231  | 7.36%  |
 
 The 96.10% accuracy figure reflects final correctness after error correction — 4 cases required SHACL fixes and 17 required additional prompting before producing correct output. No incorrect TTL file was unrecoverable through the built-in error-correction loop (meaning SHACL violations and NYI warnings were sufficient to guide the LLM towards correct fixes).
 
