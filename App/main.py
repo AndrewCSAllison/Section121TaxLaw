@@ -172,7 +172,7 @@ def build_top_bar(root):
 
     tk.Label(bar, text="§ 121", bg=PANEL, fg=ACCENT,
              font=("Segoe UI Black", 18)).pack(side="left", padx=16, pady=8)
-    tk.Label(bar, text="GraphDB Pipeline", bg=PANEL, fg=TEXT,
+    tk.Label(bar, text="Exclusion Calculation System", bg=PANEL, fg=TEXT,
              font=("Segoe UI", 13)).pack(side="left", pady=8)
 
     status_var = tk.StringVar(value="● Ready")
@@ -519,7 +519,7 @@ def build_tab_guide(nb):
     # Header
     hdr_frame = tk.Frame(inner, bg=BG)
     hdr_frame.pack(fill="x", padx=30, pady=(24, 4))
-    tk.Label(hdr_frame, text="§121 Pipeline — How to Use",
+    tk.Label(hdr_frame, text="§121 Exclusion Calculation Pipeline — How to Use",
              bg=BG, fg=TEXT, font=("Segoe UI Semibold", 16)).pack(side="left")
     tk.Label(hdr_frame,
              text="Follow the steps below in order for each taxpayer scenario.",
@@ -581,7 +581,7 @@ def build_footer(root):
     footer.pack_propagate(False)
     tk.Label(footer, text="Ctrl+Enter to Submit  ·  Ctrl+O to Load File",
              bg=PANEL, fg=SUBTEXT, font=("Segoe UI", 8)).pack(side="left", padx=12)
-    tk.Label(footer, text="§121 Tax Exclusion Calculation System",
+    tk.Label(footer, text="§121 Exclusion Calculation System",
              bg=PANEL, fg=SUBTEXT, font=("Segoe UI", 8)).pack(side="right", padx=12)
 
 
@@ -591,7 +591,7 @@ def build_footer(root):
 
 def main():
     root = tk.Tk()
-    root.title("§121 GraphDB Pipeline")
+    root.title("§121 Exclusion Calculation System")
     root.geometry("1100x700")
     root.minsize(900, 600)
     root.configure(bg=BG)

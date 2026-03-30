@@ -1,4 +1,4 @@
-# §121 GraphDB Pipeline Version 1.0
+# §121 Exclusion Calculator Version 1.0
 
 A proof of concept knowledge graph–driven application for evaluating **IRC §121 home sale exclusion** scenarios (**Note - Version 1.0 only implements the following sections of IRC §121: `121(a), 121(b)(1), 121(b)(2)(A), 121(b)(2)(B), 121(b)(3), 121(c), 121(d)(1)`). The system converts plain-English taxpayer descriptions into RDF/Turtle (`.ttl`) facts according to a predefined ontology via a large language model, validates and stores the information in a GraphDB knowledge graph, runs a chain of SPARQL queries to calculate results, and finally produces a readable determination of the taxpayer's exclusion.
 
@@ -93,7 +93,7 @@ Plain-English Scenario
 ## 3. Repository Structure
 
 ```
-§121-GraphDB-Pipeline/
+§121-Exclusion-Calculator-Pipeline/
 │
 ├── App/                                 # Python application package
 │   ├── __init__.py
