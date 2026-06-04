@@ -45,7 +45,8 @@ Never omit datatypes.
 - The exclusion cap for a SingleReturn is always 250,000 and for a JointReturn is always 500,000.
 - If the taxpayer scenario mentions multiple joint owners that are splitting the realized gain, link each individual taxpayer to the same disposition with the total potential gain realized and separate them into different SingleReturns, making sure to add their precentageOwned under OwnershipUseInterval.
 - Only include a partialExclusionReason if the scenario refers to one in the taxpayer description or Section 121c specifically (refer to the predefined reasons listed in the ontology).
-- If two taxpayers own a property together, are married, or unmarried and splitting a return, model their percentageOwned as  0.5.
+- If two taxpayers own a property together, are married, or unmarried and splitting a return, model their percentageOwned as 0.5.
+- Clarify with the user if marriage indicates the addition of ownership/residency of a property. 
 
 *Missing or Ambiguous Information*
 If you have determined required information is missing:

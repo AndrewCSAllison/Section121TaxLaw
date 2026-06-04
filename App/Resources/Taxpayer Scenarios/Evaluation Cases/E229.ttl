@@ -1,38 +1,50 @@
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
 :BY_1 a :Taxpayer .
+
 :BY_2 a :Taxpayer .
 
-:House a :Property .
+:MainHouse a :Property .
 
-:OUI_BY_1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :House ;
+:OwnershipInterval_BY1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainHouse ;
     :ownershipStart "1996-01-01"^^xsd:date ;
     :ownershipEnd "2000-01-15"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:RUI_BY_1 a :ResidenceUseInterval ;
-    :hasResidenceOf :House ;
+:OwnershipInterval_BY2 a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainHouse ;
+    :ownershipStart "1996-01-01"^^xsd:date ;
+    :ownershipEnd "2000-01-15"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal .
+
+:ResidenceInterval_BY1 a :ResidenceUseInterval ;
+    :hasResidenceOf :MainHouse ;
     :residenceStart "1996-01-01"^^xsd:date ;
     :residenceEnd "2000-01-15"^^xsd:date .
 
-:RUI_BY_2 a :ResidenceUseInterval ;
-    :hasResidenceOf :House ;
+:ResidenceInterval_BY2 a :ResidenceUseInterval ;
+    :hasResidenceOf :MainHouse ;
     :residenceStart "1999-01-15"^^xsd:date ;
     :residenceEnd "2000-01-15"^^xsd:date .
 
-:Disposition_House a :Disposition ;
-    :involves :House ;
+:Disp1 a :Disposition ;
+    :involves :MainHouse ;
     :sellDate "2000-01-15"^^xsd:date ;
     :potentialGain 500000 ;
     :partialExclusionReason :EmploymentRelatedReason .
 
-:JointReturn_House a :JointReturn ;
-    :exclusionCap 500000 ;
-    :associates :BY_1 , :BY_2 ;
-    :linkedTo :Disposition_House .
+:Ret1 a :JointReturn ;
+    :associates :BY_1, :BY_2 ;
+    :linkedTo :Disp1 ;
+    :exclusionCap 500000 .
 
-:BY_1 :owns :OUI_BY_1 ;
-       :uses :RUI_BY_1 ;
-       :disposesOf :Disposition_House .
+:BY_1 :owns :OwnershipInterval_BY1 ;
+      :uses :ResidenceInterval_BY1 ;
+      :disposesOf :Disp1 .
 
-:BY_2 :uses :RUI_BY_2 ;
-       :disposesOf :Disposition_House .
+:BY_2 :owns :OwnershipInterval_BY2 ;
+      :uses :ResidenceInterval_BY2 ;
+      :disposesOf :Disp1 .

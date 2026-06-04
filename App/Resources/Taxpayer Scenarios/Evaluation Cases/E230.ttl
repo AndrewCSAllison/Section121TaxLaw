@@ -1,41 +1,53 @@
-:BY_1 a :Taxpayer .
-:BY_2 a :Taxpayer .
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:House a :Property .
+:MainResidence a :Property .
 
-:BY_1_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :House ;
+:BY1 a :Taxpayer ;
+    :owns :BY1_OwnershipInterval ;
+    :uses :BY1_ResidenceInterval ;
+    :disposesOf :Sale2000 .
+
+:BY2 a :Taxpayer ;
+    :owns :BY2_OwnershipInterval ;
+    :uses :BY2_ResidenceInterval ;
+    :disposesOf :Sale2000 .
+
+:BY1_OwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
     :ownershipStart "1996-01-01"^^xsd:date ;
     :ownershipEnd "2000-01-15"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:BY_1_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :House ;
+:BY2_OwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "1999-01-15"^^xsd:date ;
+    :ownershipEnd "2000-01-15"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal .
+
+:BY1_ResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
     :residenceStart "1996-01-01"^^xsd:date ;
     :residenceEnd "2000-01-15"^^xsd:date .
 
-:BY_2_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :House ;
+:BY2_ResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
     :residenceStart "1999-01-15"^^xsd:date ;
     :residenceEnd "2000-01-15"^^xsd:date .
 
-:HouseDisposition a :Disposition ;
-    :involves :House ;
+:Sale2000 a :Disposition ;
+    :involves :MainResidence ;
     :sellDate "2000-01-15"^^xsd:date ;
-    :potentialGain 500000 ;
+    :potentialGain "500000"^^xsd:integer ;
     :partialExclusionReason :EmploymentRelatedReason .
 
-:BY_1 a :Taxpayer ;
-    :disposesOf :HouseDisposition ;
-    :owns :BY_1_Ownership ;
-    :uses :BY_1_Residence .
+:BY1_Return a :SingleReturn ;
+    :associates :BY1 ;
+    :linkedTo :Sale2000 ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:BY_2 a :Taxpayer ;
-    :uses :BY_2_Residence ;
-    :disposesOf :HouseDisposition .
-
-:JointReturn_1 a :JointReturn ;
-    :exclusionCap 500000 ;
-    :associates :BY_1 ;
-    :associates :BY_2 ;
-    :linkedTo :HouseDisposition .
+:BY2_Return a :SingleReturn ;
+    :associates :BY2 ;
+    :linkedTo :Sale2000 ;
+    :exclusionCap "250000"^^xsd:integer .
