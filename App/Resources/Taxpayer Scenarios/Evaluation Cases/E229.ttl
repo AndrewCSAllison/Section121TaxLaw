@@ -1,39 +1,50 @@
-:BY_1 a :Taxpayer .
+@prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+:BY_1 a :Taxpayer .
 :BY_2 a :Taxpayer .
 
-:House a :Property .
+:MainResidence a :Property .
 
-:OUI_BY_1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :House ;
+:BY_1_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
     :ownershipStart "1996-01-01"^^xsd:date ;
     :ownershipEnd "2000-01-15"^^xsd:date ;
     :percentageOwned "0.5"^^xsd:decimal .
 
-:RUI_BY_1 a :ResidenceUseInterval ;
-    :hasResidenceOf :House ;
+:BY_2_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "1999-01-15"^^xsd:date ;
+    :ownershipEnd "2000-01-15"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal .
+
+:BY_1_Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
     :residenceStart "1996-01-01"^^xsd:date ;
     :residenceEnd "2000-01-15"^^xsd:date .
 
-:RUI_BY_2 a :ResidenceUseInterval ;
-    :hasResidenceOf :House ;
+:BY_2_Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :MainResidence ;
     :residenceStart "1999-01-15"^^xsd:date ;
     :residenceEnd "2000-01-15"^^xsd:date .
 
-:Disposition_House a :Disposition ;
-    :involves :House ;
+:BY_1 :owns :BY_1_Ownership ;
+      :uses :BY_1_Residence ;
+      :disposesOf :Disposition1 .
+
+:BY_2 :owns :BY_2_Ownership ;
+      :uses :BY_2_Residence ;
+      :disposesOf :Disposition1 .
+
+:Disposition1 a :Disposition ;
+    :involves :MainResidence ;
     :sellDate "2000-01-15"^^xsd:date ;
     :potentialGain 500000 ;
     :partialExclusionReason :EmploymentRelatedReason .
 
-:JointReturn_House a :JointReturn ;
-    :exclusionCap 500000 ;
-    :associates :BY_1 , :BY_2 ;
-    :linkedTo :Disposition_House .
-
-:BY_1 :owns :OUI_BY_1 ;
-       :uses :RUI_BY_1 ;
-       :disposesOf :Disposition_House .
-
-:BY_2 :uses :RUI_BY_2 ;
-       :disposesOf :Disposition_House .
+:Return1 a :JointReturn ;
+    :associates :BY_1, :BY_2 ;
+    :linkedTo :Disposition1 ;
+    :exclusionCap 500000 .
