@@ -1,4 +1,5 @@
 from pathlib import Path
+from wsgiref import headers
 
 import requests
 import urllib.parse
@@ -48,9 +49,10 @@ def upload_ttl(ttl_content: str, target_graph: str = None) -> str:
     upload_url = f"{GRAPHDB_REPO}/statements"
 
     if target_graph:
-        # URL-encode the graph URI so '#' becomes %23
-        safe_graph = urllib.parse.quote(target_graph, safe=':/')
-        upload_url += f"?context=<{safe_graph}>"
+        params = {'context': f'<{target_graph}>'}
+        response = requests.post(upload_url, data=ttl_content.encode("utf-8"), headers=headers, params=params)
+    else:
+        response = requests.post(upload_url, data=ttl_content.encode("utf-8"), headers=headers)
 
     response = requests.post(upload_url, data=ttl_content.encode("utf-8"), headers=headers)
     _check_response(response, "upload_ttl")

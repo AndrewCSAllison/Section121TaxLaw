@@ -1,5 +1,6 @@
 @prefix : <http://example.org/section121#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+<<<<<<< HEAD
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -24,10 +25,40 @@
     :ownershipEnd "1999-01-15"^^xsd:date .
 
 :BY1_Residence1 a :ResidenceUseInterval ;
+=======
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:MainResidence a :Property .
+
+:BY1 a :Taxpayer ;
+    :owns :BY1_OwnershipInterval ;
+    :uses :BY1_ResidenceInterval ;
+    :disposesOf :Sale2000 .
+
+:BY2 a :Taxpayer ;
+    :owns :BY2_OwnershipInterval ;
+    :uses :BY2_ResidenceInterval ;
+    :disposesOf :Sale2000 .
+
+:BY1_OwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "1996-01-01"^^xsd:date ;
+    :ownershipEnd "2000-01-15"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal .
+
+:BY2_OwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :MainResidence ;
+    :ownershipStart "1999-01-15"^^xsd:date ;
+    :ownershipEnd "2000-01-15"^^xsd:date ;
+    :percentageOwned "0.5"^^xsd:decimal .
+
+:BY1_ResidenceInterval a :ResidenceUseInterval ;
+>>>>>>> a022cda1fc235d7160db74365150324ff983da1e
     :hasResidenceOf :MainResidence ;
     :residenceStart "1996-01-01"^^xsd:date ;
     :residenceEnd "1999-01-15"^^xsd:date .
 
+<<<<<<< HEAD
 :BY1_Ownership2 a :OwnershipUseInterval ;
     :hasOwnershipOf :MainResidence ;
     :ownershipStart "1999-01-15"^^xsd:date ;
@@ -35,10 +66,14 @@
     :percentageOwned "0.5"^^xsd:decimal .
 
 :BY1_Residence2 a :ResidenceUseInterval ;
+=======
+:BY2_ResidenceInterval a :ResidenceUseInterval ;
+>>>>>>> a022cda1fc235d7160db74365150324ff983da1e
     :hasResidenceOf :MainResidence ;
     :residenceStart "1999-01-15"^^xsd:date ;
     :residenceEnd "2000-01-15"^^xsd:date .
 
+<<<<<<< HEAD
 #########################
 # Ownership/Use Intervals - BY_2
 #########################
@@ -68,11 +103,15 @@
 # Disposition
 #########################
 :Disposition1 a :Disposition ;
+=======
+:Sale2000 a :Disposition ;
+>>>>>>> a022cda1fc235d7160db74365150324ff983da1e
     :involves :MainResidence ;
     :sellDate "2000-01-15"^^xsd:date ;
-    :potentialGain 500000 ;
+    :potentialGain "500000"^^xsd:integer ;
     :partialExclusionReason :EmploymentRelatedReason .
 
+<<<<<<< HEAD
 #########################
 # Return
 #########################
@@ -80,3 +119,14 @@
     :associates :BY_1, :BY_2 ;
     :linkedTo :Disposition1 ;
     :exclusionCap 500000 .
+=======
+:BY1_Return a :SingleReturn ;
+    :associates :BY1 ;
+    :linkedTo :Sale2000 ;
+    :exclusionCap "250000"^^xsd:integer .
+
+:BY2_Return a :SingleReturn ;
+    :associates :BY2 ;
+    :linkedTo :Sale2000 ;
+    :exclusionCap "250000"^^xsd:integer .
+>>>>>>> a022cda1fc235d7160db74365150324ff983da1e
