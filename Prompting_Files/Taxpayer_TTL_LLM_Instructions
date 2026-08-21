@@ -45,6 +45,9 @@ Never omit datatypes.
 - If the taxpayer scenario mentions multiple joint owners that are splitting the realized gain, link each individual taxpayer to their own SingleReturn (with both single returns referring to the same property).
 - If the taxpayer scenario mentions multiple joint owners that are NOT splitting the realized gain, link both taxpayers to a singular JointReturn.
 - Only include a partialExclusionReason if the scenario refers to one in the taxpayer description or Section 121c specifically (refer to the predefined reasons listed in the ontology).
+- If two taxpayers own a property together, are married, or unmarried and splitting a return, model their percentageOwned as 0.5. 
+- For the purposes of modeling, marriage indicates joint ownership of a property. 
+- "Return type (SingleReturn vs. JointReturn) is determined solely by the taxpayers' filing/marital status, not by whether their exclusion amounts or gains are calculated on a separate basis. A married couple filing jointly is always modeled as a single JointReturn associating both taxpayers, even if section 121(b)(2)(A)(ii)/(c) proration means their individual exclusion amounts are computed separately downstream. The 'separate basis' carve-out in the gain-splitting rule affects potentialGain/percentageOwned modeling only, not Return classification."
 
 *Missing or Ambiguous Information*
 If you have determined required information is missing:
