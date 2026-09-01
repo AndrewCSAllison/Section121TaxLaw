@@ -111,19 +111,22 @@ Plain-English Scenario
 │   ├── Section_121_Taxpayer_Ontology.ttl
 │   └── Section_121_SHACL_Shapes.ttl
 │
-├── Resources/
-│   └── SPARQL_Queries/
-│       ├── DerivedInfoQuery.sparql      # SPARQL UPDATE — computes derived ownership/use facts
-│       ├── InterpretationQuery.sparql   # SPARQL UPDATE — applies §121 rule logic
-│       ├── NYICheck.sparql              # SPARQL SELECT — checks for undefined entities
-│       └── ResultsQuery.sparql          # SPARQL SELECT — retrieves final exclusion results
+├── SPARQL_Queries/
+│   ├── DerivedInfoQuery.sparql      # SPARQL UPDATE — computes derived ownership/use facts
+│   ├── InterpretationQuery.sparql   # SPARQL UPDATE — applies §121 rule logic
+│   ├── NYICheck.sparql              # SPARQL SELECT — checks for undefined entities
+│   └── ResultsQuery.sparql          # SPARQL SELECT — retrieves final exclusion results
 │
-└── Testing/
-    ├── Accuracy_Validation_Cases/       # 77 hand-verified test cases (SPARQL pipeline accuracy)
-    ├── Evaluation_Cases/                # 231 cases (77 × 3 runs) for full NL→Output evaluation
-    │   └── Section_121_Evaluation_Cases.xlsx
-    ├── Test_Cases/                      # Original prototype test cases
-    └── Incorrect_Example_Cases/         # Annotated examples of typical LLM/pipeline errors
+├── Taxpayer_Scenarios/
+│   ├── Accuracy_Validation_Cases/       # 77 hand-verified test cases (SPARQL pipeline accuracy)
+│   ├── Evaluation_Cases/                # 231 cases (77 × 3 runs) for full NL→Output evaluation
+│   ├── Test_Cases/                      # Original prototype test cases
+│   └── Incorrect_Example_Cases/         # Annotated examples of typical LLM/pipeline errors
+│
+└── Results/
+    ├── Section 121 IRC Original Test Cases.xlsx      # Results for the 30 Federal Regulations Test Cases
+    ├── Section 121 Accuracy Validation Cases.xlsx     # Results for the 77 Accuracy Validation Cases
+    └── Section 121 Final Evaluation Cases.xlsx        # Results for the 231 Evaluation Cases (primary benchmark)
 ```
 
 > **Note:** `Combined_Prompting_File` is automatically read by `main.py` at startup and pre-loaded into the Prompt Builder. Do not move or rename it without updating the path in `main.py`.
@@ -389,7 +392,7 @@ SHACL validation is run before any SPARQL reasoning. Violations halt the pipelin
 
 ### SPARQL Queries
 
-All SPARQL files live in `App/Resources/SPARQL_Queries/`.
+All SPARQL files live in `SPARQL_Queries/`.
 
 #### `NYICheck.sparql` — Undefined Entity Check (SELECT)
 
@@ -473,7 +476,7 @@ Realized gain: 600000.0, Excluded gain: 500000.0, Taxable gain: 100000.0
 
 ## 12. Evaluation & Testing
 
-The `App\Resources\Taxpayer Scenarios` directory contains four suites of cases:
+The `Taxpayer_Scenarios/` directory contains four suites of cases; scored results for each suite are tracked in `Results/`:
 
 ### Federal Regulations Test Cases (30 cases)
 
@@ -483,13 +486,17 @@ Initial prototype cases directly taken from [ecfr.gov](ecfr.gov) used to verify 
 [Section §1.121-2](https://www.ecfr.gov/current/title-26/chapter-I/subchapter-A/part-1/subject-group-ECFRb467872627553f1/section-1.121-2)
 [Section §1.121-3](https://www.ecfr.gov/current/title-26/chapter-I/subchapter-A/part-1/subject-group-ECFRb467872627553f1/section-1.121-3)
 
+**Results file:** `Results/Section 121 IRC Original Test Cases.xlsx`
+
 ### Accuracy Validation Cases (77 cases)
 
 A curated set of 77 scenarios with hand-verified expected outputs. These test the accuracy of the **SPARQL pipeline in isolation** — they assume a correct Turtle file is already provided and measure whether the SPARQL rules produce the correct exclusion determination.
 
+**Results file:** `Results/Section 121 Accuracy Validation Cases.xlsx` — all 77 cases produce the correct exclusion determination (77 / 77, 100%).
+
 ### Evaluation Cases (231 cases) — primary benchmark
 
-**File:** `Section_121_Evaluation_Cases.xlsx`
+**File:** `Results/Section 121 Final Evaluation Cases.xlsx`
 
 The 77 Accuracy Validation Cases run **three times each** (231 total runs). Each run puts a different LLM-generated Turtle file through the full pipeline, measuring:
 
@@ -508,11 +515,14 @@ Each evaluation case was scored on three metrics:
 
 | Metric                        | Count     | Rate   |
 | ----------------------------- | --------- | ------ |
-| Overall correct               | 222 / 231 | 96.10% |
+| Overall correct               | 219 / 231 | 94.81% |
 | Initial SHACL errors          | 4 / 231   | 1.73%  |
 | Required additional prompting | 17 / 231  | 7.36%  |
 
-The 96.10% accuracy figure reflects final correctness after error correction — 4 cases required SHACL fixes and 17 required additional prompting before producing correct output. No incorrect TTL file was unrecoverable through the built-in error-correction loop (meaning SHACL violations and NYI warnings were sufficient to guide the LLM towards correct fixes).
+These two error categories are distinct:
+
+- **Structural validity (SHACL / NYI):** every TTL file that initially failed SHACL validation or triggered an NYI warning was fully recoverable through the built-in error-correction loop — pasting the violation back to the LLM was always sufficient to produce a structurally valid file. 4 cases needed SHACL fixes and 17 needed additional prompting to get there.
+- **Final correctness:** structural validity does not guarantee a correct answer. 12 / 231 cases (5.19%) produced Turtle that was syntactically valid and passed SHACL, but still led the pipeline to the wrong exclusion determination — a substantive modeling/reasoning gap rather than a validation failure. These are reflected in the 219 / 231 (94.81%) overall-correct figure above.
 
 ### Incorrect Example Cases
 
@@ -544,7 +554,7 @@ All HTTP communication with GraphDB. Functions:
 | `run_shacl_validation()`                     | CONSTRUCT query to retrieve current SHACL violations; returns empty string if none |
 | `run_update_query(query, from_file=True)`    | Execute a SPARQL UPDATE; if `from_file=True`, loads from `SPARQL_DIR`          |
 | `run_select_query(filename)`                 | Execute a SPARQL SELECT from a file; returns parsed JSON                           |
-| `load_query_file(filename)`                  | Read a `.sparql` file from `Resources/SPARQL_Queries/`                         |
+| `load_query_file(filename)`                  | Read a `.sparql` file from `SPARQL_Queries/`                                   |
 
 ### `controller.py`
 

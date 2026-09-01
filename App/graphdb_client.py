@@ -7,7 +7,7 @@ import urllib.parse
 from App.config import GRAPHDB_REPO, SHACL_GRAPH
 
 BASE_DIR = Path(__file__).resolve().parent
-SPARQL_DIR = BASE_DIR / "Resources" / "SPARQL_Queries"
+SPARQL_DIR = BASE_DIR.parent / "SPARQL_Queries"
 
 
 # ──────────────────────────────────────────────
