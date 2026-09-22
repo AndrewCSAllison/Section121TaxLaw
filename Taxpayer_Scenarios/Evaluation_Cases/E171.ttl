@@ -1,54 +1,51 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:BE a :Taxpayer .
+:E171 a :Taxpayer ;
+    :owns :E171TownhouseOwnership, :E171HouseOwnership ;
+    :uses :E171TownhouseResidence, :E171HouseResidence ;
+    :disposesOf :E171TownhouseDisposition, :E171HouseDisposition .
 
-:Townhouse a :Property .
-:House a :Property .
+:E171Townhouse a :Property .
 
-:BE_Townhouse_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :Townhouse ;
+:E171House a :Property .
+
+:E171TownhouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E171Townhouse ;
     :ownershipStart "1997-01-01"^^xsd:date ;
-    :ownershipEnd "1998-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2001-12-31"^^xsd:date .
 
-:BE_Townhouse_Use a :ResidenceUseInterval ;
-    :hasResidenceOf :Townhouse ;
+:E171TownhouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E171Townhouse ;
     :residenceStart "1997-01-01"^^xsd:date ;
     :residenceEnd "1998-12-31"^^xsd:date .
 
-:BE_House_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :House ;
+:E171HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E171House ;
     :ownershipStart "1999-01-01"^^xsd:date ;
-    :ownershipEnd "2002-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2002-12-31"^^xsd:date .
 
-:BE_House_Use a :ResidenceUseInterval ;
-    :hasResidenceOf :House ;
+:E171HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E171House ;
     :residenceStart "1999-01-01"^^xsd:date ;
     :residenceEnd "2002-12-31"^^xsd:date .
 
-:Disposition_Townhouse a :Disposition ;
-    :involves :Townhouse ;
+:E171TownhouseDisposition a :Disposition ;
+    :involves :E171Townhouse ;
     :sellDate "2001-12-31"^^xsd:date ;
-    :potentialGain 120000 .
+    :potentialGain "120000"^^xsd:integer .
 
-:Disposition_House a :Disposition ;
-    :involves :House ;
+:E171HouseDisposition a :Disposition ;
+    :involves :E171House ;
     :sellDate "2002-12-31"^^xsd:date ;
-    :potentialGain 270000 .
+    :potentialGain "270000"^^xsd:integer .
 
-:BE_SingleReturn_Townhouse a :SingleReturn ;
-    :associates :BE ;
-    :linkedTo :Disposition_Townhouse ;
-    :exclusionCap 250000 .
+:E171TownhouseReturn a :SingleReturn ;
+    :associates :E171 ;
+    :linkedTo :E171TownhouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:BE_SingleReturn_House a :SingleReturn ;
-    :associates :BE ;
-    :linkedTo :Disposition_House ;
-    :exclusionCap 250000 .
-
-:BE :owns :BE_Townhouse_Ownership, :BE_House_Ownership ;
-    :uses :BE_Townhouse_Use, :BE_House_Use ;
-    :disposesOf :Disposition_Townhouse, :Disposition_House .
+:E171HouseReturn a :SingleReturn ;
+    :associates :E171 ;
+    :linkedTo :E171HouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

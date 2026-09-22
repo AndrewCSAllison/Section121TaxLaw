@@ -1,49 +1,51 @@
-:AI_1 a :Taxpayer .
-:AI_2 a :Taxpayer .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:MainResidence a :Property .
+:E105a a :Taxpayer ;
+    :owns :E105aOwnership ;
+    :uses :E105aResidence ;
+    :disposesOf :HouseSale .
 
-:OwnershipInterval_AI_1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E105b a :Taxpayer ;
+    :owns :E105bOwnership ;
+    :uses :E105bResidence ;
+    :disposesOf :HouseSale .
+
+:House a :Property .
+
+:E105aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2010-06-01"^^xsd:date ;
     :ownershipEnd "2012-05-31"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:OwnershipInterval_AI_2 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E105bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2010-06-01"^^xsd:date ;
     :ownershipEnd "2012-05-31"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:ResidenceInterval_AI_1 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E105aResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2010-06-01"^^xsd:date ;
     :residenceEnd "2012-05-31"^^xsd:date .
 
-:ResidenceInterval_AI_2 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E105bResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2010-06-01"^^xsd:date ;
     :residenceEnd "2012-05-31"^^xsd:date .
 
-:Disposition_Main a :Disposition ;
-    :involves :MainResidence ;
+:HouseSale a :Disposition ;
+    :involves :House ;
     :sellDate "2012-05-31"^^xsd:date ;
-    :potentialGain 256000 .
+    :potentialGain "256000"^^xsd:integer .
 
-:SingleReturn_AI_1 a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :AI_1 ;
-    :linkedTo :Disposition_Main .
+:E105aReturn a :SingleReturn ;
+    :associates :E105a ;
+    :linkedTo :HouseSale ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:SingleReturn_AI_2 a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :AI_2 ;
-    :linkedTo :Disposition_Main .
-
-:AI_1 :owns :OwnershipInterval_AI_1 ;
-       :uses :ResidenceInterval_AI_1 ;
-       :disposesOf :Disposition_Main .
-
-:AI_2 :owns :OwnershipInterval_AI_2 ;
-       :uses :ResidenceInterval_AI_2 ;
-       :disposesOf :Disposition_Main . 
+:E105bReturn a :SingleReturn ;
+    :associates :E105b ;
+    :linkedTo :HouseSale ;
+    :exclusionCap "250000"^^xsd:integer .

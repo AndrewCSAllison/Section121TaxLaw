@@ -1,44 +1,46 @@
-:AL_1 a :Taxpayer .
-:AL_2 a :Taxpayer .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:MainResidence a :Property .
+:E114a a :Taxpayer ;
+    :owns :E114aOwnership ;
+    :uses :E114aResidence ;
+    :disposesOf :E114Disposition .
 
-:OwnershipInterval_AL1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E114b a :Taxpayer ;
+    :owns :E114bOwnership ;
+    :uses :E114bResidence ;
+    :disposesOf :E114Disposition .
+
+:E114Property a :Property .
+
+:E114aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E114Property ;
     :ownershipStart "2015-05-15"^^xsd:date ;
     :ownershipEnd "2017-05-14"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:OwnershipInterval_AL2 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E114bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E114Property ;
     :ownershipStart "2015-05-15"^^xsd:date ;
     :ownershipEnd "2017-05-14"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:ResidenceInterval_AL1 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E114aResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E114Property ;
     :residenceStart "2015-05-15"^^xsd:date ;
     :residenceEnd "2017-05-14"^^xsd:date .
 
-:ResidenceInterval_AL2 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E114bResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E114Property ;
     :residenceStart "2015-05-15"^^xsd:date ;
     :residenceEnd "2017-05-14"^^xsd:date .
 
-:Disposition_Sale a :Disposition ;
-    :involves :MainResidence ;
+:E114Disposition a :Disposition ;
+    :involves :E114Property ;
     :sellDate "2017-05-14"^^xsd:date ;
-    :potentialGain 480000 .
+    :potentialGain "480000"^^xsd:integer .
 
-:JointReturn_AL a :JointReturn ;
-    :exclusionCap 500000 ;
-    :associates :AL_1, :AL_2 ;
-    :linkedTo :Disposition_Sale .
-
-:AL_1 :owns :OwnershipInterval_AL1 ;
-       :uses :ResidenceInterval_AL1 ;
-       :disposesOf :Disposition_Sale .
-
-:AL_2 :owns :OwnershipInterval_AL2 ;
-       :uses :ResidenceInterval_AL2 ;
-       :disposesOf :Disposition_Sale .
+:E114JointReturn a :JointReturn ;
+    :associates :E114a, :E114b ;
+    :linkedTo :E114Disposition ;
+    :exclusionCap "500000"^^xsd:integer .

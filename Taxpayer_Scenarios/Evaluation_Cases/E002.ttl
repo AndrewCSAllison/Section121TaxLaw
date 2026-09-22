@@ -1,44 +1,41 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:TaxpayerA a :Taxpayer ;
-    :owns :NYOwnershipInterval ,
-          :FLOwnershipInterval ;
-    :uses :NYResidenceInterval ,
-          :FLResidenceInterval ;
-    :disposesOf :NYDisposition .
+:E002 a :Taxpayer ;
+    :owns :E002_NY_Ownership, :E002_FL_Ownership ;
+    :uses :E002_NY_Residence, :E002_FL_Residence ;
+    :disposesOf :E002_NY_Disposition .
 
-:NYProperty a :Property .
-:FLProperty a :Property .
+:NewYorkResidence a :Property .
 
-:NYOwnershipInterval a :OwnershipUseInterval ;
-    :hasOwnershipOf :NYProperty ;
+:FloridaResidence a :Property .
+
+:E002_NY_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :NewYorkResidence ;
     :ownershipStart "1999-01-01"^^xsd:date ;
-    :ownershipEnd "2004-12-31"^^xsd:date ;
-    :percentageOwned "1.0"^^xsd:decimal .
+    :ownershipEnd "2004-12-31"^^xsd:date .
 
-:FLOwnershipInterval a :OwnershipUseInterval ;
-    :hasOwnershipOf :FLProperty ;
+:E002_FL_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :FloridaResidence ;
     :ownershipStart "1999-01-01"^^xsd:date ;
-    :ownershipEnd "2004-12-31"^^xsd:date ;
-    :percentageOwned "1.0"^^xsd:decimal .
+    :ownershipEnd "2004-12-31"^^xsd:date .
 
-:NYResidenceInterval a :ResidenceUseInterval ;
-    :hasResidenceOf :NYProperty ;
+:E002_NY_Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :NewYorkResidence ;
     :residenceStart "1999-01-01"^^xsd:date ;
     :residenceEnd "2004-12-31"^^xsd:date .
 
-:FLResidenceInterval a :ResidenceUseInterval ;
-    :hasResidenceOf :FLProperty ;
+:E002_FL_Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :FloridaResidence ;
     :residenceStart "1999-01-01"^^xsd:date ;
     :residenceEnd "2004-12-31"^^xsd:date .
 
-:NYDisposition a :Disposition ;
-    :involves :NYProperty ;
+:E002_NY_Disposition a :Disposition ;
+    :involves :NewYorkResidence ;
     :sellDate "2004-12-31"^^xsd:date ;
-    :potentialGain 300000 .
+    :potentialGain "300000"^^xsd:integer .
 
-:ReturnA a :SingleReturn ;
-    :associates :TaxpayerA ;
-    :linkedTo :NYDisposition ;
-    :exclusionCap 250000 .
+:E002_Return a :SingleReturn ;
+    :associates :E002 ;
+    :linkedTo :E002_NY_Disposition ;
+    :exclusionCap "250000"^^xsd:integer .

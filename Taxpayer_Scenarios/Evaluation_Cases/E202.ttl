@@ -1,47 +1,52 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:MichiganHome a :Property .
+:MichiganHouse a :Property .
 
-:BP_1 a :Taxpayer ;
-    :owns :BP1_Ownership ;
-    :uses :BP1_Residence ;
-    :disposesOf :Sale_2004 .
+:E202a a :Taxpayer ;
+    :owns :E202aOwnership ;
+    :uses :E202aResidence ;
+    :disposesOf :MichiganHouseDisposition .
 
-:BP_2 a :Taxpayer ;
-    :owns :BP2_Ownership ;
-    :uses :BP2_Residence ;
-    :disposesOf :Sale_2004 .
+:E202b a :Taxpayer ;
+    :owns :E202bOwnership ;
+    :uses :E202bResidence ;
+    :disposesOf :MichiganHouseDisposition .
 
-:BP1_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :MichiganHome ;
+:E202aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :MichiganHouse ;
     :ownershipStart "2003-01-01"^^xsd:date ;
     :ownershipEnd "2004-01-01"^^xsd:date ;
     :percentageOwned "0.5"^^xsd:decimal .
 
-:BP2_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :MichiganHome ;
+:E202bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :MichiganHouse ;
     :ownershipStart "2003-01-01"^^xsd:date ;
     :ownershipEnd "2004-01-01"^^xsd:date ;
     :percentageOwned "0.5"^^xsd:decimal .
 
-:BP1_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :MichiganHome ;
+:E202aResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :MichiganHouse ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2004-01-01"^^xsd:date .
 
-:BP2_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :MichiganHome ;
+:E202bResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :MichiganHouse ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2004-01-01"^^xsd:date .
 
-:Sale_2004 a :Disposition ;
-    :involves :MichiganHome ;
+:MichiganHouseDisposition a :Disposition ;
+    :involves :MichiganHouse ;
     :sellDate "2004-01-01"^^xsd:date ;
     :potentialGain "120000"^^xsd:integer ;
     :partialExclusionReason :NonQualifyingReason .
 
-:JointReturn_2004 a :JointReturn ;
-    :associates :BP_1, :BP_2 ;
-    :linkedTo :Sale_2004 ;
-    :exclusionCap "500000"^^xsd:integer .
+:E202aReturn a :SingleReturn ;
+    :associates :E202a ;
+    :linkedTo :MichiganHouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .
+
+:E202bReturn a :SingleReturn ;
+    :associates :E202b ;
+    :linkedTo :MichiganHouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

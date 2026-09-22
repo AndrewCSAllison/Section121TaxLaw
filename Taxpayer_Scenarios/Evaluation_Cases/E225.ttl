@@ -1,49 +1,30 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-#########################
-# Property
-#########################
-:SmallHouse a :Property .
+:E225 a :Taxpayer ;
+    :owns :E225SmallHouseOwnership ;
+    :uses :E225SmallHouseResidence ;
+    :disposesOf :E225SmallHouseDisposition .
 
-#########################
-# Taxpayer
-#########################
-:BW a :Taxpayer .
+:E225SmallHouse a :Property .
 
-#########################
-# Ownership & Residence Intervals
-#########################
-:BW_Ownership_1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :SmallHouse ;
+:E225SmallHouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E225SmallHouse ;
     :ownershipStart "2003-01-01"^^xsd:date ;
-    :ownershipEnd "2004-01-01"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2004-01-01"^^xsd:date .
 
-:BW_Residence_1 a :ResidenceUseInterval ;
-    :hasResidenceOf :SmallHouse ;
+:E225SmallHouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E225SmallHouse ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2004-01-01"^^xsd:date .
 
-:BW :owns :BW_Ownership_1 ;
-    :uses :BW_Residence_1 .
-
-#########################
-# Disposition
-#########################
-:BW_Disposition_1 a :Disposition ;
-    :involves :SmallHouse ;
+:E225SmallHouseDisposition a :Disposition ;
+    :involves :E225SmallHouse ;
     :sellDate "2004-01-01"^^xsd:date ;
-    :potentialGain 120000 ;
+    :potentialGain "120000"^^xsd:integer ;
     :partialExclusionReason :NonQualifyingReason .
 
-:BW :disposesOf :BW_Disposition_1 .
-
-#########################
-# Tax Return
-#########################
-:BW_SingleReturn a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :BW ;
-    :linkedTo :BW_Disposition_1 .
+:E225Return a :SingleReturn ;
+    :associates :E225 ;
+    :linkedTo :E225SmallHouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

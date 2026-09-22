@@ -1,31 +1,30 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:BR a :Taxpayer .
+:E208 a :Taxpayer ;
+    :owns :E208Ownership ;
+    :uses :E208Residence ;
+    :disposesOf :E208Disposition .
 
-:MainResidence a :Property .
+:E208House a :Property .
 
-:BR_Ownership1 a :OwnershipUseInterval ;
+:E208Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E208House ;
     :ownershipStart "2003-01-01"^^xsd:date ;
-    :ownershipEnd "2004-01-01"^^xsd:date ;
-    :hasOwnershipOf :MainResidence .
+    :ownershipEnd "2004-01-01"^^xsd:date .
 
-:BR_Residence1 a :ResidenceUseInterval ;
+:E208Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :E208House ;
     :residenceStart "2003-01-01"^^xsd:date ;
-    :residenceEnd "2004-01-01"^^xsd:date ;
-    :hasResidenceOf :MainResidence .
+    :residenceEnd "2004-01-01"^^xsd:date .
 
-:BR_Disposition1 a :Disposition ;
+:E208Disposition a :Disposition ;
+    :involves :E208House ;
     :sellDate "2004-01-01"^^xsd:date ;
-    :potentialGain 200000 ;
-    :involves :MainResidence ;
+    :potentialGain "200000"^^xsd:integer ;
     :partialExclusionReason :NonQualifyingReason .
 
-:BR :owns :BR_Ownership1 ;
-    :uses :BR_Residence1 ;
-    :disposesOf :BR_Disposition1 .
-
-:BR_Return1 a :SingleReturn ;
-    :associates :BR ;
-    :linkedTo :BR_Disposition1 ;
-    :exclusionCap 250000 .
+:E208Return a :SingleReturn ;
+    :associates :E208 ;
+    :linkedTo :E208Disposition ;
+    :exclusionCap "250000"^^xsd:integer .

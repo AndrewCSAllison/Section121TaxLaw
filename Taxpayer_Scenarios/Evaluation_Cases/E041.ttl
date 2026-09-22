@@ -1,42 +1,46 @@
-:TaxpayerN a :Taxpayer ;
-    :owns :HouseOwnershipInterval , :LandOwnershipInterval ;
-    :uses :HouseResidenceInterval , :LandResidenceInterval ;
-    :disposesOf :HouseDisposition , :LandDisposition .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:MainHouse a :Property .
-:ParcelLand a :Property .
+:House a :Property .
 
-:HouseOwnershipInterval a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainHouse ;
+:Land a :Property .
+
+:E041 a :Taxpayer ;
+    :owns :E041HouseOwnership, :E041LandOwnership ;
+    :uses :E041HouseResidence, :E041LandResidence ;
+    :disposesOf :HouseDisposition, :LandDisposition .
+
+:E041HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "1995-01-01"^^xsd:date ;
-    :ownershipEnd "2000-12-31"^^xsd:date .
+    :ownershipEnd "2000-05-20"^^xsd:date .
 
-:LandOwnershipInterval a :OwnershipUseInterval ;
-    :hasOwnershipOf :ParcelLand ;
+:E041LandOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :Land ;
     :ownershipStart "1996-01-01"^^xsd:date ;
-    :ownershipEnd "2000-12-31"^^xsd:date .
+    :ownershipEnd "2000-05-20"^^xsd:date .
 
-:HouseResidenceInterval a :ResidenceUseInterval ;
-    :hasResidenceOf :MainHouse ;
+:E041HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "1995-01-01"^^xsd:date ;
-    :residenceEnd "2000-12-31"^^xsd:date .
+    :residenceEnd "2000-05-20"^^xsd:date .
 
-:LandResidenceInterval a :ResidenceUseInterval ;
-    :hasResidenceOf :ParcelLand ;
+:E041LandResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :Land ;
     :residenceStart "1996-01-01"^^xsd:date ;
-    :residenceEnd "2000-12-31"^^xsd:date .
+    :residenceEnd "2000-05-20"^^xsd:date .
 
 :HouseDisposition a :Disposition ;
-    :involves :MainHouse ;
+    :involves :House ;
     :sellDate "2000-05-20"^^xsd:date ;
-    :potentialGain -10000 .
+    :potentialGain "-10000"^^xsd:integer .
 
 :LandDisposition a :Disposition ;
-    :involves :ParcelLand ;
+    :involves :Land ;
     :sellDate "2000-05-20"^^xsd:date ;
-    :potentialGain 250000 .
+    :potentialGain "250000"^^xsd:integer .
 
-:SingleReturn2000 a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :TaxpayerN ;
-    :linkedTo :HouseDisposition , :LandDisposition .
+:E041SingleReturn a :SingleReturn ;
+    :associates :E041 ;
+    :linkedTo :HouseDisposition, :LandDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

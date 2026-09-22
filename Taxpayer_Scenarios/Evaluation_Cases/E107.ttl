@@ -1,44 +1,46 @@
-:AJ_1 a :Taxpayer .
-:AJ_2 a :Taxpayer .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:MainResidence a :Property .
+:E107a a :Taxpayer ;
+    :owns :E107aOwnership ;
+    :uses :E107aResidence ;
+    :disposesOf :E107Disposition .
 
-:OwnershipInterval_AJ1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E107b a :Taxpayer ;
+    :owns :E107bOwnership ;
+    :uses :E107bResidence ;
+    :disposesOf :E107Disposition .
+
+:E107Property a :Property .
+
+:E107aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E107Property ;
     :ownershipStart "2020-01-01"^^xsd:date ;
     :ownershipEnd "2022-12-31"^^xsd:date ;
-    :percentageOwned 0.5 .
-    
-:OwnershipInterval_AJ2 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+    :percentageOwned "0.5"^^xsd:decimal .
+
+:E107bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E107Property ;
     :ownershipStart "2020-01-01"^^xsd:date ;
     :ownershipEnd "2022-12-31"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:ResidenceInterval_AJ1 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E107aResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E107Property ;
     :residenceStart "2020-01-01"^^xsd:date ;
     :residenceEnd "2022-12-31"^^xsd:date .
 
-:ResidenceInterval_AJ2 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E107bResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E107Property ;
     :residenceStart "2020-01-01"^^xsd:date ;
     :residenceEnd "2022-12-31"^^xsd:date .
 
-:Disposition_1 a :Disposition ;
-    :involves :MainResidence ;
+:E107Disposition a :Disposition ;
+    :involves :E107Property ;
     :sellDate "2022-12-31"^^xsd:date ;
-    :potentialGain 256000 .
+    :potentialGain "256000"^^xsd:integer .
 
-:JointReturn_1 a :JointReturn ;
-    :exclusionCap 500000 ;
-    :associates :AJ_1, :AJ_2 ;
-    :linkedTo :Disposition_1 .
-
-:AJ_1 :owns :OwnershipInterval_AJ1 ;
-       :uses :ResidenceInterval_AJ1 ;
-       :disposesOf :Disposition_1 .
-
-:AJ_2 :owns :OwnershipInterval_AJ2 ;
-       :uses :ResidenceInterval_AJ2 ;
-       :disposesOf :Disposition_1 . 
+:E107JointReturn a :JointReturn ;
+    :associates :E107a, :E107b ;
+    :linkedTo :E107Disposition ;
+    :exclusionCap "500000"^^xsd:integer .

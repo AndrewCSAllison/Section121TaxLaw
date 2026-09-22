@@ -1,52 +1,52 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:MainResidence a :Property .
+:E211a a :Taxpayer ;
+    :owns :E211aOwnership ;
+    :uses :E211aResidence ;
+    :disposesOf :HouseSale .
 
-:BS_1 a :Taxpayer ;
-    :owns :BS1Ownership ;
-    :uses :BS1Residence ;
-    :disposesOf :Disposition1 .
+:E211b a :Taxpayer ;
+    :owns :E211bOwnership ;
+    :uses :E211bResidence ;
+    :disposesOf :HouseSale .
 
-:BS_2 a :Taxpayer ;
-    :owns :BS2Ownership ;
-    :uses :BS2Residence ;
-    :disposesOf :Disposition1 .
+:House a :Property .
 
-:BS1Ownership a :OwnershipUseInterval ;
+:E211aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2003-01-01"^^xsd:date ;
     :ownershipEnd "2004-01-01"^^xsd:date ;
-    :percentageOwned "0.5"^^xsd:decimal ;
-    :hasOwnershipOf :MainResidence .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:BS2Ownership a :OwnershipUseInterval ;
+:E211bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2003-01-01"^^xsd:date ;
     :ownershipEnd "2004-01-01"^^xsd:date ;
-    :percentageOwned "0.5"^^xsd:decimal ;
-    :hasOwnershipOf :MainResidence .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:BS1Residence a :ResidenceUseInterval ;
+:E211aResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2003-01-01"^^xsd:date ;
-    :residenceEnd "2004-01-01"^^xsd:date ;
-    :hasResidenceOf :MainResidence .
+    :residenceEnd "2004-01-01"^^xsd:date .
 
-:BS2Residence a :ResidenceUseInterval ;
+:E211bResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2003-01-01"^^xsd:date ;
-    :residenceEnd "2003-11-30"^^xsd:date ;
-    :hasResidenceOf :MainResidence .
+    :residenceEnd "2003-11-30"^^xsd:date .
 
-:Disposition1 a :Disposition ;
+:HouseSale a :Disposition ;
+    :involves :House ;
     :sellDate "2004-01-01"^^xsd:date ;
-    :potentialGain 140000 ;
-    :involves :MainResidence ;
+    :potentialGain "140000"^^xsd:integer ;
     :partialExclusionReason :UnforeseenCircumstanceReason .
 
-:Return1 a :SingleReturn ;
-    :associates :BS_1 ;
-    :linkedTo :Disposition1 ;
-    :exclusionCap 250000 .
+:E211aReturn a :SingleReturn ;
+    :associates :E211a ;
+    :linkedTo :HouseSale ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:Return2 a :SingleReturn ;
-    :associates :BS_2 ;
-    :linkedTo :Disposition1 ;
-    :exclusionCap 250000 .
+:E211bReturn a :SingleReturn ;
+    :associates :E211b ;
+    :linkedTo :HouseSale ;
+    :exclusionCap "250000"^^xsd:integer .

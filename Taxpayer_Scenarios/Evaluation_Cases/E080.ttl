@@ -1,31 +1,29 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:AA a :Taxpayer .
+:E080 a :Taxpayer ;
+    :owns :E080TownhouseOwnership ;
+    :uses :E080TownhouseResidence ;
+    :disposesOf :E080TownhouseDisposition .
 
-:Townhouse a :Property .
+:E080Townhouse a :Property .
 
-:AA_Ownership1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :Townhouse ;
+:E080TownhouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E080Townhouse ;
     :ownershipStart "1997-02-10"^^xsd:date ;
     :ownershipEnd "2000-06-12"^^xsd:date .
 
-:AA_Residence1 a :ResidenceUseInterval ;
-    :hasResidenceOf :Townhouse ;
+:E080TownhouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E080Townhouse ;
     :residenceStart "1995-06-12"^^xsd:date ;
     :residenceEnd "1998-04-20"^^xsd:date .
 
-:AA_Disposition1 a :Disposition ;
-    :involves :Townhouse ;
+:E080TownhouseDisposition a :Disposition ;
+    :involves :E080Townhouse ;
     :sellDate "2000-06-12"^^xsd:date ;
-    :potentialGain 180000 .
+    :potentialGain "180000"^^xsd:integer .
 
-:AA_Return a :SingleReturn ;
-    :associates :AA ;
-    :linkedTo :AA_Disposition1 ;
-    :exclusionCap 250000 .
-
-:AA :owns :AA_Ownership1 ;
-    :uses :AA_Residence1 ;
-    :disposesOf :AA_Disposition1 .
+:E080SingleReturn a :SingleReturn ;
+    :associates :E080 ;
+    :linkedTo :E080TownhouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

@@ -1,31 +1,30 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:BX a :Taxpayer ;
-    :owns :BX_OwnershipInterval ;
-    :uses :BX_ResidenceInterval ;
-    :disposesOf :BX_Disposition .
+:E227 a :Taxpayer ;
+    :owns :E227Ownership ;
+    :uses :E227ResidenceUse ;
+    :disposesOf :E227Disposition .
 
-:BX_House a :Property .
+:E227House a :Property .
 
-:BX_OwnershipInterval a :OwnershipUseInterval ;
-    :hasOwnershipOf :BX_House ;
+:E227Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E227House ;
     :ownershipStart "2003-01-01"^^xsd:date ;
-    :ownershipEnd "2004-01-01"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2004-01-01"^^xsd:date .
 
-:BX_ResidenceInterval a :ResidenceUseInterval ;
-    :hasResidenceOf :BX_House ;
+:E227ResidenceUse a :ResidenceUseInterval ;
+    :hasResidenceOf :E227House ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2004-01-01"^^xsd:date .
 
-:BX_Disposition a :Disposition ;
-    :involves :BX_House ;
+:E227Disposition a :Disposition ;
+    :involves :E227House ;
     :sellDate "2004-01-01"^^xsd:date ;
-    :potentialGain 250000 ;
+    :potentialGain "250000"^^xsd:integer ;
     :partialExclusionReason :EmploymentRelatedReason .
 
-:BX_SingleReturn a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :BX ;
-    :linkedTo :BX_Disposition .
+:E227Return a :SingleReturn ;
+    :associates :E227 ;
+    :linkedTo :E227Disposition ;
+    :exclusionCap "250000"^^xsd:integer .

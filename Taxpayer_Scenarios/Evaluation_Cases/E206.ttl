@@ -1,31 +1,30 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:BQ a :Taxpayer .
+:E206 a :Taxpayer ;
+    :owns :E206OwnershipInterval ;
+    :uses :E206ResidenceInterval ;
+    :disposesOf :E206Disposition .
 
-:Condominium a :Property .
+:E206Condominium a :Property .
 
-:Ownership1 a :OwnershipUseInterval ;
+:E206OwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :E206Condominium ;
     :ownershipStart "2003-01-01"^^xsd:date ;
-    :ownershipEnd "2003-09-01"^^xsd:date ;
-    :hasOwnershipOf :Condominium .
+    :ownershipEnd "2003-09-01"^^xsd:date .
 
-:Residence1 a :ResidenceUseInterval ;
+:E206ResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :E206Condominium ;
     :residenceStart "2003-01-01"^^xsd:date ;
-    :residenceEnd "2003-09-01"^^xsd:date ;
-    :hasResidenceOf :Condominium .
+    :residenceEnd "2003-09-01"^^xsd:date .
 
-:Disposition1 a :Disposition ;
+:E206Disposition a :Disposition ;
+    :involves :E206Condominium ;
     :sellDate "2003-09-01"^^xsd:date ;
-    :potentialGain 90000 ;
-    :involves :Condominium ;
+    :potentialGain "90000"^^xsd:integer ;
     :partialExclusionReason :UnforeseenCircumstanceReason .
 
-:BQ :owns :Ownership1 ;
-    :uses :Residence1 ;
-    :disposesOf :Disposition1 .
-
-:Return1 a :SingleReturn ;
-    :associates :BQ ;
-    :linkedTo :Disposition1 ;
-    :exclusionCap 250000 .
+:E206Return a :SingleReturn ;
+    :associates :E206 ;
+    :linkedTo :E206Disposition ;
+    :exclusionCap "250000"^^xsd:integer .

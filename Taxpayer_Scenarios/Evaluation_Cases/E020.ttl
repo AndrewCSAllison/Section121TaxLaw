@@ -1,42 +1,51 @@
-:Taxpayer_G a :Taxpayer ;
-    :owns :Oregon_OwnershipInterval_1 , :Massachusetts_OwnershipInterval_1 ;
-    :uses :Oregon_ResidenceInterval_1 , :Massachusetts_ResidenceInterval_1 ;
-    :disposesOf :Oregon_Disposition , :Massachusetts_Disposition .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:Oregon_OwnershipInterval_1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :Oregon_Property ;
+:E020 a :Taxpayer ;
+    :owns :E020OregonOwnership, :E020MassachusettsOwnership ;
+    :uses :E020OregonResidence1999_2000, :E020MassachusettsResidence2001_2002, :E020OregonResidence2003 ;
+    :disposesOf :E020OregonDisposition, :E020MassachusettsDisposition .
+
+:E020OregonProperty a :Property .
+
+:E020MassachusettsProperty a :Property .
+
+:E020OregonOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E020OregonProperty ;
     :ownershipStart "1999-01-01"^^xsd:date ;
     :ownershipEnd "2003-12-31"^^xsd:date .
 
-:Massachusetts_OwnershipInterval_1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :Massachusetts_Property ;
+:E020MassachusettsOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E020MassachusettsProperty ;
     :ownershipStart "1999-01-01"^^xsd:date ;
     :ownershipEnd "2003-12-31"^^xsd:date .
 
-:Oregon_ResidenceInterval_1 a :ResidenceUseInterval ;
-    :hasResidenceOf :Oregon_Property ;
+:E020OregonResidence1999_2000 a :ResidenceUseInterval ;
+    :hasResidenceOf :E020OregonProperty ;
     :residenceStart "1999-01-01"^^xsd:date ;
     :residenceEnd "2000-12-31"^^xsd:date .
 
-:Massachusetts_ResidenceInterval_1 a :ResidenceUseInterval ;
-    :hasResidenceOf :Massachusetts_Property ;
+:E020MassachusettsResidence2001_2002 a :ResidenceUseInterval ;
+    :hasResidenceOf :E020MassachusettsProperty ;
     :residenceStart "2001-01-01"^^xsd:date ;
     :residenceEnd "2002-12-31"^^xsd:date .
 
-:Oregon_Disposition a :Disposition ;
-    :involves :Oregon_Property ;
+:E020OregonResidence2003 a :ResidenceUseInterval ;
+    :hasResidenceOf :E020OregonProperty ;
+    :residenceStart "2003-01-01"^^xsd:date ;
+    :residenceEnd "2003-12-31"^^xsd:date .
+
+:E020OregonDisposition a :Disposition ;
+    :involves :E020OregonProperty ;
     :sellDate "2003-12-20"^^xsd:date ;
-    :potentialGain 225000 .
+    :potentialGain "225000"^^xsd:integer .
 
-:Massachusetts_Disposition a :Disposition ;
-    :involves :Massachusetts_Property ;
+:E020MassachusettsDisposition a :Disposition ;
+    :involves :E020MassachusettsProperty ;
     :sellDate "2003-12-20"^^xsd:date ;
-    :potentialGain 205000 .
+    :potentialGain "205000"^^xsd:integer .
 
-:Oregon_Property a :Property .
-:Massachusetts_Property a :Property .
-
-:SingleReturn_G_2003 a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :Taxpayer_G ;
-    :linkedTo :Oregon_Disposition , :Massachusetts_Disposition .
+:E020Return a :SingleReturn ;
+    :associates :E020 ;
+    :linkedTo :E020OregonDisposition, :E020MassachusettsDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

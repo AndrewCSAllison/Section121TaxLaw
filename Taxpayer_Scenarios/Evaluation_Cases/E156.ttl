@@ -1,55 +1,51 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:AZ a :Taxpayer .
+:E156 a :Taxpayer ;
+    :owns :E156TownhouseOwnership, :E156HouseOwnership ;
+    :uses :E156TownhouseResidence, :E156HouseResidence ;
+    :disposesOf :E156TownhouseDisposition, :E156HouseDisposition .
 
-:Townhouse a :Property .
-:House a :Property .
+:E156Townhouse a :Property .
 
-:AZ_Townhouse_OwnUse a :OwnershipUseInterval ;
-    :hasOwnershipOf :Townhouse ;
+:E156House a :Property .
+
+:E156TownhouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E156Townhouse ;
     :ownershipStart "1998-01-01"^^xsd:date ;
-    :ownershipEnd "1999-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2002-12-31"^^xsd:date .
 
-:AZ_Townhouse_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :Townhouse ;
+:E156TownhouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E156Townhouse ;
     :residenceStart "1998-01-01"^^xsd:date ;
     :residenceEnd "1999-12-31"^^xsd:date .
 
-:AZ_House_OwnUse a :OwnershipUseInterval ;
-    :hasOwnershipOf :House ;
+:E156HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E156House ;
     :ownershipStart "2000-01-01"^^xsd:date ;
-    :ownershipEnd "2003-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2003-12-31"^^xsd:date .
 
-:AZ_House_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :House ;
+:E156HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E156House ;
     :residenceStart "2000-01-01"^^xsd:date ;
     :residenceEnd "2003-12-31"^^xsd:date .
 
-:Townhouse_Disposition a :Disposition ;
-    :involves :Townhouse ;
+:E156TownhouseDisposition a :Disposition ;
+    :involves :E156Townhouse ;
     :sellDate "2002-12-31"^^xsd:date ;
-    :potentialGain 150000 .
+    :potentialGain "150000"^^xsd:integer .
 
-:House_Disposition a :Disposition ;
-    :involves :House ;
+:E156HouseDisposition a :Disposition ;
+    :involves :E156House ;
     :sellDate "2003-12-31"^^xsd:date ;
-    :potentialGain 300000 ;
-    :partialExclusionReason :NonQualifyingReason .
+    :potentialGain "300000"^^xsd:integer .
 
-:AZ_Townhouse_Return a :SingleReturn ;
-    :associates :AZ ;
-    :linkedTo :Townhouse_Disposition ;
-    :exclusionCap 250000 .
+:E156TownhouseReturn a :SingleReturn ;
+    :associates :E156 ;
+    :linkedTo :E156TownhouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:AZ_House_Return a :SingleReturn ;
-    :associates :AZ ;
-    :linkedTo :House_Disposition ;
-    :exclusionCap 250000 .
-
-:AZ :owns :AZ_Townhouse_OwnUse , :AZ_House_OwnUse .
-:AZ :uses :AZ_Townhouse_Residence , :AZ_House_Residence .
-:AZ :disposesOf :Townhouse_Disposition , :House_Disposition .
+:E156HouseReturn a :SingleReturn ;
+    :associates :E156 ;
+    :linkedTo :E156HouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

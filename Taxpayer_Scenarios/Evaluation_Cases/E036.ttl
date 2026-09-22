@@ -1,42 +1,46 @@
-:TaxpayerL a :Taxpayer ;
-    :owns :HouseOwnershipInterval , :LandOwnershipInterval ;
-    :uses :HouseResidenceInterval , :LandResidenceInterval ;
-    :disposesOf :HouseDisposition , :LandDisposition .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:House a :Property .
-:Land a :Property .
+:E036 a :Taxpayer ;
+    :owns :E036HouseOwnership, :E036LandOwnership ;
+    :uses :E036HouseResidence, :E036LandResidence ;
+    :disposesOf :E036HouseDisposition, :E036LandDisposition .
 
-:HouseOwnershipInterval a :OwnershipUseInterval ;
-    :hasOwnershipOf :House ;
+:E036House a :Property .
+
+:E036Land a :Property .
+
+:E036HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E036House ;
     :ownershipStart "1998-01-01"^^xsd:date ;
-    :ownershipEnd "2003-12-31"^^xsd:date .
+    :ownershipEnd "2003-06-15"^^xsd:date .
 
-:LandOwnershipInterval a :OwnershipUseInterval ;
-    :hasOwnershipOf :Land ;
+:E036LandOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E036Land ;
     :ownershipStart "1999-01-01"^^xsd:date ;
-    :ownershipEnd "2003-12-31"^^xsd:date .
+    :ownershipEnd "2003-06-15"^^xsd:date .
 
-:HouseResidenceInterval a :ResidenceUseInterval ;
-    :hasResidenceOf :House ;
+:E036HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E036House ;
     :residenceStart "1998-01-01"^^xsd:date ;
-    :residenceEnd "2003-12-31"^^xsd:date .
+    :residenceEnd "2003-06-15"^^xsd:date .
 
-:LandResidenceInterval a :ResidenceUseInterval ;
-    :hasResidenceOf :Land ;
+:E036LandResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E036Land ;
     :residenceStart "1998-01-01"^^xsd:date ;
-    :residenceEnd "2003-12-31"^^xsd:date .
+    :residenceEnd "2003-06-15"^^xsd:date .
 
-:HouseDisposition a :Disposition ;
-    :involves :House ;
+:E036HouseDisposition a :Disposition ;
+    :involves :E036House ;
     :sellDate "2003-06-15"^^xsd:date ;
-    :potentialGain -25000 .
+    :potentialGain "-25000"^^xsd:integer .
 
-:LandDisposition a :Disposition ;
-    :involves :Land ;
+:E036LandDisposition a :Disposition ;
+    :involves :E036Land ;
     :sellDate "2003-06-15"^^xsd:date ;
-    :potentialGain 270000 .
+    :potentialGain "270000"^^xsd:integer .
 
-:SingleReturn1 a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :TaxpayerL ;
-    :linkedTo :HouseDisposition , :LandDisposition .
+:E036Return a :SingleReturn ;
+    :associates :E036 ;
+    :linkedTo :E036HouseDisposition, :E036LandDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

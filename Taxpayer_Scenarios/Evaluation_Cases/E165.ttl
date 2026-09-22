@@ -1,30 +1,31 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:BC a :Taxpayer .
+:E165 a :Taxpayer ;
+    :owns :E165TownhouseOwnership, :E165HouseOwnership ;
+    :uses :E165TownhouseResidence, :E165HouseResidence ;
+    :disposesOf :TownhouseDisposition, :HouseDisposition .
 
 :Townhouse a :Property .
+
 :House a :Property .
 
-:TownhouseOwnership a :OwnershipUseInterval ;
+:E165TownhouseOwnership a :OwnershipUseInterval ;
     :hasOwnershipOf :Townhouse ;
     :ownershipStart "2001-01-01"^^xsd:date ;
-    :ownershipEnd "2002-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2004-12-31"^^xsd:date .
 
-:TownhouseResidence a :ResidenceUseInterval ;
+:E165TownhouseResidence a :ResidenceUseInterval ;
     :hasResidenceOf :Townhouse ;
     :residenceStart "2001-01-01"^^xsd:date ;
     :residenceEnd "2002-12-31"^^xsd:date .
 
-:HouseOwnership a :OwnershipUseInterval ;
+:E165HouseOwnership a :OwnershipUseInterval ;
     :hasOwnershipOf :House ;
     :ownershipStart "2003-01-01"^^xsd:date ;
-    :ownershipEnd "2005-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2005-12-31"^^xsd:date .
 
-:HouseResidence a :ResidenceUseInterval ;
+:E165HouseResidence a :ResidenceUseInterval ;
     :hasResidenceOf :House ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2005-12-31"^^xsd:date .
@@ -32,28 +33,19 @@
 :TownhouseDisposition a :Disposition ;
     :involves :Townhouse ;
     :sellDate "2004-12-31"^^xsd:date ;
-    :potentialGain 220000 .
+    :potentialGain "220000"^^xsd:integer .
 
 :HouseDisposition a :Disposition ;
     :involves :House ;
     :sellDate "2005-12-31"^^xsd:date ;
-    :potentialGain 350000 ;
-    :partialExclusionReason :NonQualifyingReason .
-
-:BC a :Taxpayer ;
-    :owns :TownhouseOwnership ;
-    :owns :HouseOwnership ;
-    :uses :TownhouseResidence ;
-    :uses :HouseResidence ;
-    :disposesOf :TownhouseDisposition ;
-    :disposesOf :HouseDisposition .
+    :potentialGain "350000"^^xsd:integer .
 
 :TownhouseReturn a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :BC ;
-    :linkedTo :TownhouseDisposition .
+    :associates :E165 ;
+    :linkedTo :TownhouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .
 
 :HouseReturn a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :BC ;
-    :linkedTo :HouseDisposition .
+    :associates :E165 ;
+    :linkedTo :HouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

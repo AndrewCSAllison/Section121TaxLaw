@@ -1,76 +1,51 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-#########################
-# Taxpayer
-#########################
-:AY a :Taxpayer .
+:E152 a :Taxpayer ;
+    :owns :E152TownhouseOwnership, :E152HouseOwnership ;
+    :uses :E152TownhouseResidence, :E152HouseResidence ;
+    :disposesOf :E152TownhouseDisposition, :E152HouseDisposition .
 
-#########################
-# Properties
-#########################
-:Townhouse a :Property .
-:House2000 a :Property .
+:E152Townhouse a :Property .
 
-#########################
-# OwnershipUseIntervals
-#########################
-:AY_Townhouse_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :Townhouse ;
+:E152House a :Property .
+
+:E152TownhouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E152Townhouse ;
     :ownershipStart "1998-01-01"^^xsd:date ;
-    :ownershipEnd "2002-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2002-12-31"^^xsd:date .
 
-:AY_House2000_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :House2000 ;
-    :ownershipStart "2000-01-01"^^xsd:date ;
-    :ownershipEnd "2003-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
-
-#########################
-# ResidenceUseIntervals
-#########################
-:AY_Townhouse_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :Townhouse ;
+:E152TownhouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E152Townhouse ;
     :residenceStart "1998-01-01"^^xsd:date ;
     :residenceEnd "1999-12-31"^^xsd:date .
 
-:AY_House2000_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :House2000 ;
+:E152HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E152House ;
+    :ownershipStart "2000-01-01"^^xsd:date ;
+    :ownershipEnd "2003-12-31"^^xsd:date .
+
+:E152HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E152House ;
     :residenceStart "2000-01-01"^^xsd:date ;
     :residenceEnd "2003-12-31"^^xsd:date .
 
-#########################
-# Dispositions
-#########################
-:AY_Townhouse_Disposition a :Disposition ;
-    :involves :Townhouse ;
+:E152TownhouseDisposition a :Disposition ;
+    :involves :E152Townhouse ;
     :sellDate "2002-12-31"^^xsd:date ;
-    :potentialGain 150000 .
+    :potentialGain "150000"^^xsd:integer .
 
-:AY_House2000_Disposition a :Disposition ;
-    :involves :House2000 ;
+:E152HouseDisposition a :Disposition ;
+    :involves :E152House ;
     :sellDate "2003-12-31"^^xsd:date ;
-    :potentialGain 300000 ;
-    :partialExclusionReason :NonQualifyingReason .
+    :potentialGain "300000"^^xsd:integer .
 
-#########################
-# Single Returns
-#########################
-:AY_Townhouse_Return a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :AY ;
-    :linkedTo :AY_Townhouse_Disposition .
+:E152TownhouseReturn a :SingleReturn ;
+    :associates :E152 ;
+    :linkedTo :E152TownhouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:AY_House2000_Return a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :AY ;
-    :linkedTo :AY_House2000_Disposition .
-
-#########################
-# Ownership & Use Links
-#########################
-:AY :owns :AY_Townhouse_Ownership , :AY_House2000_Ownership ;
-    :uses :AY_Townhouse_Residence , :AY_House2000_Residence ;
-    :disposesOf :AY_Townhouse_Disposition , :AY_House2000_Disposition .
+:E152HouseReturn a :SingleReturn ;
+    :associates :E152 ;
+    :linkedTo :E152HouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

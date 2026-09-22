@@ -1,28 +1,30 @@
-:BL a :Taxpayer ;
-    :owns :BL_Condo_OwnershipInterval ;
-    :uses :BL_Condo_ResidenceInterval ;
-    :disposesOf :BL_Condo_Disposition .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:BL_Condo a :Property .
+:E190 a :Taxpayer ;
+    :owns :E190CondominiumOwnership ;
+    :uses :E190CondominiumResidence ;
+    :disposesOf :E190CondominiumDisposition .
 
-:BL_Condo_OwnershipInterval a :OwnershipUseInterval ;
-    :hasOwnershipOf :BL_Condo ;
+:E190Condominium a :Property .
+
+:E190CondominiumOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E190Condominium ;
     :ownershipStart "2003-07-01"^^xsd:date ;
-    :ownershipEnd "2004-02-05"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2004-02-05"^^xsd:date .
 
-:BL_Condo_ResidenceInterval a :ResidenceUseInterval ;
-    :hasResidenceOf :BL_Condo ;
+:E190CondominiumResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E190Condominium ;
     :residenceStart "2003-07-01"^^xsd:date ;
     :residenceEnd "2004-02-05"^^xsd:date .
 
-:BL_Condo_Disposition a :Disposition ;
-    :involves :BL_Condo ;
+:E190CondominiumDisposition a :Disposition ;
+    :involves :E190Condominium ;
     :sellDate "2004-02-05"^^xsd:date ;
-    :potentialGain 300000 ;
+    :potentialGain "300000"^^xsd:integer ;
     :partialExclusionReason :EmploymentRelatedReason .
 
-:BL_SingleReturn a :SingleReturn ;
-    :associates :BL ;
-    :linkedTo :BL_Condo_Disposition ;
-    :exclusionCap 250000 .
+:E190SingleReturn a :SingleReturn ;
+    :exclusionCap "250000"^^xsd:integer ;
+    :associates :E190 ;
+    :linkedTo :E190CondominiumDisposition .

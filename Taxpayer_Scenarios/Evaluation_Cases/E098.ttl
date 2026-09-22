@@ -1,49 +1,51 @@
-:AG_1 a :Taxpayer .
-:AG_2 a :Taxpayer .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:MainResidence a :Property .
+:House a :Property .
 
-:OUI_AG1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E098a a :Taxpayer ;
+    :owns :E098aOwnership ;
+    :uses :E098aResidence ;
+    :disposesOf :HouseSale .
+
+:E098b a :Taxpayer ;
+    :owns :E098bOwnership ;
+    :uses :E098bResidence ;
+    :disposesOf :HouseSale .
+
+:E098aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2015-05-15"^^xsd:date ;
     :ownershipEnd "2017-05-14"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:OUI_AG2 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E098bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2015-05-15"^^xsd:date ;
     :ownershipEnd "2017-05-14"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:RUI_AG1 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E098aResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2015-05-15"^^xsd:date ;
     :residenceEnd "2017-05-14"^^xsd:date .
 
-:RUI_AG2 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E098bResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2015-05-15"^^xsd:date ;
     :residenceEnd "2017-05-14"^^xsd:date .
 
-:Disposition_MainResidence a :Disposition ;
-    :involves :MainResidence ;
+:HouseSale a :Disposition ;
+    :involves :House ;
     :sellDate "2017-05-14"^^xsd:date ;
-    :potentialGain 540000 .
+    :potentialGain "540000"^^xsd:integer .
 
-:Return_AG1 a :SingleReturn ;
-    :associates :AG_1 ;
-    :linkedTo :Disposition_MainResidence ;
-    :exclusionCap 250000 .
+:E098aReturn a :SingleReturn ;
+    :associates :E098a ;
+    :linkedTo :HouseSale ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:Return_AG2 a :SingleReturn ;
-    :associates :AG_2 ;
-    :linkedTo :Disposition_MainResidence ;
-    :exclusionCap 250000 .
-
-:AG_1 :owns :OUI_AG1 ;
-       :uses :RUI_AG1 ;
-       :disposesOf :Disposition_MainResidence .
-
-:AG_2 :owns :OUI_AG2 ;
-       :uses :RUI_AG2 ;
-       :disposesOf :Disposition_MainResidence .
+:E098bReturn a :SingleReturn ;
+    :associates :E098b ;
+    :linkedTo :HouseSale ;
+    :exclusionCap "250000"^^xsd:integer .

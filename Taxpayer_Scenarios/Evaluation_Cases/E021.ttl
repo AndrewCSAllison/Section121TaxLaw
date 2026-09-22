@@ -1,49 +1,51 @@
-:TaxpayerG a :Taxpayer ;
-    :owns :OwnershipIntervalOregon, :OwnershipIntervalMassachusetts ;
-    :uses :ResidenceIntervalOregon1999_2000, :ResidenceIntervalMassachusetts2001_2002, :ResidenceIntervalOregon2003 ;
-    :disposesOf :DispositionOregon, :DispositionMassachusetts .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:PropertyOregon a :Property .
-:PropertyMassachusetts a :Property .
+:E021 a :Taxpayer ;
+    :owns :E021_Oregon_Ownership, :E021_Massachusetts_Ownership ;
+    :uses :E021_Oregon_Residence_1999_2000, :E021_Massachusetts_Residence_2001_2002, :E021_Oregon_Residence_2003 ;
+    :disposesOf :E021_Oregon_Disposition, :E021_Massachusetts_Disposition .
 
-:OwnershipIntervalOregon a :OwnershipUseInterval ;
-    :hasOwnershipOf :PropertyOregon ;
+:E021_Oregon_Property a :Property .
+
+:E021_Massachusetts_Property a :Property .
+
+:E021_Oregon_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E021_Oregon_Property ;
     :ownershipStart "1999-01-01"^^xsd:date ;
-    :ownershipEnd "2003-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2003-12-31"^^xsd:date .
 
-:OwnershipIntervalMassachusetts a :OwnershipUseInterval ;
-    :hasOwnershipOf :PropertyMassachusetts ;
+:E021_Massachusetts_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E021_Massachusetts_Property ;
     :ownershipStart "1999-01-01"^^xsd:date ;
-    :ownershipEnd "2003-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2003-12-31"^^xsd:date .
 
-:ResidenceIntervalOregon1999_2000 a :ResidenceUseInterval ;
-    :hasResidenceOf :PropertyOregon ;
+:E021_Oregon_Residence_1999_2000 a :ResidenceUseInterval ;
+    :hasResidenceOf :E021_Oregon_Property ;
     :residenceStart "1999-01-01"^^xsd:date ;
     :residenceEnd "2000-12-31"^^xsd:date .
 
-:ResidenceIntervalMassachusetts2001_2002 a :ResidenceUseInterval ;
-    :hasResidenceOf :PropertyMassachusetts ;
+:E021_Massachusetts_Residence_2001_2002 a :ResidenceUseInterval ;
+    :hasResidenceOf :E021_Massachusetts_Property ;
     :residenceStart "2001-01-01"^^xsd:date ;
     :residenceEnd "2002-12-31"^^xsd:date .
 
-:ResidenceIntervalOregon2003 a :ResidenceUseInterval ;
-    :hasResidenceOf :PropertyOregon ;
+:E021_Oregon_Residence_2003 a :ResidenceUseInterval ;
+    :hasResidenceOf :E021_Oregon_Property ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2003-12-31"^^xsd:date .
 
-:DispositionOregon a :Disposition ;
-    :involves :PropertyOregon ;
+:E021_Oregon_Disposition a :Disposition ;
+    :involves :E021_Oregon_Property ;
     :sellDate "2003-12-20"^^xsd:date ;
-    :potentialGain 225000 .
+    :potentialGain "225000"^^xsd:integer .
 
-:DispositionMassachusetts a :Disposition ;
-    :involves :PropertyMassachusetts ;
+:E021_Massachusetts_Disposition a :Disposition ;
+    :involves :E021_Massachusetts_Property ;
     :sellDate "2003-12-20"^^xsd:date ;
-    :potentialGain 205000 .
+    :potentialGain "205000"^^xsd:integer .
 
-:SingleReturnG a :SingleReturn ;
-    :associates :TaxpayerG ;
-    :linkedTo :DispositionOregon, :DispositionMassachusetts ;
-    :exclusionCap 250000 .
+:E021_Return a :SingleReturn ;
+    :associates :E021 ;
+    :linkedTo :E021_Oregon_Disposition, :E021_Massachusetts_Disposition ;
+    :exclusionCap "250000"^^xsd:integer .

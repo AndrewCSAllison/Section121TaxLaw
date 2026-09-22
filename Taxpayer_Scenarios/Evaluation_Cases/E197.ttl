@@ -1,47 +1,47 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:MainResidence a :Property .
+:E197a a :Taxpayer ;
+    :owns :E197aOwnership ;
+    :uses :E197aResidence ;
+    :disposesOf :HouseSale .
 
-:BN_1 a :Taxpayer ;
-    :owns :BN_1_Ownership ;
-    :uses :BN_1_Residence ;
-    :disposesOf :Disposition_BN .
+:E197b a :Taxpayer ;
+    :owns :E197bOwnership ;
+    :uses :E197bResidence ;
+    :disposesOf :HouseSale .
 
-:BN_2 a :Taxpayer ;
-    :owns :BN_2_Ownership ;
-    :uses :BN_2_Residence ;
-    :disposesOf :Disposition_BN .
+:House a :Property .
 
-:BN_1_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E197aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2003-01-01"^^xsd:date ;
     :ownershipEnd "2004-01-01"^^xsd:date ;
     :percentageOwned "0.5"^^xsd:decimal .
 
-:BN_2_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E197bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2003-01-01"^^xsd:date ;
     :ownershipEnd "2004-01-01"^^xsd:date ;
     :percentageOwned "0.5"^^xsd:decimal .
 
-:BN_1_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E197aResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2004-01-01"^^xsd:date .
 
-:BN_2_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E197bResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2004-01-01"^^xsd:date .
 
-:Disposition_BN a :Disposition ;
-    :involves :MainResidence ;
+:HouseSale a :Disposition ;
+    :involves :House ;
     :sellDate "2004-01-01"^^xsd:date ;
     :potentialGain "300000"^^xsd:integer ;
     :partialExclusionReason :HealthRelatedReason .
 
-:BN_JointReturn a :JointReturn ;
-    :associates :BN_1, :BN_2 ;
-    :linkedTo :Disposition_BN ;
+:JointReturn a :JointReturn ;
+    :associates :E197a, :E197b ;
+    :linkedTo :HouseSale ;
     :exclusionCap "500000"^^xsd:integer .

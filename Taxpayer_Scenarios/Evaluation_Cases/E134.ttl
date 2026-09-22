@@ -1,53 +1,53 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:AS_1 a :Taxpayer .
-:AS_2 a :Taxpayer .
+:E134a a :Taxpayer ;
+    :owns :E134aOwnership ;
+    :uses :E134aResidenceUse ;
+    :disposesOf :E134aDisposition .
 
-:Residence1 a :Property .
-:Residence2 a :Property .
+:E134b a :Taxpayer ;
+    :owns :E134bOwnership ;
+    :uses :E134bResidenceUse ;
+    :disposesOf :E134bDisposition .
 
-:AS1_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :Residence1 ;
+:E134aProperty a :Property .
+
+:E134bProperty a :Property .
+
+:E134aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E134aProperty ;
     :ownershipStart "1999-02-01"^^xsd:date ;
     :ownershipEnd "2002-12-31"^^xsd:date ;
     :percentageOwned "1.0"^^xsd:decimal .
 
-:AS2_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :Residence2 ;
+:E134bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E134bProperty ;
     :ownershipStart "1999-02-01"^^xsd:date ;
     :ownershipEnd "2002-12-31"^^xsd:date ;
     :percentageOwned "1.0"^^xsd:decimal .
 
-:AS1_ResidenceUse a :ResidenceUseInterval ;
-    :hasResidenceOf :Residence1 ;
+:E134aResidenceUse a :ResidenceUseInterval ;
+    :hasResidenceOf :E134aProperty ;
     :residenceStart "1999-02-01"^^xsd:date ;
     :residenceEnd "2002-12-31"^^xsd:date .
 
-:AS2_ResidenceUse a :ResidenceUseInterval ;
-    :hasResidenceOf :Residence2 ;
+:E134bResidenceUse a :ResidenceUseInterval ;
+    :hasResidenceOf :E134bProperty ;
     :residenceStart "1999-02-01"^^xsd:date ;
     :residenceEnd "2002-12-31"^^xsd:date .
 
-:AS1_Disposition a :Disposition ;
-    :involves :Residence1 ;
+:E134aDisposition a :Disposition ;
+    :involves :E134aProperty ;
     :sellDate "2002-12-31"^^xsd:date ;
     :potentialGain "250000"^^xsd:integer .
 
-:AS2_Disposition a :Disposition ;
-    :involves :Residence2 ;
+:E134bDisposition a :Disposition ;
+    :involves :E134bProperty ;
     :sellDate "2002-12-31"^^xsd:date ;
     :potentialGain "270000"^^xsd:integer .
 
-:AS_1 :owns :AS1_Ownership ;
-      :uses :AS1_ResidenceUse ;
-      :disposesOf :AS1_Disposition .
-
-:AS_2 :owns :AS2_Ownership ;
-      :uses :AS2_ResidenceUse ;
-      :disposesOf :AS2_Disposition .
-
-:JointReturn_2002 a :JointReturn ;
-    :associates :AS_1 , :AS_2 ;
-    :linkedTo :AS1_Disposition , :AS2_Disposition ;
+:E134JointReturn a :JointReturn ;
+    :associates :E134a, :E134b ;
+    :linkedTo :E134aDisposition, :E134bDisposition ;
     :exclusionCap "500000"^^xsd:integer .

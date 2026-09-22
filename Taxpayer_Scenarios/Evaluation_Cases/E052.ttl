@@ -1,30 +1,29 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:R a :Taxpayer .
+:E052 a :Taxpayer ;
+    :owns :E052Ownership ;
+    :uses :E052Residence ;
+    :disposesOf :E052Disposition .
 
-:MainResidence a :Property .
+:E052House a :Property .
 
-:Ownership1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E052Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E052House ;
     :ownershipStart "1985-03-01"^^xsd:date ;
     :ownershipEnd "1999-11-30"^^xsd:date .
 
-:Residence1 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E052Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :E052House ;
     :residenceStart "1985-03-01"^^xsd:date ;
     :residenceEnd "1997-12-31"^^xsd:date .
 
-:Disposition1 a :Disposition ;
-    :involves :MainResidence ;
+:E052Disposition a :Disposition ;
+    :involves :E052House ;
     :sellDate "1999-11-30"^^xsd:date ;
-    :potentialGain 150000 .
+    :potentialGain "150000"^^xsd:integer .
 
-:Return1 a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :R ;
-    :linkedTo :Disposition1 .
-
-:R :owns :Ownership1 ;
-   :uses :Residence1 ;
-   :disposesOf :Disposition1 .
+:E052Return a :SingleReturn ;
+    :associates :E052 ;
+    :linkedTo :E052Disposition ;
+    :exclusionCap "250000"^^xsd:integer .

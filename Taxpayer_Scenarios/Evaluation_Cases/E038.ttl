@@ -1,42 +1,46 @@
-:TaxpayerM a :Taxpayer ;
-    :owns :MHouseOwnershipInterval, :MLandOwnershipInterval ;
-    :uses :MHouseResidenceInterval, :MLandResidenceInterval ;
-    :disposesOf :MHouseDisposition, :MLandDisposition .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:MainHouse a :Property .
-:ParcelLand a :Property .
+:E038 a :Taxpayer ;
+    :owns :E038HouseOwnership, :E038LandOwnership ;
+    :uses :E038HouseResidence, :E038LandResidence ;
+    :disposesOf :E038HouseDisposition, :E038LandDisposition .
 
-:MHouseOwnershipInterval a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainHouse ;
+:E038House a :Property .
+
+:E038Land a :Property .
+
+:E038HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E038House ;
     :ownershipStart "2000-01-01"^^xsd:date ;
-    :ownershipEnd "2005-12-31"^^xsd:date .
+    :ownershipEnd "2005-07-01"^^xsd:date .
 
-:MLandOwnershipInterval a :OwnershipUseInterval ;
-    :hasOwnershipOf :ParcelLand ;
+:E038LandOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E038Land ;
     :ownershipStart "2001-01-01"^^xsd:date ;
-    :ownershipEnd "2005-12-31"^^xsd:date .
+    :ownershipEnd "2005-07-01"^^xsd:date .
 
-:MHouseResidenceInterval a :ResidenceUseInterval ;
-    :hasResidenceOf :MainHouse ;
+:E038HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E038House ;
     :residenceStart "2000-01-01"^^xsd:date ;
     :residenceEnd "2005-12-31"^^xsd:date .
 
-:MLandResidenceInterval a :ResidenceUseInterval ;
-    :hasResidenceOf :ParcelLand ;
+:E038LandResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E038Land ;
     :residenceStart "2001-01-01"^^xsd:date ;
     :residenceEnd "2005-12-31"^^xsd:date .
 
-:MHouseDisposition a :Disposition ;
-    :involves :MainHouse ;
+:E038HouseDisposition a :Disposition ;
+    :involves :E038House ;
     :sellDate "2005-07-01"^^xsd:date ;
-    :potentialGain -15000 .
+    :potentialGain "-15000"^^xsd:integer .
 
-:MLandDisposition a :Disposition ;
-    :involves :ParcelLand ;
+:E038LandDisposition a :Disposition ;
+    :involves :E038Land ;
     :sellDate "2005-07-01"^^xsd:date ;
-    :potentialGain 300000 .
+    :potentialGain "300000"^^xsd:integer .
 
-:MSingleReturn a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :TaxpayerM ;
-    :linkedTo :MHouseDisposition, :MLandDisposition .
+:E038Return a :SingleReturn ;
+    :associates :E038 ;
+    :linkedTo :E038HouseDisposition, :E038LandDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

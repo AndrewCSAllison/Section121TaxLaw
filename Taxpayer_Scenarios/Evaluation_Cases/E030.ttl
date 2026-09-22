@@ -1,49 +1,51 @@
-:TaxpayerJ a :Taxpayer ;
-    :owns :OwnershipJTexas , :OwnershipJNewMexico ;
-    :uses :ResidenceJTexas2000_2001 , :ResidenceJNewMexico2002_2003 , :ResidenceJTexas2004 ;
-    :disposesOf :DispositionTexas , :DispositionNewMexico .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:OwnershipJTexas a :OwnershipUseInterval ;
-    :hasOwnershipOf :PropertyTexas ;
+:E030 a :Taxpayer ;
+    :owns :E030TexasOwnership, :E030NewMexicoOwnership ;
+    :uses :E030TexasResidence2000_2001, :E030NewMexicoResidence2002_2003, :E030TexasResidence2004 ;
+    :disposesOf :E030TexasDisposition, :E030NewMexicoDisposition .
+
+:E030TexasProperty a :Property .
+
+:E030NewMexicoProperty a :Property .
+
+:E030TexasOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E030TexasProperty ;
     :ownershipStart "2000-01-01"^^xsd:date ;
-    :ownershipEnd "2004-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2004-12-31"^^xsd:date .
 
-:OwnershipJNewMexico a :OwnershipUseInterval ;
-    :hasOwnershipOf :PropertyNewMexico ;
+:E030NewMexicoOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E030NewMexicoProperty ;
     :ownershipStart "2000-01-01"^^xsd:date ;
-    :ownershipEnd "2004-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2004-12-31"^^xsd:date .
 
-:ResidenceJTexas2000_2001 a :ResidenceUseInterval ;
-    :hasResidenceOf :PropertyTexas ;
+:E030TexasResidence2000_2001 a :ResidenceUseInterval ;
+    :hasResidenceOf :E030TexasProperty ;
     :residenceStart "2000-01-01"^^xsd:date ;
     :residenceEnd "2001-12-31"^^xsd:date .
 
-:ResidenceJNewMexico2002_2003 a :ResidenceUseInterval ;
-    :hasResidenceOf :PropertyNewMexico ;
+:E030NewMexicoResidence2002_2003 a :ResidenceUseInterval ;
+    :hasResidenceOf :E030NewMexicoProperty ;
     :residenceStart "2002-01-01"^^xsd:date ;
     :residenceEnd "2003-12-31"^^xsd:date .
 
-:ResidenceJTexas2004 a :ResidenceUseInterval ;
-    :hasResidenceOf :PropertyTexas ;
+:E030TexasResidence2004 a :ResidenceUseInterval ;
+    :hasResidenceOf :E030TexasProperty ;
     :residenceStart "2004-01-01"^^xsd:date ;
     :residenceEnd "2004-12-31"^^xsd:date .
 
-:PropertyTexas a :Property .
-:PropertyNewMexico a :Property .
-
-:DispositionTexas a :Disposition ;
-    :involves :PropertyTexas ;
+:E030TexasDisposition a :Disposition ;
+    :involves :E030TexasProperty ;
     :sellDate "2004-12-18"^^xsd:date ;
-    :potentialGain 230000 .
+    :potentialGain "230000"^^xsd:integer .
 
-:DispositionNewMexico a :Disposition ;
-    :involves :PropertyNewMexico ;
+:E030NewMexicoDisposition a :Disposition ;
+    :involves :E030NewMexicoProperty ;
     :sellDate "2004-12-18"^^xsd:date ;
-    :potentialGain 210000 .
+    :potentialGain "210000"^^xsd:integer .
 
-:ReturnJ a :SingleReturn ;
-    :associates :TaxpayerJ ;
-    :linkedTo :DispositionTexas , :DispositionNewMexico ;
-    :exclusionCap 250000 .
+:E030Return a :SingleReturn ;
+    :associates :E030 ;
+    :linkedTo :E030TexasDisposition, :E030NewMexicoDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

@@ -1,38 +1,40 @@
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:E139a a :Taxpayer ;
+    :owns :E139aOwnership ;
+    :disposesOf :ResidenceSale .
+
+:E139b a :Taxpayer ;
+    :owns :E139bOwnership ;
+    :uses :E139bResidenceUse ;
+    :disposesOf :ResidenceSale .
+
 :MainResidence a :Property .
 
-:AU_1 a :Taxpayer ;
-    :owns :AU_1_OwnershipInterval ;
-    :disposesOf :Disposition_MainResidence .
-
-:AU_1_OwnershipInterval a :OwnershipUseInterval ;
+:E139aOwnership a :OwnershipUseInterval ;
     :hasOwnershipOf :MainResidence ;
     :ownershipStart "2001-02-01"^^xsd:date ;
     :ownershipEnd "2004-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:AU_2 a :Taxpayer ;
-    :owns :AU_2_OwnershipInterval ;
-    :uses :AU_2_ResidenceInterval ;
-    :disposesOf :Disposition_MainResidence .
-
-:AU_2_OwnershipInterval a :OwnershipUseInterval ;
+:E139bOwnership a :OwnershipUseInterval ;
     :hasOwnershipOf :MainResidence ;
     :ownershipStart "2001-02-01"^^xsd:date ;
     :ownershipEnd "2004-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:AU_2_ResidenceInterval a :ResidenceUseInterval ;
+:E139bResidenceUse a :ResidenceUseInterval ;
     :hasResidenceOf :MainResidence ;
     :residenceStart "2001-02-01"^^xsd:date ;
     :residenceEnd "2004-12-31"^^xsd:date .
 
-:Disposition_MainResidence a :Disposition ;
+:ResidenceSale a :Disposition ;
     :involves :MainResidence ;
     :sellDate "2004-12-31"^^xsd:date ;
-    :potentialGain 350000 ;
-    :partialExclusionReason :NonQualifyingReason .
+    :potentialGain "350000"^^xsd:integer .
 
-:JointReturn_2004 a :JointReturn ;
-    :associates :AU_1, :AU_2 ;
-    :linkedTo :Disposition_MainResidence ;
-    :exclusionCap 500000 .
+:JointReturn2004 a :JointReturn ;
+    :associates :E139a, :E139b ;
+    :linkedTo :ResidenceSale ;
+    :exclusionCap "500000"^^xsd:integer .

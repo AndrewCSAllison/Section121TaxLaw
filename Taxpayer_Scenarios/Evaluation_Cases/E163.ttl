@@ -1,73 +1,51 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-#########################
-# Properties
-#########################
+:E163 a :Taxpayer ;
+    :owns :E163TownhouseOwnership, :E163HouseOwnership ;
+    :uses :E163TownhouseResidence, :E163HouseResidence ;
+    :disposesOf :TownhouseDisposition, :HouseDisposition .
+
 :Townhouse a :Property .
-:House2003 a :Property .
 
-#########################
-# Taxpayer
-#########################
-:BC a :Taxpayer .
+:House a :Property .
 
-#########################
-# Ownership and Residence Intervals
-#########################
-:BC_Townhouse_OwnUse a :OwnershipUseInterval ;
+:E163TownhouseOwnership a :OwnershipUseInterval ;
     :hasOwnershipOf :Townhouse ;
     :ownershipStart "2001-01-01"^^xsd:date ;
-    :ownershipEnd "2002-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2004-12-31"^^xsd:date .
 
-:BC_Townhouse_ResUse a :ResidenceUseInterval ;
+:E163TownhouseResidence a :ResidenceUseInterval ;
     :hasResidenceOf :Townhouse ;
     :residenceStart "2001-01-01"^^xsd:date ;
     :residenceEnd "2002-12-31"^^xsd:date .
 
-:BC_House2003_OwnUse a :OwnershipUseInterval ;
-    :hasOwnershipOf :House2003 ;
+:E163HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2003-01-01"^^xsd:date ;
-    :ownershipEnd "2005-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2005-12-31"^^xsd:date .
 
-:BC_House2003_ResUse a :ResidenceUseInterval ;
-    :hasResidenceOf :House2003 ;
+:E163HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2005-12-31"^^xsd:date .
 
-#########################
-# Dispositions
-#########################
-:BC_Townhouse_Disposition a :Disposition ;
+:TownhouseDisposition a :Disposition ;
     :involves :Townhouse ;
     :sellDate "2004-12-31"^^xsd:date ;
-    :potentialGain 220000 .
+    :potentialGain "220000"^^xsd:integer .
 
-:BC_House2003_Disposition a :Disposition ;
-    :involves :House2003 ;
+:HouseDisposition a :Disposition ;
+    :involves :House ;
     :sellDate "2005-12-31"^^xsd:date ;
-    :potentialGain 350000 ;
-    :partialExclusionReason :NonQualifyingReason .
+    :potentialGain "350000"^^xsd:integer .
 
-#########################
-# Returns
-#########################
-:BC_Townhouse_Return a :SingleReturn ;
-    :associates :BC ;
-    :linkedTo :BC_Townhouse_Disposition ;
-    :exclusionCap 250000 .
+:TownhouseReturn a :SingleReturn ;
+    :associates :E163 ;
+    :linkedTo :TownhouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:BC_House2003_Return a :SingleReturn ;
-    :associates :BC ;
-    :linkedTo :BC_House2003_Disposition ;
-    :exclusionCap 250000 .
-
-#########################
-# Link taxpayer to intervals and dispositions
-#########################
-:BC :owns :BC_Townhouse_OwnUse , :BC_House2003_OwnUse ;
-    :uses :BC_Townhouse_ResUse , :BC_House2003_ResUse ;
-    :disposesOf :BC_Townhouse_Disposition , :BC_House2003_Disposition .
+:HouseReturn a :SingleReturn ;
+    :associates :E163 ;
+    :linkedTo :HouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

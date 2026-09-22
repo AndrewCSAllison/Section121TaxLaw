@@ -1,37 +1,29 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-### Property Instance
-:MainResidence a :Property .
+:E073 a :Taxpayer ;
+    :owns :E073Ownership ;
+    :uses :E073ResidenceUse ;
+    :disposesOf :E073HouseSale .
 
-### Taxpayer Instance
-:Y a :Taxpayer ;
-    :owns :Y_OwnershipInterval1 ;
-    :uses :Y_ResidenceInterval1 ;
-    :disposesOf :Y_Disposition1 .
+:E073House a :Property .
 
-### Ownership Interval
-:Y_OwnershipInterval1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E073Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E073House ;
     :ownershipStart "1989-07-20"^^xsd:date ;
-    :ownershipEnd "2001-12-01"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2001-12-01"^^xsd:date .
 
-### Residence Interval
-:Y_ResidenceInterval1 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E073ResidenceUse a :ResidenceUseInterval ;
+    :hasResidenceOf :E073House ;
     :residenceStart "1989-07-20"^^xsd:date ;
-    :residenceEnd "1998-01-04"^^xsd:date .
+    :residenceEnd "1997-12-31"^^xsd:date .
 
-### Disposition
-:Y_Disposition1 a :Disposition ;
-    :involves :MainResidence ;
+:E073HouseSale a :Disposition ;
+    :involves :E073House ;
     :sellDate "2001-12-01"^^xsd:date ;
-    :potentialGain 205000 .
+    :potentialGain "205000"^^xsd:integer .
 
-### Return
-:Y_SingleReturn a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :Y ;
-    :linkedTo :Y_Disposition1 .
+:E073SingleReturn a :SingleReturn ;
+    :associates :E073 ;
+    :linkedTo :E073HouseSale ;
+    :exclusionCap "250000"^^xsd:integer .

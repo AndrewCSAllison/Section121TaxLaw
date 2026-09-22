@@ -1,38 +1,40 @@
-:MainResidence a :Property .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:AU_1 a :Taxpayer .
-:AU_2 a :Taxpayer .
+:E141Residence a :Property .
 
-:AU1_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E141a a :Taxpayer ;
+    :owns :E141aOwnership ;
+    :disposesOf :E141Disposition .
+
+:E141b a :Taxpayer ;
+    :owns :E141bOwnership ;
+    :uses :E141bResidenceUse ;
+    :disposesOf :E141Disposition .
+
+:E141aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E141Residence ;
     :ownershipStart "2001-02-01"^^xsd:date ;
     :ownershipEnd "2004-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:AU2_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E141bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E141Residence ;
     :ownershipStart "2001-02-01"^^xsd:date ;
     :ownershipEnd "2004-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:AU2_ResidenceUse a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E141bResidenceUse a :ResidenceUseInterval ;
+    :hasResidenceOf :E141Residence ;
     :residenceStart "2001-02-01"^^xsd:date ;
     :residenceEnd "2004-12-31"^^xsd:date .
 
-:Disposition_Main a :Disposition ;
-    :involves :MainResidence ;
+:E141Disposition a :Disposition ;
+    :involves :E141Residence ;
     :sellDate "2004-12-31"^^xsd:date ;
-    :potentialGain 350000 .
+    :potentialGain "350000"^^xsd:integer .
 
-:JointReturn2004 a :JointReturn ;
-    :exclusionCap 500000 ;
-    :associates :AU_1 ;
-    :associates :AU_2 ;
-    :linkedTo :Disposition_Main .
-
-:AU_1 :owns :AU1_Ownership .
-:AU_2 :owns :AU2_Ownership .
-:AU_2 :uses :AU2_ResidenceUse .
-:AU_1 :disposesOf :Disposition_Main .
-:AU_2 :disposesOf :Disposition_Main .
+:E141JointReturn a :JointReturn ;
+    :associates :E141a, :E141b ;
+    :linkedTo :E141Disposition ;
+    :exclusionCap "500000"^^xsd:integer .

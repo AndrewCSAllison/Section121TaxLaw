@@ -1,72 +1,51 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-#########################
-# Properties
-#########################
-:Townhouse a :Property .
-:House a :Property .
+:E173 a :Taxpayer ;
+    :owns :E173TownhouseOwnership, :E173HouseOwnership ;
+    :uses :E173TownhouseResidence, :E173HouseResidence ;
+    :disposesOf :E173TownhouseDisposition, :E173HouseDisposition .
 
-#########################
-# Taxpayer
-#########################
-:BF a :Taxpayer .
+:E173Townhouse a :Property .
 
-#########################
-# Ownership and Residence Intervals
-#########################
-:BF_Own_Townhouse a :OwnershipUseInterval ;
-    :hasOwnershipOf :Townhouse ;
-    :ownershipStart "2000-01-01"^^xsd:date ;
-    :ownershipEnd "2004-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+:E173House a :Property .
 
-:BF_Use_Townhouse a :ResidenceUseInterval ;
-    :hasResidenceOf :Townhouse ;
-    :residenceStart "2000-01-01"^^xsd:date ;
+:E173TownhouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E173Townhouse ;
+    :ownershipStart "2001-01-01"^^xsd:date ;
+    :ownershipEnd "2004-12-31"^^xsd:date .
+
+:E173TownhouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E173Townhouse ;
+    :residenceStart "2001-01-01"^^xsd:date ;
     :residenceEnd "2002-12-31"^^xsd:date .
 
-:BF_Own_House a :OwnershipUseInterval ;
-    :hasOwnershipOf :House ;
-    :ownershipStart "2000-01-01"^^xsd:date ;
-    :ownershipEnd "2005-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+:E173HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E173House ;
+    :ownershipStart "2003-01-01"^^xsd:date ;
+    :ownershipEnd "2005-12-31"^^xsd:date .
 
-:BF_Use_House a :ResidenceUseInterval ;
-    :hasResidenceOf :House ;
-    :residenceStart "2000-01-01"^^xsd:date ;
+:E173HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E173House ;
+    :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2005-12-31"^^xsd:date .
 
-#########################
-# Dispositions
-#########################
-:Disp_Townhouse a :Disposition ;
-    :involves :Townhouse ;
+:E173TownhouseDisposition a :Disposition ;
+    :involves :E173Townhouse ;
     :sellDate "2004-12-31"^^xsd:date ;
-    :potentialGain 210000 .
+    :potentialGain "210000"^^xsd:integer .
 
-:Disp_House a :Disposition ;
-    :involves :House ;
+:E173HouseDisposition a :Disposition ;
+    :involves :E173House ;
     :sellDate "2005-12-31"^^xsd:date ;
-    :potentialGain 290000 .
+    :potentialGain "290000"^^xsd:integer .
 
-#########################
-# Returns
-#########################
-:Return_Townhouse a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :BF ;
-    :linkedTo :Disp_Townhouse .
+:E173TownhouseReturn a :SingleReturn ;
+    :associates :E173 ;
+    :linkedTo :E173TownhouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:Return_House a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :BF ;
-    :linkedTo :Disp_House .
-
-#########################
-# Links
-#########################
-:BF :owns :BF_Own_Townhouse, :BF_Own_House ;
-    :uses :BF_Use_Townhouse, :BF_Use_House ;
-    :disposesOf :Disp_Townhouse, :Disp_House .
+:E173HouseReturn a :SingleReturn ;
+    :associates :E173 ;
+    :linkedTo :E173HouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

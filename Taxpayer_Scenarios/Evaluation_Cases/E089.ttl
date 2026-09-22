@@ -1,49 +1,29 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-#########################
-# Property
-#########################
-:Townhouse a :Property .
+:E089 a :Taxpayer ;
+    :owns :E089OwnershipInterval ;
+    :uses :E089ResidenceInterval ;
+    :disposesOf :E089Disposition .
 
-#########################
-# Taxpayer
-#########################
-:AD a :Taxpayer ;
-    :owns :AD_Townhouse_Ownership ;
-    :uses :AD_Townhouse_Residence ;
-    :disposesOf :AD_Townhouse_Disposition .
+:E089Townhouse a :Property .
 
-#########################
-# Ownership Use Interval
-#########################
-:AD_Townhouse_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :Townhouse ;
+:E089OwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :E089Townhouse ;
     :ownershipStart "1996-12-12"^^xsd:date ;
-    :ownershipEnd "2000-04-21"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2000-04-21"^^xsd:date .
 
-#########################
-# Residence Use Interval
-#########################
-:AD_Townhouse_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :Townhouse ;
+:E089ResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :E089Townhouse ;
     :residenceStart "1995-04-21"^^xsd:date ;
     :residenceEnd "1998-02-10"^^xsd:date .
 
-#########################
-# Disposition
-#########################
-:AD_Townhouse_Disposition a :Disposition ;
-    :involves :Townhouse ;
+:E089Disposition a :Disposition ;
+    :involves :E089Townhouse ;
     :sellDate "2000-04-21"^^xsd:date ;
-    :potentialGain 235000 .
+    :potentialGain "235000"^^xsd:integer .
 
-#########################
-# Return
-#########################
-:AD_SingleReturn a :SingleReturn ;
-    :associates :AD ;
-    :linkedTo :AD_Townhouse_Disposition ;
-    :exclusionCap 250000 .
+:E089SingleReturn a :SingleReturn, :Return ;
+    :associates :E089 ;
+    :linkedTo :E089Disposition ;
+    :exclusionCap "250000"^^xsd:integer .

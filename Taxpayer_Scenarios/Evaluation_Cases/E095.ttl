@@ -1,53 +1,51 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:AF_1 a :Taxpayer .
-:AF_2 a :Taxpayer .
+:E095a a :Taxpayer ;
+    :owns :E095aOwnership ;
+    :uses :E095aResidence ;
+    :disposesOf :HouseSale .
 
-:MainResidence a :Property .
+:E095b a :Taxpayer ;
+    :owns :E095bOwnership ;
+    :uses :E095bResidence ;
+    :disposesOf :HouseSale .
 
-:AF1_OwnUse a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:House a :Property .
+
+:E095aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2018-02-01"^^xsd:date ;
     :ownershipEnd "2020-02-28"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:AF2_OwnUse a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E095bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2018-02-01"^^xsd:date ;
     :ownershipEnd "2020-02-28"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:AF1_ResUse a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E095aResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2018-02-01"^^xsd:date ;
     :residenceEnd "2020-02-28"^^xsd:date .
 
-:AF2_ResUse a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E095bResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2018-02-01"^^xsd:date ;
     :residenceEnd "2020-02-28"^^xsd:date .
 
-:Disposition1 a :Disposition ;
-    :involves :MainResidence ;
+:HouseSale a :Disposition ;
+    :involves :House ;
     :sellDate "2020-02-28"^^xsd:date ;
-    :potentialGain 300000 .
+    :potentialGain "300000"^^xsd:integer .
 
-:AF_1 :owns :AF1_OwnUse ;
-       :uses :AF1_ResUse ;
-       :disposesOf :Disposition1 .
+:E095aReturn a :SingleReturn ;
+    :associates :E095a ;
+    :linkedTo :HouseSale ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:AF_2 :owns :AF2_OwnUse ;
-       :uses :AF2_ResUse ;
-       :disposesOf :Disposition1 .
-
-:Return1 a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :AF_1 ;
-    :linkedTo :Disposition1 .
-
-:Return2 a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :AF_2 ;
-    :linkedTo :Disposition1 .
+:E095bReturn a :SingleReturn ;
+    :associates :E095b ;
+    :linkedTo :HouseSale ;
+    :exclusionCap "250000"^^xsd:integer .

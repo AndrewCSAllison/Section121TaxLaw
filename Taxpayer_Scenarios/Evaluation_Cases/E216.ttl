@@ -1,28 +1,30 @@
-:BT a :Taxpayer .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:BT_Condo a :Property .
+:E216 a :Taxpayer ;
+    :owns :E216Ownership1 ;
+    :uses :E216Residence1 ;
+    :disposesOf :CondominiumDisposition .
 
-:BT_CondoOwnership a :OwnershipUseInterval ;
-    :hasOwnershipOf :BT_Condo ;
+:Condominium a :Property .
+
+:E216Ownership1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :Condominium ;
     :ownershipStart "2003-01-01"^^xsd:date ;
-    :ownershipEnd "2004-06-01"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2004-06-01"^^xsd:date .
 
-:BT_CondoResidence a :ResidenceUseInterval ;
-    :hasResidenceOf :BT_Condo ;
+:E216Residence1 a :ResidenceUseInterval ;
+    :hasResidenceOf :Condominium ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2004-06-01"^^xsd:date .
 
-:BT_CondoDisposition a :Disposition ;
-    :involves :BT_Condo ;
+:CondominiumDisposition a :Disposition ;
+    :involves :Condominium ;
     :sellDate "2004-06-01"^^xsd:date ;
-    :potentialGain 80000 .
+    :potentialGain "80000"^^xsd:integer ;
+    :partialExclusionReason :NonQualifyingReason .
 
-:BT_Return a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :BT ;
-    :linkedTo :BT_CondoDisposition .
-
-:BT :owns :BT_CondoOwnership ;
-    :uses :BT_CondoResidence ;
-    :disposesOf :BT_CondoDisposition .
+:E216Return a :SingleReturn ;
+    :associates :E216 ;
+    :linkedTo :CondominiumDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

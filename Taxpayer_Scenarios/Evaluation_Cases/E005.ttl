@@ -1,55 +1,51 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:B a :Taxpayer ;
-    :disposesOf :DispositionVA ,
-                :DispositionME ;
-    :owns :OwnVA ,
-          :OwnME ;
-    :uses :UseVA1999_2000 ,
-          :UseME2001_2002 ,
-          :UseVA2003 .
+:E005 a :Taxpayer ;
+    :owns :E005VirginiaOwnership, :E005MaineOwnership ;
+    :uses :E005VirginiaUse1999_2000, :E005MaineUse2001_2002, :E005VirginiaUse2003 ;
+    :disposesOf :VirginiaDisposition, :MaineDisposition .
 
-:PropertyVA a :Property .
-:PropertyME a :Property .
+:VirginiaResidence a :Property .
 
-:OwnVA a :OwnershipUseInterval ;
-    :hasOwnershipOf :PropertyVA ;
+:MaineResidence a :Property .
+
+:E005VirginiaOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :VirginiaResidence ;
     :ownershipStart "1999-01-01"^^xsd:date ;
     :ownershipEnd "2003-12-31"^^xsd:date .
 
-:OwnME a :OwnershipUseInterval ;
-    :hasOwnershipOf :PropertyME ;
+:E005MaineOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :MaineResidence ;
     :ownershipStart "1999-01-01"^^xsd:date ;
     :ownershipEnd "2003-12-31"^^xsd:date .
 
-:UseVA1999_2000 a :ResidenceUseInterval ;
-    :hasResidenceOf :PropertyVA ;
+:E005VirginiaUse1999_2000 a :ResidenceUseInterval ;
+    :hasResidenceOf :VirginiaResidence ;
     :residenceStart "1999-01-01"^^xsd:date ;
     :residenceEnd "2000-12-31"^^xsd:date .
 
-:UseME2001_2002 a :ResidenceUseInterval ;
-    :hasResidenceOf :PropertyME ;
+:E005MaineUse2001_2002 a :ResidenceUseInterval ;
+    :hasResidenceOf :MaineResidence ;
     :residenceStart "2001-01-01"^^xsd:date ;
     :residenceEnd "2002-12-31"^^xsd:date .
 
-:UseVA2003 a :ResidenceUseInterval ;
-    :hasResidenceOf :PropertyVA ;
+:E005VirginiaUse2003 a :ResidenceUseInterval ;
+    :hasResidenceOf :VirginiaResidence ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2003-12-31"^^xsd:date .
 
-:DispositionVA a :Disposition ;
-    :involves :PropertyVA ;
+:VirginiaDisposition a :Disposition ;
+    :involves :VirginiaResidence ;
     :sellDate "2003-12-31"^^xsd:date ;
-    :potentialGain 250000 .
+    :potentialGain "250000"^^xsd:integer .
 
-:DispositionME a :Disposition ;
-    :involves :PropertyME ;
+:MaineDisposition a :Disposition ;
+    :involves :MaineResidence ;
     :sellDate "2003-12-31"^^xsd:date ;
-    :potentialGain 150000 .
+    :potentialGain "150000"^^xsd:integer .
 
-:ReturnB a :SingleReturn ;
-    :associates :B ;
-    :linkedTo :DispositionVA ,
-              :DispositionME ;
-    :exclusionCap 250000 .
+:E005Return a :SingleReturn ;
+    :associates :E005 ;
+    :linkedTo :VirginiaDisposition, :MaineDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

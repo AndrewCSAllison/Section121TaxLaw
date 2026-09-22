@@ -1,47 +1,47 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:MainResidence a :Property .
+:E201a a :Taxpayer ;
+    :owns :E201aOwnership ;
+    :uses :E201aResidence ;
+    :disposesOf :HouseDisposition .
 
-:BO_1 a :Taxpayer ;
-    :owns :BO1_Ownership ;
-    :uses :BO1_Residence ;
-    :disposesOf :BO_Disposition .
+:E201b a :Taxpayer ;
+    :owns :E201bOwnership ;
+    :uses :E201bResidence ;
+    :disposesOf :HouseDisposition .
 
-:BO_2 a :Taxpayer ;
-    :owns :BO2_Ownership ;
-    :uses :BO2_Residence ;
-    :disposesOf :BO_Disposition .
+:House a :Property .
 
-:BO1_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E201aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2003-01-01"^^xsd:date ;
     :ownershipEnd "2004-01-01"^^xsd:date ;
     :percentageOwned "0.5"^^xsd:decimal .
 
-:BO2_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E201bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2003-01-01"^^xsd:date ;
     :ownershipEnd "2004-01-01"^^xsd:date ;
     :percentageOwned "0.5"^^xsd:decimal .
 
-:BO1_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E201aResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2004-01-01"^^xsd:date .
 
-:BO2_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E201bResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2004-01-01"^^xsd:date .
 
-:BO_Disposition a :Disposition ;
-    :involves :MainResidence ;
+:HouseDisposition a :Disposition ;
+    :involves :House ;
     :sellDate "2004-01-01"^^xsd:date ;
     :potentialGain "325000"^^xsd:integer ;
     :partialExclusionReason :HealthRelatedReason .
 
-:BO_JointReturn a :JointReturn ;
-    :associates :BO_1 , :BO_2 ;
-    :linkedTo :BO_Disposition ;
+:E201JointReturn a :JointReturn ;
+    :associates :E201a, :E201b ;
+    :linkedTo :HouseDisposition ;
     :exclusionCap "500000"^^xsd:integer .

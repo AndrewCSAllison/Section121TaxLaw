@@ -1,47 +1,56 @@
-:TaxpayerC a :Taxpayer ;
-    :owns :OwnershipC_Texas , :OwnershipC_California ;
-    :uses :ResidenceC_Texas1 , :ResidenceC_California , :ResidenceC_Texas2 ;
-    :disposesOf :DispositionC_Texas , :DispositionC_California .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:OwnershipC_Texas a :OwnershipUseInterval ;
-    :hasOwnershipOf :Property_Texas ;
+:E009 a :Taxpayer ;
+    :owns :E009TexasOwnership,
+          :E009CaliforniaOwnership ;
+    :uses :E009TexasResidence2000_2001,
+          :E009CaliforniaResidence2002_2003,
+          :E009TexasResidence2004 ;
+    :disposesOf :E009TexasDisposition,
+                :E009CaliforniaDisposition .
+
+:E009TexasProperty a :Property .
+
+:E009CaliforniaProperty a :Property .
+
+:E009TexasOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E009TexasProperty ;
     :ownershipStart "2000-01-01"^^xsd:date ;
     :ownershipEnd "2004-12-31"^^xsd:date .
 
-:OwnershipC_California a :OwnershipUseInterval ;
-    :hasOwnershipOf :Property_California ;
+:E009CaliforniaOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E009CaliforniaProperty ;
     :ownershipStart "2000-01-01"^^xsd:date ;
     :ownershipEnd "2004-12-31"^^xsd:date .
 
-:ResidenceC_Texas1 a :ResidenceUseInterval ;
-    :hasResidenceOf :Property_Texas ;
+:E009TexasResidence2000_2001 a :ResidenceUseInterval ;
+    :hasResidenceOf :E009TexasProperty ;
     :residenceStart "2000-01-01"^^xsd:date ;
     :residenceEnd "2001-12-31"^^xsd:date .
 
-:ResidenceC_California a :ResidenceUseInterval ;
-    :hasResidenceOf :Property_California ;
+:E009CaliforniaResidence2002_2003 a :ResidenceUseInterval ;
+    :hasResidenceOf :E009CaliforniaProperty ;
     :residenceStart "2002-01-01"^^xsd:date ;
     :residenceEnd "2003-12-31"^^xsd:date .
 
-:ResidenceC_Texas2 a :ResidenceUseInterval ;
-    :hasResidenceOf :Property_Texas ;
+:E009TexasResidence2004 a :ResidenceUseInterval ;
+    :hasResidenceOf :E009TexasProperty ;
     :residenceStart "2004-01-01"^^xsd:date ;
     :residenceEnd "2004-12-31"^^xsd:date .
 
-:Property_Texas a :Property .
-:Property_California a :Property .
-
-:DispositionC_Texas a :Disposition ;
-    :involves :Property_Texas ;
+:E009TexasDisposition a :Disposition ;
+    :involves :E009TexasProperty ;
     :sellDate "2004-12-15"^^xsd:date ;
-    :potentialGain 220000 .
+    :potentialGain "220000"^^xsd:integer .
 
-:DispositionC_California a :Disposition ;
-    :involves :Property_California ;
+:E009CaliforniaDisposition a :Disposition ;
+    :involves :E009CaliforniaProperty ;
     :sellDate "2004-12-15"^^xsd:date ;
-    :potentialGain 200000 .
+    :potentialGain "200000"^^xsd:integer .
 
-:ReturnC a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :TaxpayerC ;
-    :linkedTo :DispositionC_Texas , :DispositionC_California .
+:E009Return a :SingleReturn ;
+    :associates :E009 ;
+    :linkedTo :E009TexasDisposition,
+              :E009CaliforniaDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

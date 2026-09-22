@@ -1,52 +1,53 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:AP_1 a :Taxpayer ;
-    :owns :AP1_Ownership ;
-    :uses :AP1_Residence ;
-    :disposesOf :AP1_Disposition .
+:E126a a :Taxpayer ;
+    :owns :E126aOwnership ;
+    :uses :E126aResidenceUse ;
+    :disposesOf :E126aDisposition .
 
-:AP_2 a :Taxpayer ;
-    :owns :AP2_Ownership ;
-    :uses :AP2_Residence ;
-    :disposesOf :AP2_Disposition .
+:E126b a :Taxpayer ;
+    :owns :E126bOwnership ;
+    :uses :E126bResidenceUse ;
+    :disposesOf :E126bDisposition .
 
-:Property_AP1 a :Property .
-:Property_AP2 a :Property .
+:E126aProperty a :Property .
 
-:AP1_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :Property_AP1 ;
+:E126bProperty a :Property .
+
+:E126aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E126aProperty ;
     :ownershipStart "2000-02-01"^^xsd:date ;
     :ownershipEnd "2003-12-31"^^xsd:date ;
     :percentageOwned "1.0"^^xsd:decimal .
 
-:AP2_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :Property_AP2 ;
+:E126bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E126bProperty ;
     :ownershipStart "2000-02-01"^^xsd:date ;
     :ownershipEnd "2003-12-31"^^xsd:date ;
     :percentageOwned "1.0"^^xsd:decimal .
 
-:AP1_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :Property_AP1 ;
+:E126aResidenceUse a :ResidenceUseInterval ;
+    :hasResidenceOf :E126aProperty ;
     :residenceStart "2000-02-01"^^xsd:date ;
     :residenceEnd "2003-12-31"^^xsd:date .
 
-:AP2_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :Property_AP2 ;
+:E126bResidenceUse a :ResidenceUseInterval ;
+    :hasResidenceOf :E126bProperty ;
     :residenceStart "2000-02-01"^^xsd:date ;
     :residenceEnd "2003-12-31"^^xsd:date .
 
-:AP1_Disposition a :Disposition ;
-    :involves :Property_AP1 ;
+:E126aDisposition a :Disposition ;
+    :involves :E126aProperty ;
     :sellDate "2003-12-31"^^xsd:date ;
     :potentialGain "220000"^^xsd:integer .
 
-:AP2_Disposition a :Disposition ;
-    :involves :Property_AP2 ;
+:E126bDisposition a :Disposition ;
+    :involves :E126bProperty ;
     :sellDate "2003-12-31"^^xsd:date ;
     :potentialGain "280000"^^xsd:integer .
 
-:JointReturn_2003 a :JointReturn ;
-    :associates :AP_1 , :AP_2 ;
-    :linkedTo :AP1_Disposition , :AP2_Disposition ;
+:E126JointReturn a :JointReturn ;
+    :associates :E126a, :E126b ;
+    :linkedTo :E126aDisposition, :E126bDisposition ;
     :exclusionCap "500000"^^xsd:integer .

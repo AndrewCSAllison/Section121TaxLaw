@@ -1,44 +1,44 @@
-:AK_1 a :Taxpayer .
-:AK_2 a :Taxpayer .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:MainResidence a :Property .
+:E109a a :Taxpayer ;
+    :disposesOf :E109Disposition ;
+    :owns :E109aOwnership ;
+    :uses :E109aResidence .
 
-:OUI_AK a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E109b a :Taxpayer ;
+    :disposesOf :E109Disposition ;
+    :owns :E109bOwnership ;
+    :uses :E109bResidence .
+
+:E109Property a :Property .
+
+:E109aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E109Property ;
     :ownershipStart "2018-02-01"^^xsd:date ;
-    :ownershipEnd "2020-02-28"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :ownershipEnd "2020-02-28"^^xsd:date .
 
-:OUI_AK_2 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E109bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E109Property ;
     :ownershipStart "2018-02-01"^^xsd:date ;
-    :ownershipEnd "2020-02-28"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :ownershipEnd "2020-02-28"^^xsd:date .
 
-:RUI_AK a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E109aResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E109Property ;
     :residenceStart "2018-02-01"^^xsd:date ;
     :residenceEnd "2020-02-28"^^xsd:date .
 
-:RUI_AK_2 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E109bResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E109Property ;
     :residenceStart "2018-02-01"^^xsd:date ;
     :residenceEnd "2020-02-28"^^xsd:date .
 
-:Disposition_AK a :Disposition ;
-    :involves :MainResidence ;
+:E109Disposition a :Disposition ;
+    :involves :E109Property ;
     :sellDate "2020-02-28"^^xsd:date ;
-    :potentialGain 300000 .
+    :potentialGain "300000"^^xsd:integer .
 
-:JointReturn_AK a :JointReturn ;
-    :exclusionCap 500000 ;
-    :associates :AK_1 , :AK_2 ;
-    :linkedTo :Disposition_AK .
-
-:AK_1 :owns :OUI_AK ;
-       :uses :RUI_AK ;
-       :disposesOf :Disposition_AK .
-
-:AK_2 :owns :OUI_AK_2 ;
-       :uses :RUI_AK_2 ;
-       :disposesOf :Disposition_AK .
+:E109JointReturn a :JointReturn ;
+    :associates :E109a, :E109b ;
+    :linkedTo :E109Disposition ;
+    :exclusionCap "500000"^^xsd:integer .

@@ -1,58 +1,51 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
-:AE_1 a :Taxpayer .
-:AE_2 a :Taxpayer .
+:E093a a :Taxpayer ;
+    :owns :E093aOwnership ;
+    :uses :E093aResidence ;
+    :disposesOf :HouseSale .
 
-:MainResidence a :Property .
+:E093b a :Taxpayer ;
+    :owns :E093bOwnership ;
+    :uses :E093bResidence ;
+    :disposesOf :HouseSale .
 
-:AE1_OwnUse a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:House a :Property .
+
+:E093aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2020-01-01"^^xsd:date ;
     :ownershipEnd "2022-12-31"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:AE2_OwnUse a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E093bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2020-01-01"^^xsd:date ;
     :ownershipEnd "2022-12-31"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:AE1_ResUse a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E093aResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2020-01-01"^^xsd:date ;
     :residenceEnd "2022-12-31"^^xsd:date .
 
-:AE2_ResUse a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E093bResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2020-01-01"^^xsd:date ;
     :residenceEnd "2022-12-31"^^xsd:date .
 
-:AE1_Disposition a :Disposition ;
-    :involves :MainResidence ;
+:HouseSale a :Disposition ;
+    :involves :House ;
     :sellDate "2022-12-31"^^xsd:date ;
-    :potentialGain 128000 .
+    :potentialGain "256000"^^xsd:integer .
 
-:AE2_Disposition a :Disposition ;
-    :involves :MainResidence ;
-    :sellDate "2022-12-31"^^xsd:date ;
-    :potentialGain 128000 .
+:E093aReturn a :SingleReturn ;
+    :associates :E093a ;
+    :linkedTo :HouseSale ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:AE1_SingleReturn a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :AE_1 ;
-    :linkedTo :AE1_Disposition .
-
-:AE2_SingleReturn a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :AE_2 ;
-    :linkedTo :AE2_Disposition .
-
-:AE_1 :owns :AE1_OwnUse ;
-      :uses :AE1_ResUse ;
-      :disposesOf :AE1_Disposition .
-
-:AE_2 :owns :AE2_OwnUse ;
-      :uses :AE2_ResUse ;
-      :disposesOf :AE2_Disposition .
+:E093bReturn a :SingleReturn ;
+    :associates :E093b ;
+    :linkedTo :HouseSale ;
+    :exclusionCap "250000"^^xsd:integer .

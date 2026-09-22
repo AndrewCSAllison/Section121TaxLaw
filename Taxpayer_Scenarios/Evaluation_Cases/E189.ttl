@@ -1,47 +1,30 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-#########################
-# Taxpayer
-#########################
-:BK a :Taxpayer .
+:E189 a :Taxpayer ;
+    :owns :E189Ownership ;
+    :uses :E189Residence ;
+    :disposesOf :E189Disposition .
 
-#########################
-# Property
-#########################
-:BKHouse a :Property .
+:E189House a :Property .
 
-#########################
-# Ownership & Residence Intervals
-#########################
-:BKOwnership1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :BKHouse ;
+:E189Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E189House ;
     :ownershipStart "2002-02-01"^^xsd:date ;
-    :ownershipEnd "2005-08-01"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2005-08-01"^^xsd:date .
 
-:BKResidence1 a :ResidenceUseInterval ;
-    :hasResidenceOf :BKHouse ;
+:E189Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :E189House ;
     :residenceStart "2002-02-01"^^xsd:date ;
     :residenceEnd "2003-05-01"^^xsd:date .
 
-:BKResidence2 a :ResidenceUseInterval ;
-    :hasResidenceOf :BKHouse ;
-    :residenceStart "2003-05-01"^^xsd:date ;
-    :residenceEnd "2005-06-01"^^xsd:date .
-
-#########################
-# Disposition
-#########################
-:BKDisposition1 a :Disposition ;
-    :involves :BKHouse ;
+:E189Disposition a :Disposition ;
+    :involves :E189House ;
     :sellDate "2005-08-01"^^xsd:date ;
-    :potentialGain 200000 ;
+    :potentialGain "200000"^^xsd:integer ;
     :partialExclusionReason :EmploymentRelatedReason .
 
-#########################
-# Linking
-#########################
-:BK :owns :BKOwnership1 ;
-    :uses :BKResidence1, :BKResidence2 ;
-    :disposesOf :BKDisposition1 .
+:E189Return a :SingleReturn ;
+    :associates :E189 ;
+    :linkedTo :E189Disposition ;
+    :exclusionCap "250000"^^xsd:integer .

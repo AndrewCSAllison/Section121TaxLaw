@@ -1,36 +1,29 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-### Property
-:ADsTownhouse a :Property .
+:E090 a :Taxpayer ;
+    :owns :E090TownhouseOwnership ;
+    :uses :E090TownhouseResidence ;
+    :disposesOf :E090TownhouseDisposition .
 
-### Taxpayer
-:AD a :Taxpayer ;
-    :owns :AD_OwnershipInterval ;
-    :uses :AD_ResidenceInterval ;
-    :disposesOf :AD_Disposition .
+:E090Townhouse a :Property .
 
-### Ownership Interval
-:AD_OwnershipInterval a :OwnershipUseInterval ;
-    :hasOwnershipOf :ADsTownhouse ;
+:E090TownhouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E090Townhouse ;
     :ownershipStart "1996-12-12"^^xsd:date ;
-    :ownershipEnd "2000-04-21"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2000-04-21"^^xsd:date .
 
-### Residence Use Interval
-:AD_ResidenceInterval a :ResidenceUseInterval ;
-    :hasResidenceOf :ADsTownhouse ;
+:E090TownhouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E090Townhouse ;
     :residenceStart "1995-04-21"^^xsd:date ;
     :residenceEnd "1998-02-10"^^xsd:date .
 
-### Disposition
-:AD_Disposition a :Disposition ;
-    :involves :ADsTownhouse ;
+:E090TownhouseDisposition a :Disposition ;
+    :involves :E090Townhouse ;
     :sellDate "2000-04-21"^^xsd:date ;
-    :potentialGain 235000 .
+    :potentialGain "235000"^^xsd:integer .
 
-### Return
-:AD_Return a :SingleReturn ;
-    :associates :AD ;
-    :linkedTo :AD_Disposition ;
-    :exclusionCap 250000 .
+:E090SingleReturn a :SingleReturn ;
+    :associates :E090 ;
+    :linkedTo :E090TownhouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

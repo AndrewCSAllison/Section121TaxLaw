@@ -1,42 +1,41 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:TaxpayerA a :Taxpayer ;
-    :owns :OwnershipNY ,
-          :OwnershipFL ;
-    :uses :ResidenceNY ,
-          :ResidenceFL ;
-    :disposesOf :DispositionNY .
+:E001 a :Taxpayer ;
+    :owns :E001_NY_Ownership, :E001_FL_Ownership ;
+    :uses :E001_NY_Residence, :E001_FL_Residence ;
+    :disposesOf :NY_Disposition .
 
-:PropertyNY a :Property .
-:PropertyFL a :Property .
+:NY_Residence a :Property .
 
-:OwnershipNY a :OwnershipUseInterval ;
-    :hasOwnershipOf :PropertyNY ;
+:FL_Residence a :Property .
+
+:E001_NY_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :NY_Residence ;
     :ownershipStart "1999-01-01"^^xsd:date ;
     :ownershipEnd "2004-12-31"^^xsd:date .
 
-:OwnershipFL a :OwnershipUseInterval ;
-    :hasOwnershipOf :PropertyFL ;
+:E001_FL_Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :FL_Residence ;
     :ownershipStart "1999-01-01"^^xsd:date ;
     :ownershipEnd "2004-12-31"^^xsd:date .
 
-:ResidenceNY a :ResidenceUseInterval ;
-    :hasResidenceOf :PropertyNY ;
+:E001_NY_Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :NY_Residence ;
     :residenceStart "1999-01-01"^^xsd:date ;
     :residenceEnd "2004-12-31"^^xsd:date .
 
-:ResidenceFL a :ResidenceUseInterval ;
-    :hasResidenceOf :PropertyFL ;
+:E001_FL_Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :FL_Residence ;
     :residenceStart "1999-01-01"^^xsd:date ;
     :residenceEnd "2004-12-31"^^xsd:date .
 
-:DispositionNY a :Disposition ;
-    :involves :PropertyNY ;
+:NY_Disposition a :Disposition ;
+    :involves :NY_Residence ;
     :sellDate "2004-12-31"^^xsd:date ;
-    :potentialGain 300000 .
+    :potentialGain "300000"^^xsd:integer .
 
-:ReturnA a :SingleReturn ;
-    :associates :TaxpayerA ;
-    :linkedTo :DispositionNY ;
-    :exclusionCap 250000 .
+:E001_Return a :SingleReturn ;
+    :associates :E001 ;
+    :linkedTo :NY_Disposition ;
+    :exclusionCap "250000"^^xsd:integer .

@@ -1,28 +1,32 @@
-:BU a :Taxpayer .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:BUHouse a :Property .
+:E219 a :Taxpayer ;
+    :owns :E219Ownership1 ;
+    :uses :E219Residence1 ;
+    :disposesOf :E219Disposition1 .
 
-:BUOwnershipInterval a :OwnershipUseInterval ;
-    :hasOwnershipOf :BUHouse ;
+:E219House a :Property .
+
+:E219Ownership1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :E219House ;
     :ownershipStart "2003-04-01"^^xsd:date ;
-    :ownershipEnd "2004-10-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2004-10-31"^^xsd:date .
 
-:BUResidenceInterval a :ResidenceUseInterval ;
-    :hasResidenceOf :BUHouse ;
+:E219Residence1 a :ResidenceUseInterval ;
+    :hasResidenceOf :E219House ;
     :residenceStart "2003-04-01"^^xsd:date ;
     :residenceEnd "2004-10-31"^^xsd:date .
 
-:BUSale a :Disposition ;
-    :involves :BUHouse ;
+:E219Disposition1 a :Disposition ;
+    :involves :E219House ;
     :sellDate "2004-10-31"^^xsd:date ;
-    :potentialGain 95000 .
+    :potentialGain "95000"^^xsd:integer ;
+    :partialExclusionReason :NonQualifyingReason .
 
-:BUSingleReturn a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :BU ;
-    :linkedTo :BUSale .
+:E219Return a :SingleReturn ;
+    :associates :E219 ;
+    :linkedTo :E219Disposition1 ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:BU :owns :BUOwnershipInterval ;
-    :uses :BUResidenceInterval ;
-    :disposesOf :BUSale .
+:NonQualifyingReason a :ReasonType .

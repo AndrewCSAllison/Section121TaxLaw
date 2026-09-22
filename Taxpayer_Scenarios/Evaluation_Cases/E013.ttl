@@ -1,50 +1,51 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:E a :Taxpayer ;
-    :owns :OwnershipIntervalMI , :OwnershipIntervalSC ;
-    :uses :ResidenceIntervalMI_2001_2002 , :ResidenceIntervalSC_2003_2004 , :ResidenceIntervalMI_2005 ;
-    :disposesOf :DispositionMI , :DispositionSC .
+:E013 a :Taxpayer ;
+    :owns :E013MichiganOwnership, :E013SouthCarolinaOwnership ;
+    :uses :E013MichiganResidence2001_2002, :E013SouthCarolinaResidence2003_2004, :E013MichiganResidence2005 ;
+    :disposesOf :E013MichiganDisposition, :E013SouthCarolinaDisposition .
 
-:PropertyMI a :Property .
-:PropertySC a :Property .
+:E013MichiganProperty a :Property .
 
-:OwnershipIntervalMI a :OwnershipUseInterval ;
-    :hasOwnershipOf :PropertyMI ;
+:E013SouthCarolinaProperty a :Property .
+
+:E013MichiganOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E013MichiganProperty ;
     :ownershipStart "2001-01-01"^^xsd:date ;
     :ownershipEnd "2005-12-31"^^xsd:date .
 
-:OwnershipIntervalSC a :OwnershipUseInterval ;
-    :hasOwnershipOf :PropertySC ;
+:E013SouthCarolinaOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E013SouthCarolinaProperty ;
     :ownershipStart "2001-01-01"^^xsd:date ;
     :ownershipEnd "2005-12-31"^^xsd:date .
 
-:ResidenceIntervalMI_2001_2002 a :ResidenceUseInterval ;
-    :hasResidenceOf :PropertyMI ;
+:E013MichiganResidence2001_2002 a :ResidenceUseInterval ;
+    :hasResidenceOf :E013MichiganProperty ;
     :residenceStart "2001-01-01"^^xsd:date ;
     :residenceEnd "2002-12-31"^^xsd:date .
 
-:ResidenceIntervalSC_2003_2004 a :ResidenceUseInterval ;
-    :hasResidenceOf :PropertySC ;
+:E013SouthCarolinaResidence2003_2004 a :ResidenceUseInterval ;
+    :hasResidenceOf :E013SouthCarolinaProperty ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2004-12-31"^^xsd:date .
 
-:ResidenceIntervalMI_2005 a :ResidenceUseInterval ;
-    :hasResidenceOf :PropertyMI ;
+:E013MichiganResidence2005 a :ResidenceUseInterval ;
+    :hasResidenceOf :E013MichiganProperty ;
     :residenceStart "2005-01-01"^^xsd:date ;
     :residenceEnd "2005-12-31"^^xsd:date .
 
-:DispositionMI a :Disposition ;
-    :involves :PropertyMI ;
+:E013MichiganDisposition a :Disposition ;
+    :involves :E013MichiganProperty ;
     :sellDate "2005-12-18"^^xsd:date ;
-    :potentialGain 230000 .
+    :potentialGain "230000"^^xsd:integer .
 
-:DispositionSC a :Disposition ;
-    :involves :PropertySC ;
+:E013SouthCarolinaDisposition a :Disposition ;
+    :involves :E013SouthCarolinaProperty ;
     :sellDate "2005-12-18"^^xsd:date ;
-    :potentialGain 210000 .
+    :potentialGain "210000"^^xsd:integer .
 
-:ReturnE a :SingleReturn ;
-    :associates :E ;
-    :linkedTo :DispositionMI , :DispositionSC ;
-    :exclusionCap 250000 .
+:E013Return a :SingleReturn ;
+    :associates :E013 ;
+    :linkedTo :E013MichiganDisposition, :E013SouthCarolinaDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

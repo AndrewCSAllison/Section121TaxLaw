@@ -1,49 +1,51 @@
-:AH_1 a :Taxpayer .
-:AH_2 a :Taxpayer .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:MainResidence a :Property .
+:E102House a :Property .
 
-:OwnershipInterval_AH1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E102a a :Taxpayer ;
+    :owns :E102aOwnership ;
+    :uses :E102aResidence ;
+    :disposesOf :E102Disposition .
+
+:E102b a :Taxpayer ;
+    :owns :E102bOwnership ;
+    :uses :E102bResidence ;
+    :disposesOf :E102Disposition .
+
+:E102aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E102House ;
     :ownershipStart "2012-09-01"^^xsd:date ;
     :ownershipEnd "2014-08-31"^^xsd:date ;
-    :percentageOwned 0.5 .
-    
-:OwnershipInterval_AH2 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+    :percentageOwned "0.5"^^xsd:decimal .
+
+:E102bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E102House ;
     :ownershipStart "2012-09-01"^^xsd:date ;
     :ownershipEnd "2014-08-31"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:ResidenceInterval_AH1 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E102aResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E102House ;
     :residenceStart "2012-09-01"^^xsd:date ;
     :residenceEnd "2014-08-31"^^xsd:date .
 
-:ResidenceInterval_AH2 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E102bResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E102House ;
     :residenceStart "2012-09-01"^^xsd:date ;
     :residenceEnd "2014-08-31"^^xsd:date .
 
-:Disposition_AH a :Disposition ;
-    :involves :MainResidence ;
+:E102Disposition a :Disposition ;
+    :involves :E102House ;
     :sellDate "2014-08-31"^^xsd:date ;
-    :potentialGain 720000 .
+    :potentialGain "720000"^^xsd:integer .
 
-:AH_1 :owns :OwnershipInterval_AH1 ;
-       :uses :ResidenceInterval_AH1 ;
-       :disposesOf :Disposition_AH .
+:E102aReturn a :SingleReturn ;
+    :associates :E102a ;
+    :linkedTo :E102Disposition ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:AH_2 :owns :OwnershipInterval_AH2 ;
-       :uses :ResidenceInterval_AH2 ;
-       :disposesOf :Disposition_AH .
-
-:Return_AH1 a :SingleReturn ;
-    :associates :AH_1 ;
-    :linkedTo :Disposition_AH ;
-    :exclusionCap 250000 .
-
-:Return_AH2 a :SingleReturn ;
-    :associates :AH_2 ;
-    :linkedTo :Disposition_AH ;
-    :exclusionCap 250000 .
+:E102bReturn a :SingleReturn ;
+    :associates :E102b ;
+    :linkedTo :E102Disposition ;
+    :exclusionCap "250000"^^xsd:integer .

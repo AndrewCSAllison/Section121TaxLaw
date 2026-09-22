@@ -1,55 +1,51 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:AY a :Taxpayer .
+:E151 a :Taxpayer ;
+    :owns :E151TownhouseOwnership, :E151HouseOwnership ;
+    :uses :E151TownhouseResidence, :E151HouseResidence ;
+    :disposesOf :TownhouseDisposition, :HouseDisposition .
 
 :Townhouse a :Property .
-:House2000 a :Property .
 
-:AY_Townhouse_OwnUse a :OwnershipUseInterval ;
+:House a :Property .
+
+:E151TownhouseOwnership a :OwnershipUseInterval ;
     :hasOwnershipOf :Townhouse ;
     :ownershipStart "1998-01-01"^^xsd:date ;
-    :ownershipEnd "1999-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2002-12-31"^^xsd:date .
 
-:AY_Townhouse_ResUse a :ResidenceUseInterval ;
+:E151TownhouseResidence a :ResidenceUseInterval ;
     :hasResidenceOf :Townhouse ;
     :residenceStart "1998-01-01"^^xsd:date ;
     :residenceEnd "1999-12-31"^^xsd:date .
 
-:AY_House_OwnUse a :OwnershipUseInterval ;
-    :hasOwnershipOf :House2000 ;
+:E151HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2000-01-01"^^xsd:date ;
-    :ownershipEnd "2003-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2003-12-31"^^xsd:date .
 
-:AY_House_ResUse a :ResidenceUseInterval ;
-    :hasResidenceOf :House2000 ;
+:E151HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2000-01-01"^^xsd:date ;
     :residenceEnd "2003-12-31"^^xsd:date .
 
-:Disposition_Townhouse a :Disposition ;
+:TownhouseDisposition a :Disposition ;
     :involves :Townhouse ;
     :sellDate "2002-12-31"^^xsd:date ;
-    :potentialGain 150000 .
+    :potentialGain "150000"^^xsd:integer .
 
-:Disposition_House a :Disposition ;
-    :involves :House2000 ;
+:HouseDisposition a :Disposition ;
+    :involves :House ;
     :sellDate "2003-12-31"^^xsd:date ;
-    :potentialGain 300000 ;
-    :partialExclusionReason :NonQualifyingReason .
+    :potentialGain "300000"^^xsd:integer .
 
-:Return_Townhouse a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :AY ;
-    :linkedTo :Disposition_Townhouse .
+:TownhouseSingleReturn a :SingleReturn ;
+    :associates :E151 ;
+    :linkedTo :TownhouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:Return_House a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :AY ;
-    :linkedTo :Disposition_House .
-
-:AY :owns :AY_Townhouse_OwnUse, :AY_House_OwnUse ;
-    :uses :AY_Townhouse_ResUse, :AY_House_ResUse ;
-    :disposesOf :Disposition_Townhouse, :Disposition_House .
+:HouseSingleReturn a :SingleReturn ;
+    :associates :E151 ;
+    :linkedTo :HouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

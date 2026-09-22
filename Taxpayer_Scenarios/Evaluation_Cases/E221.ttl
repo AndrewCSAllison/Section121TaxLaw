@@ -1,30 +1,30 @@
-:BV a :Taxpayer .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:BV_Condo a :Property .
-:BV_House a :Property .
+:E221 a :Taxpayer ;
+    :owns :E221CondoOwnership ;
+    :uses :E221CondoResidence ;
+    :disposesOf :E221CondoDisposition .
 
-:BV_Ownership_Condo a :OwnershipUseInterval ;
-    :hasOwnershipOf :BV_Condo ;
+:E221Condominium a :Property .
+
+:E221CondoOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E221Condominium ;
     :ownershipStart "2003-01-01"^^xsd:date ;
-    :ownershipEnd "2004-06-01"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2004-06-01"^^xsd:date .
 
-:BV_Residence_Condo a :ResidenceUseInterval ;
-    :hasResidenceOf :BV_Condo ;
+:E221CondoResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E221Condominium ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2004-06-01"^^xsd:date .
 
-:BV_Disposition_Condo a :Disposition ;
-    :involves :BV_Condo ;
+:E221CondoDisposition a :Disposition ;
+    :involves :E221Condominium ;
     :sellDate "2004-06-01"^^xsd:date ;
-    :potentialGain 190000 ;
+    :potentialGain "190000"^^xsd:integer ;
     :partialExclusionReason :UnforeseenCircumstanceReason .
 
-:BV :owns :BV_Ownership_Condo .
-:BV :uses :BV_Residence_Condo .
-:BV :disposesOf :BV_Disposition_Condo .
-
-:BV_Return a :SingleReturn ;
-    :associates :BV ;
-    :linkedTo :BV_Disposition_Condo ;
-    :exclusionCap 250000 .
+:E221Return a :SingleReturn ;
+    :associates :E221 ;
+    :linkedTo :E221CondoDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

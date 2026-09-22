@@ -1,53 +1,51 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:AZ a :Taxpayer .
+:E155 a :Taxpayer ;
+    :owns :E155TownhouseOwnership, :E155HouseOwnership ;
+    :uses :E155TownhouseResidence, :E155HouseResidence ;
+    :disposesOf :E155TownhouseDisposition, :E155HouseDisposition .
 
-:Townhouse a :Property .
-:House a :Property .
+:E155Townhouse a :Property .
 
-:AZ_Own_Townhouse a :OwnershipUseInterval ;
-    :hasOwnershipOf :Townhouse ;
+:E155House a :Property .
+
+:E155TownhouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E155Townhouse ;
     :ownershipStart "1998-01-01"^^xsd:date ;
     :ownershipEnd "2002-12-31"^^xsd:date .
 
-:AZ_Use_Townhouse a :ResidenceUseInterval ;
-    :hasResidenceOf :Townhouse ;
+:E155TownhouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E155Townhouse ;
     :residenceStart "1998-01-01"^^xsd:date ;
     :residenceEnd "1999-12-31"^^xsd:date .
 
-:AZ_Own_House a :OwnershipUseInterval ;
-    :hasOwnershipOf :House ;
+:E155HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E155House ;
     :ownershipStart "2000-01-01"^^xsd:date ;
     :ownershipEnd "2003-12-31"^^xsd:date .
 
-:AZ_Use_House a :ResidenceUseInterval ;
-    :hasResidenceOf :House ;
+:E155HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E155House ;
     :residenceStart "2000-01-01"^^xsd:date ;
     :residenceEnd "2003-12-31"^^xsd:date .
 
-:Disposition_Townhouse a :Disposition ;
-    :involves :Townhouse ;
+:E155TownhouseDisposition a :Disposition ;
+    :involves :E155Townhouse ;
     :sellDate "2002-12-31"^^xsd:date ;
-    :potentialGain 150000 .
+    :potentialGain "150000"^^xsd:integer .
 
-:Disposition_House a :Disposition ;
-    :involves :House ;
+:E155HouseDisposition a :Disposition ;
+    :involves :E155House ;
     :sellDate "2003-12-31"^^xsd:date ;
-    :potentialGain 300000 ;
-    :partialExclusionReason :NonQualifyingReason .
+    :potentialGain "300000"^^xsd:integer .
 
-:Return_Townhouse a :SingleReturn ;
-    :associates :AZ ;
-    :linkedTo :Disposition_Townhouse ;
-    :exclusionCap 250000 .
+:E155TownhouseReturn a :SingleReturn ;
+    :associates :E155 ;
+    :linkedTo :E155TownhouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:Return_House a :SingleReturn ;
-    :associates :AZ ;
-    :linkedTo :Disposition_House ;
-    :exclusionCap 250000 .
-
-:AZ :owns :AZ_Own_Townhouse, :AZ_Own_House ;
-    :uses :AZ_Use_Townhouse, :AZ_Use_House ;
-    :disposesOf :Disposition_Townhouse, :Disposition_House .
+:E155HouseReturn a :SingleReturn ;
+    :associates :E155 ;
+    :linkedTo :E155HouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

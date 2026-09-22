@@ -1,60 +1,51 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-### Taxpayers
-:AE_1 a :Taxpayer .
-:AE_2 a :Taxpayer .
+:E091a a :Taxpayer ;
+    :owns :E091aOwnership ;
+    :uses :E091aResidence ;
+    :disposesOf :HouseSale .
 
-### Property
-:MainResidence a :Property .
+:E091b a :Taxpayer ;
+    :owns :E091bOwnership ;
+    :uses :E091bResidence ;
+    :disposesOf :HouseSale .
 
-### Ownership Intervals
-:OUI_AE_1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:House a :Property .
+
+:E091aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2020-01-01"^^xsd:date ;
     :ownershipEnd "2022-12-31"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:OUI_AE_2 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E091bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2020-01-01"^^xsd:date ;
     :ownershipEnd "2022-12-31"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-### Residence Use Intervals
-:RUI_AE_1 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E091aResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2020-01-01"^^xsd:date ;
     :residenceEnd "2022-12-31"^^xsd:date .
 
-:RUI_AE_2 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E091bResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2020-01-01"^^xsd:date ;
     :residenceEnd "2022-12-31"^^xsd:date .
 
-### Disposition
-:Disposition_1 a :Disposition ;
-    :involves :MainResidence ;
+:HouseSale a :Disposition ;
+    :involves :House ;
     :sellDate "2022-12-31"^^xsd:date ;
-    :potentialGain 256000 .
+    :potentialGain "256000"^^xsd:integer .
 
-### Linking Taxpayers to Ownership and Residence
-:AE_1 :owns :OUI_AE_1 ;
-       :uses :RUI_AE_1 ;
-       :disposesOf :Disposition_1 .
+:E091aReturn a :SingleReturn ;
+    :associates :E091a ;
+    :linkedTo :HouseSale ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:AE_2 :owns :OUI_AE_2 ;
-       :uses :RUI_AE_2 ;
-       :disposesOf :Disposition_1 .
-
-### Returns
-:Return_AE_1 a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :AE_1 ;
-    :linkedTo :Disposition_1 .
-
-:Return_AE_2 a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :AE_2 ;
-    :linkedTo :Disposition_1 .
+:E091bReturn a :SingleReturn ;
+    :associates :E091b ;
+    :linkedTo :HouseSale ;
+    :exclusionCap "250000"^^xsd:integer .

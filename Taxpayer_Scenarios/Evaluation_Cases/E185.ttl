@@ -1,29 +1,31 @@
-:BJ a :Taxpayer .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:MainHouse a :Property .
+:E185 a :Taxpayer ;
+    :owns :E185Ownership ;
+    :uses :E185Residence ;
+    :disposesOf :E185Disposition .
 
-:OUI_BJ_2002 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainHouse ;
+:E185FloridaHouse a :Property .
+
+:E185Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E185FloridaHouse ;
     :ownershipStart "2002-01-01"^^xsd:date ;
     :ownershipEnd "2004-01-01"^^xsd:date ;
     :percentageOwned "1.0"^^xsd:decimal .
 
-:RUI_BJ_2002 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainHouse ;
+:E185Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :E185FloridaHouse ;
     :residenceStart "2002-01-01"^^xsd:date ;
     :residenceEnd "2003-05-01"^^xsd:date .
 
-:Disposition_BJ_MainHouse a :Disposition ;
-    :involves :MainHouse ;
+:E185Disposition a :Disposition ;
+    :involves :E185FloridaHouse ;
     :sellDate "2004-01-01"^^xsd:date ;
-    :potentialGain 300000 ;
+    :potentialGain "300000"^^xsd:integer ;
     :partialExclusionReason :EmploymentRelatedReason .
 
-:SingleReturn_BJ a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :BJ ;
-    :linkedTo :Disposition_BJ_MainHouse .
-
-:BJ :owns :OUI_BJ_2002 ;
-    :uses :RUI_BJ_2002 ;
-    :disposesOf :Disposition_BJ_MainHouse .
+:E185Return a :SingleReturn ;
+    :associates :E185 ;
+    :linkedTo :E185Disposition ;
+    :exclusionCap "250000"^^xsd:integer .

@@ -1,51 +1,55 @@
 @prefix : <http://example.org/section121#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:AS_1 a :Taxpayer .
-:AS_2 a :Taxpayer .
+:E133a a :Taxpayer ;
+    :owns :E133aOwnership ;
+    :uses :E133aResidenceUse ;
+    :disposesOf :E133aDisposition .
 
-:Residence1 a :Property .
-:Residence2 a :Property .
+:E133b a :Taxpayer ;
+    :owns :E133bOwnership ;
+    :uses :E133bResidenceUse ;
+    :disposesOf :E133bDisposition .
 
-:AS1_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :Residence1 ;
+:E133aResidence a :Property .
+
+:E133bResidence a :Property .
+
+:E133aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E133aResidence ;
     :ownershipStart "1999-02-01"^^xsd:date ;
-    :ownershipEnd "2002-12-31"^^xsd:date .
+    :ownershipEnd "2002-12-31"^^xsd:date ;
+    :percentageOwned "1.0"^^xsd:decimal .
 
-:AS1_Use a :ResidenceUseInterval ;
-    :hasResidenceOf :Residence1 ;
+:E133bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E133bResidence ;
+    :ownershipStart "1999-02-01"^^xsd:date ;
+    :ownershipEnd "2002-12-31"^^xsd:date ;
+    :percentageOwned "1.0"^^xsd:decimal .
+
+:E133aResidenceUse a :ResidenceUseInterval ;
+    :hasResidenceOf :E133aResidence ;
     :residenceStart "1999-02-01"^^xsd:date ;
     :residenceEnd "2002-12-31"^^xsd:date .
 
-:AS2_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :Residence2 ;
-    :ownershipStart "1999-02-01"^^xsd:date ;
-    :ownershipEnd "2002-12-31"^^xsd:date .
-
-:AS2_Use a :ResidenceUseInterval ;
-    :hasResidenceOf :Residence2 ;
+:E133bResidenceUse a :ResidenceUseInterval ;
+    :hasResidenceOf :E133bResidence ;
     :residenceStart "1999-02-01"^^xsd:date ;
     :residenceEnd "2002-12-31"^^xsd:date .
 
-:Disposition1 a :Disposition ;
-    :involves :Residence1 ;
+:E133aDisposition a :Disposition ;
+    :involves :E133aResidence ;
     :sellDate "2002-12-31"^^xsd:date ;
-    :potentialGain 250000 .
+    :potentialGain "250000"^^xsd:integer .
 
-:Disposition2 a :Disposition ;
-    :involves :Residence2 ;
+:E133bDisposition a :Disposition ;
+    :involves :E133bResidence ;
     :sellDate "2002-12-31"^^xsd:date ;
-    :potentialGain 270000 .
+    :potentialGain "270000"^^xsd:integer .
 
-:AS_1 :owns :AS1_Ownership ;
-      :uses :AS1_Use ;
-      :disposesOf :Disposition1 .
-
-:AS_2 :owns :AS2_Ownership ;
-      :uses :AS2_Use ;
-      :disposesOf :Disposition2 .
-
-:JointReturn_2002 a :JointReturn ;
-    :associates :AS_1, :AS_2 ;
-    :linkedTo :Disposition1, :Disposition2 ;
-    :exclusionCap 500000 .
+:E133JointReturn2002 a :JointReturn, :Return ;
+    :associates :E133a, :E133b ;
+    :linkedTo :E133aDisposition, :E133bDisposition ;
+    :exclusionCap "500000"^^xsd:integer .

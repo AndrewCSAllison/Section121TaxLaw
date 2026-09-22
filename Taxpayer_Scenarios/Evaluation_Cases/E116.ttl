@@ -1,44 +1,46 @@
-:AM_1 a :Taxpayer .
-:AM_2 a :Taxpayer .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:MainResidence a :Property .
+:E116a a :Taxpayer ;
+    :disposesOf :E116Disposition ;
+    :owns :E116aOwnership ;
+    :uses :E116aResidence .
 
-:OwnershipInterval_AM1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E116b a :Taxpayer ;
+    :disposesOf :E116Disposition ;
+    :owns :E116bOwnership ;
+    :uses :E116bResidence .
+
+:E116Property a :Property .
+
+:E116aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E116Property ;
     :ownershipStart "2012-09-01"^^xsd:date ;
     :ownershipEnd "2014-08-31"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:OwnershipInterval_AM2 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E116bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E116Property ;
     :ownershipStart "2012-09-01"^^xsd:date ;
     :ownershipEnd "2014-08-31"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:ResidenceInterval_AM1 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E116aResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E116Property ;
     :residenceStart "2012-09-01"^^xsd:date ;
     :residenceEnd "2014-08-31"^^xsd:date .
 
-:ResidenceInterval_AM2 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E116bResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E116Property ;
     :residenceStart "2012-09-01"^^xsd:date ;
     :residenceEnd "2014-08-31"^^xsd:date .
 
-:Disposition_AM a :Disposition ;
-    :involves :MainResidence ;
+:E116Disposition a :Disposition ;
+    :involves :E116Property ;
     :sellDate "2014-08-31"^^xsd:date ;
-    :potentialGain 600000 .
+    :potentialGain "600000"^^xsd:integer .
 
-:JointReturn_AM a :JointReturn ;
-    :exclusionCap 500000 ;
-    :associates :AM_1 , :AM_2 ;
-    :linkedTo :Disposition_AM .
-
-:AM_1 :owns :OwnershipInterval_AM1 ;
-       :uses :ResidenceInterval_AM1 ;
-       :disposesOf :Disposition_AM .
-
-:AM_2 :owns :OwnershipInterval_AM2 ;
-       :uses :ResidenceInterval_AM2 ;
-       :disposesOf :Disposition_AM .
+:E116JointReturn a :JointReturn ;
+    :associates :E116a, :E116b ;
+    :linkedTo :E116Disposition ;
+    :exclusionCap "500000"^^xsd:integer .

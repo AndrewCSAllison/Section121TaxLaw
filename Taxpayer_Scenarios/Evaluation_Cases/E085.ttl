@@ -1,31 +1,29 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:AC a :Taxpayer ;
-    :owns :AC_OwnershipInterval1 ;
-    :uses :AC_ResidenceInterval1 ;
-    :disposesOf :AC_Disposition1 .
+:E085 a :Taxpayer ;
+    :owns :E085OwnershipInterval ;
+    :uses :E085ResidenceInterval ;
+    :disposesOf :E085Disposition .
 
-:Townhouse a :Property .
+:E085Townhouse a :Property .
 
-:AC_OwnershipInterval1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :Townhouse ;
+:E085OwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :E085Townhouse ;
     :ownershipStart "1997-04-01"^^xsd:date ;
-    :ownershipEnd "2000-09-09"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2000-09-09"^^xsd:date .
 
-:AC_ResidenceInterval1 a :ResidenceUseInterval ;
-    :hasResidenceOf :Townhouse ;
-    :residenceStart "1995-09-09"^^xsd:date ;
+:E085ResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :E085Townhouse ;
+    :residenceStart "1992-01-01"^^xsd:date ;
     :residenceEnd "1998-06-15"^^xsd:date .
 
-:AC_Disposition1 a :Disposition ;
-    :involves :Townhouse ;
+:E085Disposition a :Disposition ;
+    :involves :E085Townhouse ;
     :sellDate "2000-09-09"^^xsd:date ;
-    :potentialGain 245000 .
+    :potentialGain "245000"^^xsd:integer .
 
-:AC_SingleReturn a :SingleReturn ;
-    :associates :AC ;
-    :linkedTo :AC_Disposition1 ;
-    :exclusionCap 250000 .
+:E085Return a :SingleReturn ;
+    :associates :E085 ;
+    :linkedTo :E085Disposition ;
+    :exclusionCap "250000"^^xsd:integer .

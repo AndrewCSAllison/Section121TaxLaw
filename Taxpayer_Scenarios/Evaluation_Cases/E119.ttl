@@ -1,47 +1,46 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:AN_1 a :Taxpayer .
-:AN_2 a :Taxpayer .
+:E119a a :Taxpayer ;
+    :owns :E119aOwnership ;
+    :uses :E119aResidence ;
+    :disposesOf :E119Disposition .
 
-:MainProperty a :Property .
+:E119b a :Taxpayer ;
+    :owns :E119bOwnership ;
+    :uses :E119bResidence ;
+    :disposesOf :E119Disposition .
 
-:OwnershipInterval_AN1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainProperty ;
+:E119Property a :Property .
+
+:E119aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E119Property ;
     :ownershipStart "2010-06-01"^^xsd:date ;
     :ownershipEnd "2012-05-31"^^xsd:date ;
     :percentageOwned "0.5"^^xsd:decimal .
 
-:OwnershipInterval_AN2 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainProperty ;
+:E119bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E119Property ;
     :ownershipStart "2010-06-01"^^xsd:date ;
     :ownershipEnd "2012-05-31"^^xsd:date ;
     :percentageOwned "0.5"^^xsd:decimal .
 
-:ResidenceInterval_AN1 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainProperty ;
+:E119aResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E119Property ;
     :residenceStart "2010-06-01"^^xsd:date ;
     :residenceEnd "2012-05-31"^^xsd:date .
 
-:ResidenceInterval_AN2 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainProperty ;
+:E119bResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E119Property ;
     :residenceStart "2010-06-01"^^xsd:date ;
     :residenceEnd "2012-05-31"^^xsd:date .
 
-:SaleDisposition a :Disposition ;
-    :involves :MainProperty ;
+:E119Disposition a :Disposition ;
+    :involves :E119Property ;
     :sellDate "2012-05-31"^^xsd:date ;
     :potentialGain "200000"^^xsd:integer .
 
-:AN_1 :owns :OwnershipInterval_AN1 ;
-      :uses :ResidenceInterval_AN1 ;
-      :disposesOf :SaleDisposition .
-
-:AN_2 :owns :OwnershipInterval_AN2 ;
-      :uses :ResidenceInterval_AN2 ;
-      :disposesOf :SaleDisposition .
-
-:JointReturn_AN a :JointReturn ;
-    :associates :AN_1, :AN_2 ;
-    :linkedTo :SaleDisposition ;
+:E119JointReturn a :JointReturn ;
+    :associates :E119a, :E119b ;
+    :linkedTo :E119Disposition ;
     :exclusionCap "500000"^^xsd:integer .

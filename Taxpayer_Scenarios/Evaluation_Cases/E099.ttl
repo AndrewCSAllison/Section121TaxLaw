@@ -1,56 +1,51 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:AG_1 a :Taxpayer ;
-    :owns :AG_1_OwnershipInterval ;
-    :uses :AG_1_ResidenceInterval ;
-    :disposesOf :AG_1_Disposition .
+:E099a a :Taxpayer ;
+    :owns :E099aOwnership ;
+    :uses :E099aResidence ;
+    :disposesOf :HouseSale .
 
-:AG_2 a :Taxpayer ;
-    :owns :AG_2_OwnershipInterval ;
-    :uses :AG_2_ResidenceInterval ;
-    :disposesOf :AG_2_Disposition .
+:E099b a :Taxpayer ;
+    :owns :E099bOwnership ;
+    :uses :E099bResidence ;
+    :disposesOf :HouseSale .
 
-:MainResidence a :Property .
+:House a :Property .
 
-:AG_1_OwnershipInterval a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E099aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2015-05-15"^^xsd:date ;
     :ownershipEnd "2017-05-14"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:AG_2_OwnershipInterval a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E099bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2015-05-15"^^xsd:date ;
     :ownershipEnd "2017-05-14"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:AG_1_ResidenceInterval a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E099aResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2015-05-15"^^xsd:date ;
     :residenceEnd "2017-05-14"^^xsd:date .
 
-:AG_2_ResidenceInterval a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E099bResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2015-05-15"^^xsd:date ;
     :residenceEnd "2017-05-14"^^xsd:date .
 
-:AG_1_Disposition a :Disposition ;
-    :involves :MainResidence ;
+:HouseSale a :Disposition ;
+    :involves :House ;
     :sellDate "2017-05-14"^^xsd:date ;
-    :potentialGain 270000 .
+    :potentialGain "540000"^^xsd:integer .
 
-:AG_2_Disposition a :Disposition ;
-    :involves :MainResidence ;
-    :sellDate "2017-05-14"^^xsd:date ;
-    :potentialGain 270000 .
+:E099aReturn a :SingleReturn ;
+    :associates :E099a ;
+    :linkedTo :HouseSale ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:AG_1_Return a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :AG_1 ;
-    :linkedTo :AG_1_Disposition .
-
-:AG_2_Return a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :AG_2 ;
-    :linkedTo :AG_2_Disposition .
+:E099bReturn a :SingleReturn ;
+    :associates :E099b ;
+    :linkedTo :HouseSale ;
+    :exclusionCap "250000"^^xsd:integer .

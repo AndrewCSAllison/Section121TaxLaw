@@ -1,50 +1,51 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:AO_1 a :Taxpayer ;
-    :owns :AO1Ownership ;
-    :uses :AO1Residence ;
-    :disposesOf :AO1Disposition .
+:E122a a :Taxpayer ;
+    :owns :E122aOwnership ;
+    :uses :E122aResidenceUse ;
+    :disposesOf :E122aDisposition .
 
-:AO_2 a :Taxpayer ;
-    :owns :AO2Ownership ;
-    :uses :AO2Residence ;
-    :disposesOf :AO2Disposition .
+:E122b a :Taxpayer ;
+    :owns :E122bOwnership ;
+    :uses :E122bResidenceUse ;
+    :disposesOf :E122bDisposition .
 
-:AO1Home a :Property .
-:AO2Home a :Property .
+:E122aProperty a :Property .
 
-:AO1Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :AO1Home ;
+:E122bProperty a :Property .
+
+:E122aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E122aProperty ;
     :ownershipStart "1996-01-01"^^xsd:date ;
     :ownershipEnd "1999-12-31"^^xsd:date .
 
-:AO2Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :AO2Home ;
+:E122bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E122bProperty ;
     :ownershipStart "1996-01-01"^^xsd:date ;
     :ownershipEnd "1999-12-31"^^xsd:date .
 
-:AO1Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :AO1Home ;
+:E122aResidenceUse a :ResidenceUseInterval ;
+    :hasResidenceOf :E122aProperty ;
     :residenceStart "1996-01-01"^^xsd:date ;
     :residenceEnd "1999-12-31"^^xsd:date .
 
-:AO2Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :AO2Home ;
+:E122bResidenceUse a :ResidenceUseInterval ;
+    :hasResidenceOf :E122bProperty ;
     :residenceStart "1996-01-01"^^xsd:date ;
     :residenceEnd "1999-12-31"^^xsd:date .
 
-:AO1Disposition a :Disposition ;
-    :involves :AO1Home ;
+:E122aDisposition a :Disposition ;
+    :involves :E122aProperty ;
     :sellDate "1999-12-31"^^xsd:date ;
-    :potentialGain 200000 .
+    :potentialGain "200000"^^xsd:integer .
 
-:AO2Disposition a :Disposition ;
-    :involves :AO2Home ;
+:E122bDisposition a :Disposition ;
+    :involves :E122bProperty ;
     :sellDate "1999-12-31"^^xsd:date ;
-    :potentialGain 300000 .
+    :potentialGain "300000"^^xsd:integer .
 
-:JointReturn1999 a :JointReturn ;
-    :associates :AO_1, :AO_2 ;
-    :linkedTo :AO1Disposition, :AO2Disposition ;
-    :exclusionCap 500000 .
+:E122JointReturn a :JointReturn ;
+    :associates :E122a, :E122b ;
+    :linkedTo :E122aDisposition, :E122bDisposition ;
+    :exclusionCap "500000"^^xsd:integer .

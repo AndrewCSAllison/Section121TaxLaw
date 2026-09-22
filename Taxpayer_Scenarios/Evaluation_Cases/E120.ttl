@@ -1,45 +1,46 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:AN_1 a :Taxpayer .
-:AN_2 a :Taxpayer .
+:E120a a :Taxpayer ;
+    :owns :E120aOwnership ;
+    :uses :E120aResidence ;
+    :disposesOf :E120Disposition .
 
-:MainProperty a :Property .
+:E120b a :Taxpayer ;
+    :owns :E120bOwnership ;
+    :uses :E120bResidence ;
+    :disposesOf :E120Disposition .
 
-:OwnershipInterval_AN1 a :OwnershipUseInterval ;
+:E120Property a :Property .
+
+:E120aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E120Property ;
     :ownershipStart "2010-06-01"^^xsd:date ;
     :ownershipEnd "2012-05-31"^^xsd:date ;
-    :hasOwnershipOf :MainProperty .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:OwnershipInterval_AN2 a :OwnershipUseInterval ;
+:E120bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E120Property ;
     :ownershipStart "2010-06-01"^^xsd:date ;
     :ownershipEnd "2012-05-31"^^xsd:date ;
-    :hasOwnershipOf :MainProperty .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:ResidenceInterval_AN1 a :ResidenceUseInterval ;
+:E120aResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E120Property ;
     :residenceStart "2010-06-01"^^xsd:date ;
-    :residenceEnd "2012-05-31"^^xsd:date ;
-    :hasResidenceOf :MainProperty .
+    :residenceEnd "2012-05-31"^^xsd:date .
 
-:ResidenceInterval_AN2 a :ResidenceUseInterval ;
+:E120bResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E120Property ;
     :residenceStart "2010-06-01"^^xsd:date ;
-    :residenceEnd "2012-05-31"^^xsd:date ;
-    :hasResidenceOf :MainProperty .
+    :residenceEnd "2012-05-31"^^xsd:date .
 
-:Disposition_Main a :Disposition ;
+:E120Disposition a :Disposition ;
+    :involves :E120Property ;
     :sellDate "2012-05-31"^^xsd:date ;
-    :potentialGain 200000 ;
-    :involves :MainProperty .
+    :potentialGain "200000"^^xsd:integer .
 
-:AN_1 :owns :OwnershipInterval_AN1 ;
-    :uses :ResidenceInterval_AN1 ;
-    :disposesOf :Disposition_Main .
-
-:AN_2 :owns :OwnershipInterval_AN2 ;
-    :uses :ResidenceInterval_AN2 ;
-    :disposesOf :Disposition_Main .
-
-:JointReturn_2012 a :JointReturn ;
-    :associates :AN_1, :AN_2 ;
-    :linkedTo :Disposition_Main ;
-    :exclusionCap 500000 .
+:E120JointReturn a :JointReturn ;
+    :associates :E120a, :E120b ;
+    :linkedTo :E120Disposition ;
+    :exclusionCap "500000"^^xsd:integer .

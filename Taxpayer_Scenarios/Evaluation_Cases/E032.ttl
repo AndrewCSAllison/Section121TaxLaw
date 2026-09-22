@@ -1,49 +1,51 @@
-:K a :Taxpayer ;
-    :owns :K_OwnershipInterval_Arizona , :K_OwnershipInterval_Virginia ;
-    :uses :K_ResidenceInterval_Arizona_1 , :K_ResidenceInterval_Virginia , :K_ResidenceInterval_Arizona_2 ;
-    :disposesOf :K_Disposition_Arizona , :K_Disposition_Virginia .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:Arizona_Property a :Property .
-:Virginia_Property a :Property .
+:E032 a :Taxpayer ;
+    :owns :E032ArizonaOwnership, :E032VirginiaOwnership ;
+    :uses :E032ArizonaResidence2003_2004, :E032VirginiaResidence2005_2006, :E032ArizonaResidence2007 ;
+    :disposesOf :E032ArizonaDisposition, :E032VirginiaDisposition .
 
-:K_OwnershipInterval_Arizona a :OwnershipUseInterval ;
-    :hasOwnershipOf :Arizona_Property ;
+:ArizonaResidence a :Property .
+
+:VirginiaResidence a :Property .
+
+:E032ArizonaOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :ArizonaResidence ;
     :ownershipStart "2003-01-01"^^xsd:date ;
-    :ownershipEnd "2007-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2007-12-31"^^xsd:date .
 
-:K_OwnershipInterval_Virginia a :OwnershipUseInterval ;
-    :hasOwnershipOf :Virginia_Property ;
+:E032VirginiaOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :VirginiaResidence ;
     :ownershipStart "2003-01-01"^^xsd:date ;
-    :ownershipEnd "2007-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2007-12-31"^^xsd:date .
 
-:K_ResidenceInterval_Arizona_1 a :ResidenceUseInterval ;
-    :hasResidenceOf :Arizona_Property ;
+:E032ArizonaResidence2003_2004 a :ResidenceUseInterval ;
+    :hasResidenceOf :ArizonaResidence ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2004-12-31"^^xsd:date .
 
-:K_ResidenceInterval_Virginia a :ResidenceUseInterval ;
-    :hasResidenceOf :Virginia_Property ;
+:E032VirginiaResidence2005_2006 a :ResidenceUseInterval ;
+    :hasResidenceOf :VirginiaResidence ;
     :residenceStart "2005-01-01"^^xsd:date ;
     :residenceEnd "2006-12-31"^^xsd:date .
 
-:K_ResidenceInterval_Arizona_2 a :ResidenceUseInterval ;
-    :hasResidenceOf :Arizona_Property ;
+:E032ArizonaResidence2007 a :ResidenceUseInterval ;
+    :hasResidenceOf :ArizonaResidence ;
     :residenceStart "2007-01-01"^^xsd:date ;
     :residenceEnd "2007-12-31"^^xsd:date .
 
-:K_Disposition_Arizona a :Disposition ;
-    :involves :Arizona_Property ;
+:E032ArizonaDisposition a :Disposition ;
+    :involves :ArizonaResidence ;
     :sellDate "2007-12-20"^^xsd:date ;
-    :potentialGain 240000 .
+    :potentialGain "240000"^^xsd:integer .
 
-:K_Disposition_Virginia a :Disposition ;
-    :involves :Virginia_Property ;
+:E032VirginiaDisposition a :Disposition ;
+    :involves :VirginiaResidence ;
     :sellDate "2007-12-20"^^xsd:date ;
-    :potentialGain 215000 .
+    :potentialGain "215000"^^xsd:integer .
 
-:K_SingleReturn a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :K ;
-    :linkedTo :K_Disposition_Arizona , :K_Disposition_Virginia .
+:E032Return a :SingleReturn ;
+    :associates :E032 ;
+    :linkedTo :E032ArizonaDisposition, :E032VirginiaDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

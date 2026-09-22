@@ -1,31 +1,29 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:W a :Taxpayer ;
-    :owns :W_OwnershipInterval1 ;
-    :uses :W_ResidenceInterval1 ;
-    :disposesOf :Disposition1 .
+:E068 a :Taxpayer ;
+    :owns :E068OwnershipInterval ;
+    :uses :E068ResidenceInterval ;
+    :disposesOf :E068Disposition .
 
-:MainResidence a :Property .
+:E068House a :Property .
 
-:W_OwnershipInterval1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E068OwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :E068House ;
     :ownershipStart "1986-05-10"^^xsd:date ;
-    :ownershipEnd "2001-09-20"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2001-09-20"^^xsd:date .
 
-:W_ResidenceInterval1 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E068ResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :E068House ;
     :residenceStart "1986-05-10"^^xsd:date ;
-    :residenceEnd "1998-01-04"^^xsd:date .
+    :residenceEnd "1997-12-31"^^xsd:date .
 
-:Disposition1 a :Disposition ;
-    :involves :MainResidence ;
+:E068Disposition a :Disposition ;
+    :involves :E068House ;
     :sellDate "2001-09-20"^^xsd:date ;
-    :potentialGain 195000 .
+    :potentialGain "195000"^^xsd:integer .
 
-:Return1 a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :W ;
-    :linkedTo :Disposition1 .
+:E068SingleReturn a :SingleReturn ;
+    :associates :E068 ;
+    :linkedTo :E068Disposition ;
+    :exclusionCap "250000"^^xsd:integer .

@@ -1,52 +1,52 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:MainResidence a :Property .
+:E212a a :Taxpayer ;
+    :owns :E212aOwnership1 ;
+    :uses :E212aResidence1 ;
+    :disposesOf :HouseDisposition .
 
-:BS_1 a :Taxpayer ;
-    :owns :BS1_Ownership ;
-    :uses :BS1_Residence ;
-    :disposesOf :Sale2004 .
+:E212b a :Taxpayer ;
+    :owns :E212bOwnership1 ;
+    :uses :E212bResidence1 ;
+    :disposesOf :HouseDisposition .
 
-:BS_2 a :Taxpayer ;
-    :owns :BS2_Ownership ;
-    :uses :BS2_Residence ;
-    :disposesOf :Sale2004 .
+:House a :Property .
 
-:BS1_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E212aOwnership1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2003-01-01"^^xsd:date ;
     :ownershipEnd "2004-01-01"^^xsd:date ;
     :percentageOwned "0.5"^^xsd:decimal .
 
-:BS2_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E212bOwnership1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2003-01-01"^^xsd:date ;
     :ownershipEnd "2004-01-01"^^xsd:date ;
     :percentageOwned "0.5"^^xsd:decimal .
 
-:BS1_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E212aResidence1 a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2004-01-01"^^xsd:date .
 
-:BS2_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E212bResidence1 a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2003-11-30"^^xsd:date .
 
-:Sale2004 a :Disposition ;
-    :involves :MainResidence ;
+:HouseDisposition a :Disposition ;
+    :involves :House ;
     :sellDate "2004-01-01"^^xsd:date ;
-    :potentialGain 140000 ;
+    :potentialGain "140000"^^xsd:integer ;
     :partialExclusionReason :UnforeseenCircumstanceReason .
 
-:BS1_Return a :SingleReturn ;
-    :associates :BS_1 ;
-    :linkedTo :Sale2004 ;
-    :exclusionCap 250000 .
+:E212aReturn a :SingleReturn ;
+    :associates :E212a ;
+    :linkedTo :HouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:BS2_Return a :SingleReturn ;
-    :associates :BS_2 ;
-    :linkedTo :Sale2004 ;
-    :exclusionCap 250000 .
+:E212bReturn a :SingleReturn ;
+    :associates :E212b ;
+    :linkedTo :HouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

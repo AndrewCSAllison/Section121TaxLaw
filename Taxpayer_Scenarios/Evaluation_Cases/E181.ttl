@@ -1,29 +1,31 @@
-:BI a :Taxpayer .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:Townhouse a :Property .
+:E181 a :Taxpayer ;
+    :owns :E181Ownership ;
+    :uses :E181Residence ;
+    :disposesOf :E181Sale .
 
-:BI_OwnershipInterval a :OwnershipUseInterval ;
-    :hasOwnershipOf :Townhouse ;
+:E181Townhouse a :Property .
+
+:E181Ownership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E181Townhouse ;
     :ownershipStart "2003-01-01"^^xsd:date ;
-    :ownershipEnd "2004-06-01"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2004-06-01"^^xsd:date .
 
-:BI_ResidenceInterval a :ResidenceUseInterval ;
-    :hasResidenceOf :Townhouse ;
+:E181Residence a :ResidenceUseInterval ;
+    :hasResidenceOf :E181Townhouse ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2004-06-01"^^xsd:date .
 
-:BI_Disposition a :Disposition ;
-    :involves :Townhouse ;
+:E181Sale a :Disposition ;
+    :involves :E181Townhouse ;
     :sellDate "2004-06-01"^^xsd:date ;
-    :potentialGain 250000 ;
+    :potentialGain "250000"^^xsd:integer ;
     :partialExclusionReason :EmploymentRelatedReason .
 
-:BI_Return a :SingleReturn ;
-    :associates :BI ;
-    :linkedTo :BI_Disposition ;
-    :exclusionCap 250000 .
+:EmploymentRelatedReason a :ReasonType .
 
-:BI :owns :BI_OwnershipInterval ;
-    :uses :BI_ResidenceInterval ;
-    :disposesOf :BI_Disposition . 
+:E181Return a :Return ;
+    :associates :E181 ;
+    :linkedTo :E181Sale .

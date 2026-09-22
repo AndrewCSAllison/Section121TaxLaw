@@ -1,62 +1,30 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-#########################
-# Taxpayer
-#########################
-:BL a :Taxpayer .
+:E192 a :Taxpayer ;
+    :owns :E192CondominiumOwnership ;
+    :uses :E192CondominiumResidence ;
+    :disposesOf :E192CondominiumDisposition .
 
-#########################
-# Properties
-#########################
-:BL_Condominium a :Property .
-:BL_Townhouse a :Property .
+:E192Condominium a :Property .
 
-#########################
-# Ownership and Residence Intervals
-#########################
-:BL_CondoOwnership a :OwnershipUseInterval ;
-    :hasOwnershipOf :BL_Condominium ;
+:E192CondominiumOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E192Condominium ;
     :ownershipStart "2003-07-01"^^xsd:date ;
-    :ownershipEnd "2004-02-05"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2004-02-05"^^xsd:date .
 
-:BL_CondoResidence a :ResidenceUseInterval ;
-    :hasResidenceOf :BL_Condominium ;
+:E192CondominiumResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E192Condominium ;
     :residenceStart "2003-07-01"^^xsd:date ;
     :residenceEnd "2004-02-05"^^xsd:date .
 
-:BL_TownhouseOwnership a :OwnershipUseInterval ;
-    :hasOwnershipOf :BL_Townhouse ;
-    :ownershipStart "2004-02-05"^^xsd:date ;
-    :ownershipEnd "2004-02-05"^^xsd:date .
-
-:BL_TownhouseResidence a :ResidenceUseInterval ;
-    :hasResidenceOf :BL_Townhouse ;
-    :residenceStart "2004-02-05"^^xsd:date ;
-    :residenceEnd "2004-02-05"^^xsd:date .
-
-#########################
-# Disposition
-#########################
-:BL_CondoDisposition a :Disposition ;
-    :involves :BL_Condominium ;
+:E192CondominiumDisposition a :Disposition ;
+    :involves :E192Condominium ;
     :sellDate "2004-02-05"^^xsd:date ;
-    :potentialGain 300000 ;
+    :potentialGain "300000"^^xsd:integer ;
     :partialExclusionReason :EmploymentRelatedReason .
 
-#########################
-# Associations
-#########################
-:BL :owns :BL_CondoOwnership , :BL_TownhouseOwnership ;
-    :uses :BL_CondoResidence , :BL_TownhouseResidence ;
-    :disposesOf :BL_CondoDisposition .
-
-#########################
-# Single Return
-#########################
-:BL_2004_Return a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :BL ;
-    :linkedTo :BL_CondoDisposition .
+:E192SingleReturn a :SingleReturn ;
+    :associates :E192 ;
+    :linkedTo :E192CondominiumDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

@@ -1,38 +1,39 @@
-:BY_1 a :Taxpayer .
-:BY_2 a :Taxpayer .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:E229a a :Taxpayer ;
+    :owns :E229aOwnership ;
+    :uses :E229aResidence ;
+    :disposesOf :HouseSale .
+
+:E229b a :Taxpayer ;
+    :uses :E229bResidence ;
+    :disposesOf :HouseSale .
 
 :House a :Property .
 
-:OUI_BY_1 a :OwnershipUseInterval ;
+:E229aOwnership a :OwnershipUseInterval ;
     :hasOwnershipOf :House ;
     :ownershipStart "1996-01-01"^^xsd:date ;
-    :ownershipEnd "2000-01-15"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2000-01-15"^^xsd:date .
 
-:RUI_BY_1 a :ResidenceUseInterval ;
+:E229aResidence a :ResidenceUseInterval ;
     :hasResidenceOf :House ;
     :residenceStart "1996-01-01"^^xsd:date ;
     :residenceEnd "2000-01-15"^^xsd:date .
 
-:RUI_BY_2 a :ResidenceUseInterval ;
+:E229bResidence a :ResidenceUseInterval ;
     :hasResidenceOf :House ;
     :residenceStart "1999-01-15"^^xsd:date ;
     :residenceEnd "2000-01-15"^^xsd:date .
 
-:Disposition_House a :Disposition ;
+:HouseSale a :Disposition ;
     :involves :House ;
     :sellDate "2000-01-15"^^xsd:date ;
-    :potentialGain 500000 ;
+    :potentialGain "500000"^^xsd:integer ;
     :partialExclusionReason :EmploymentRelatedReason .
 
-:JointReturn_House a :JointReturn ;
-    :exclusionCap 500000 ;
-    :associates :BY_1 , :BY_2 ;
-    :linkedTo :Disposition_House .
-
-:BY_1 :owns :OUI_BY_1 ;
-       :uses :RUI_BY_1 ;
-       :disposesOf :Disposition_House .
-
-:BY_2 :uses :RUI_BY_2 ;
-       :disposesOf :Disposition_House .
+:E229JointReturn a :JointReturn ;
+    :associates :E229a, :E229b ;
+    :linkedTo :HouseSale ;
+    :exclusionCap "500000"^^xsd:integer .

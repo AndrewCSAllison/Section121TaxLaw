@@ -1,29 +1,30 @@
-:BJ a :Taxpayer .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:MainHouse a :Property .
+:E184 a :Taxpayer ;
+    :owns :E184OwnershipInterval ;
+    :uses :E184ResidenceInterval ;
+    :disposesOf :E184Disposition .
 
-:OwnershipInterval1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainHouse ;
+:E184FloridaHouse a :Property .
+
+:E184OwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :E184FloridaHouse ;
     :ownershipStart "2002-01-01"^^xsd:date ;
-    :ownershipEnd "2004-01-01"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2004-01-01"^^xsd:date .
 
-:ResidenceInterval1 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainHouse ;
+:E184ResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :E184FloridaHouse ;
     :residenceStart "2002-01-01"^^xsd:date ;
     :residenceEnd "2003-05-01"^^xsd:date .
 
-:Disposition1 a :Disposition ;
-    :involves :MainHouse ;
+:E184Disposition a :Disposition ;
+    :involves :E184FloridaHouse ;
     :sellDate "2004-01-01"^^xsd:date ;
-    :potentialGain 300000 ;
+    :potentialGain "300000"^^xsd:integer ;
     :partialExclusionReason :EmploymentRelatedReason .
 
-:SingleReturn1 a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :BJ ;
-    :linkedTo :Disposition1 .
-
-:BJ :owns :OwnershipInterval1 ;
-    :uses :ResidenceInterval1 ;
-    :disposesOf :Disposition1 .
+:E184SingleReturn a :SingleReturn ;
+    :associates :E184 ;
+    :linkedTo :E184Disposition ;
+    :exclusionCap "250000"^^xsd:integer .

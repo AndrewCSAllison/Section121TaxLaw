@@ -1,32 +1,30 @@
 @prefix : <http://example.org/section121#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:BQ a :Taxpayer .
+:E207 a :Taxpayer ;
+    :owns :E207Ownership1 ;
+    :uses :E207Residence1 ;
+    :disposesOf :E207CondoSale .
 
-:MainCondo a :Property .
+:E207Condominium a :Property .
 
-:BQOwnership1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainCondo ;
+:E207Ownership1 a :OwnershipUseInterval ;
+    :hasOwnershipOf :E207Condominium ;
     :ownershipStart "2003-01-01"^^xsd:date ;
-    :ownershipEnd "2003-09-01"^^xsd:date ;
-    :percentageOwned "1.0"^^xsd:decimal .
+    :ownershipEnd "2003-09-01"^^xsd:date .
 
-:BQResidence1 a :ResidenceUseInterval ;
-    :hasResidenceOf :MainCondo ;
+:E207Residence1 a :ResidenceUseInterval ;
+    :hasResidenceOf :E207Condominium ;
     :residenceStart "2003-01-01"^^xsd:date ;
     :residenceEnd "2003-09-01"^^xsd:date .
 
-:BQDisposition1 a :Disposition ;
-    :involves :MainCondo ;
+:E207CondoSale a :Disposition ;
+    :involves :E207Condominium ;
     :sellDate "2003-09-01"^^xsd:date ;
     :potentialGain "90000"^^xsd:integer ;
     :partialExclusionReason :UnforeseenCircumstanceReason .
 
-:BQReturn1 a :SingleReturn ;
-    :associates :BQ ;
-    :linkedTo :BQDisposition1 ;
+:E207Return a :SingleReturn ;
+    :associates :E207 ;
+    :linkedTo :E207CondoSale ;
     :exclusionCap "250000"^^xsd:integer .
-
-:BQ :owns :BQOwnership1 ;
-    :uses :BQResidence1 ;
-    :disposesOf :BQDisposition1 .

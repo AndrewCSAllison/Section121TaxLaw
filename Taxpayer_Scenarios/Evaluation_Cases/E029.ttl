@@ -1,94 +1,51 @@
-:TexasProperty a :Property .
-:NewMexicoProperty a :Property .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:J_TexasOwnership a :OwnershipUseInterval ;
-    :hasOwnershipOf :TexasProperty ;
+:E029 a :Taxpayer ;
+    :owns :E029TexasOwnership, :E029NewMexicoOwnership ;
+    :uses :E029TexasResidence2000_2001, :E029NewMexicoResidence2002_2003, :E029TexasResidence2004 ;
+    :disposesOf :E029TexasDisposition, :E029NewMexicoDisposition .
+
+:E029TexasProperty a :Property .
+
+:E029NewMexicoProperty a :Property .
+
+:E029TexasOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E029TexasProperty ;
     :ownershipStart "2000-01-01"^^xsd:date ;
     :ownershipEnd "2004-12-31"^^xsd:date .
 
-:J_NewMexicoOwnership a :OwnershipUseInterval ;
-    :hasOwnershipOf :NewMexicoProperty ;
+:E029NewMexicoOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E029NewMexicoProperty ;
     :ownershipStart "2000-01-01"^^xsd:date ;
     :ownershipEnd "2004-12-31"^^xsd:date .
 
-:J_TexasResidence2000 a :ResidenceUseInterval ;
-    :hasResidenceOf :TexasProperty ;
+:E029TexasResidence2000_2001 a :ResidenceUseInterval ;
+    :hasResidenceOf :E029TexasProperty ;
     :residenceStart "2000-01-01"^^xsd:date ;
     :residenceEnd "2001-12-31"^^xsd:date .
 
-:J_NewMexicoResidence2002 a :ResidenceUseInterval ;
-    :hasResidenceOf :NewMexicoProperty ;
+:E029NewMexicoResidence2002_2003 a :ResidenceUseInterval ;
+    :hasResidenceOf :E029NewMexicoProperty ;
     :residenceStart "2002-01-01"^^xsd:date ;
     :residenceEnd "2003-12-31"^^xsd:date .
 
-:J_TexasResidence2004 a :ResidenceUseInterval ;
-    :hasResidenceOf :TexasProperty ;
+:E029TexasResidence2004 a :ResidenceUseInterval ;
+    :hasResidenceOf :E029TexasProperty ;
     :residenceStart "2004-01-01"^^xsd:date ;
     :residenceEnd "2004-12-31"^^xsd:date .
 
-:J_TexasDisposition a :Disposition ;
-    :involves :TexasProperty ;
+:E029TexasDisposition a :Disposition ;
+    :involves :E029TexasProperty ;
     :sellDate "2004-12-18"^^xsd:date ;
-    :potentialGain 230000 .
+    :potentialGain "230000"^^xsd:integer .
 
-:J_NewMexicoDisposition a :Disposition ;
-    :involves :NewMexicoProperty ;
+:E029NewMexicoDisposition a :Disposition ;
+    :involves :E029NewMexicoProperty ;
     :sellDate "2004-12-18"^^xsd:date ;
-    :potentialGain 210000 .
+    :potentialGain "210000"^^xsd:integer .
 
-:J a :Taxpayer ;
-    :owns :J_TexasOwnership , :J_NewMexicoOwnership ;
-    :uses :J_TexasResidence2000 , :J_NewMexicoResidence2002 , :J_TexasResidence2004 ;
-    :disposesOf :J_TexasDisposition , :J_NewMexicoDisposition .
-
-:J_SingleReturn a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :J ;
-    :linkedTo :J_TexasDisposition , :J_NewMexicoDisposition .
-:TexasProperty a :Property .
-:NewMexicoProperty a :Property .
-
-:J_TexasOwnership a :OwnershipUseInterval ;
-    :hasOwnershipOf :TexasProperty ;
-    :ownershipStart "2000-01-01"^^xsd:date ;
-    :ownershipEnd "2004-12-31"^^xsd:date .
-
-:J_NewMexicoOwnership a :OwnershipUseInterval ;
-    :hasOwnershipOf :NewMexicoProperty ;
-    :ownershipStart "2000-01-01"^^xsd:date ;
-    :ownershipEnd "2004-12-31"^^xsd:date .
-
-:J_TexasResidence2000 a :ResidenceUseInterval ;
-    :hasResidenceOf :TexasProperty ;
-    :residenceStart "2000-01-01"^^xsd:date ;
-    :residenceEnd "2001-12-31"^^xsd:date .
-
-:J_NewMexicoResidence2002 a :ResidenceUseInterval ;
-    :hasResidenceOf :NewMexicoProperty ;
-    :residenceStart "2002-01-01"^^xsd:date ;
-    :residenceEnd "2003-12-31"^^xsd:date .
-
-:J_TexasResidence2004 a :ResidenceUseInterval ;
-    :hasResidenceOf :TexasProperty ;
-    :residenceStart "2004-01-01"^^xsd:date ;
-    :residenceEnd "2004-12-31"^^xsd:date .
-
-:J_TexasDisposition a :Disposition ;
-    :involves :TexasProperty ;
-    :sellDate "2004-12-18"^^xsd:date ;
-    :potentialGain 230000 .
-
-:J_NewMexicoDisposition a :Disposition ;
-    :involves :NewMexicoProperty ;
-    :sellDate "2004-12-18"^^xsd:date ;
-    :potentialGain 210000 .
-
-:J a :Taxpayer ;
-    :owns :J_TexasOwnership , :J_NewMexicoOwnership ;
-    :uses :J_TexasResidence2000 , :J_NewMexicoResidence2002 , :J_TexasResidence2004 ;
-    :disposesOf :J_TexasDisposition , :J_NewMexicoDisposition .
-
-:J_SingleReturn a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :J ;
-    :linkedTo :J_TexasDisposition , :J_NewMexicoDisposition .
+:E029Return a :SingleReturn ;
+    :associates :E029 ;
+    :linkedTo :E029TexasDisposition, :E029NewMexicoDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

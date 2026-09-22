@@ -1,73 +1,51 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-#########################
-# Properties
-#########################
-:Townhouse a :Property .
-:House a :Property .
+:E170 a :Taxpayer ;
+    :owns :E170TownhouseOwnership, :E170HouseOwnership ;
+    :uses :E170TownhouseResidence, :E170HouseResidence ;
+    :disposesOf :E170TownhouseDisposition, :E170HouseDisposition .
 
-#########################
-# Taxpayer
-#########################
-:BE a :Taxpayer .
+:E170Townhouse a :Property .
 
-#########################
-# Ownership & Residence Intervals
-#########################
-:BE_Townhouse_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :Townhouse ;
+:E170House a :Property .
+
+:E170TownhouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E170Townhouse ;
     :ownershipStart "1997-01-01"^^xsd:date ;
-    :ownershipEnd "1998-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2001-12-31"^^xsd:date .
 
-:BE_Townhouse_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :Townhouse ;
+:E170TownhouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E170Townhouse ;
     :residenceStart "1997-01-01"^^xsd:date ;
     :residenceEnd "1998-12-31"^^xsd:date .
 
-:BE_House_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :House ;
+:E170HouseOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :E170House ;
     :ownershipStart "1999-01-01"^^xsd:date ;
-    :ownershipEnd "2002-12-31"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2002-12-31"^^xsd:date .
 
-:BE_House_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :House ;
+:E170HouseResidence a :ResidenceUseInterval ;
+    :hasResidenceOf :E170House ;
     :residenceStart "1999-01-01"^^xsd:date ;
     :residenceEnd "2002-12-31"^^xsd:date .
 
-#########################
-# Dispositions
-#########################
-:Disposition_Townhouse a :Disposition ;
-    :involves :Townhouse ;
+:E170TownhouseDisposition a :Disposition ;
+    :involves :E170Townhouse ;
     :sellDate "2001-12-31"^^xsd:date ;
-    :potentialGain 120000 .
+    :potentialGain "120000"^^xsd:integer .
 
-:Disposition_House a :Disposition ;
-    :involves :House ;
+:E170HouseDisposition a :Disposition ;
+    :involves :E170House ;
     :sellDate "2002-12-31"^^xsd:date ;
-    :potentialGain 270000 ;
-    :partialExclusionReason :NonQualifyingReason .
+    :potentialGain "270000"^^xsd:integer .
 
-#########################
-# Returns
-#########################
-:Return_Townhouse a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :BE ;
-    :linkedTo :Disposition_Townhouse .
+:E170TownhouseReturn a :SingleReturn ;
+    :associates :E170 ;
+    :linkedTo :E170TownhouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:Return_House a :SingleReturn ;
-    :exclusionCap 250000 ;
-    :associates :BE ;
-    :linkedTo :Disposition_House .
-
-#########################
-# Taxpayer Relations
-#########################
-:BE :owns :BE_Townhouse_Ownership , :BE_House_Ownership ;
-    :uses :BE_Townhouse_Residence , :BE_House_Residence ;
-    :disposesOf :Disposition_Townhouse , :Disposition_House .
+:E170HouseReturn a :SingleReturn ;
+    :associates :E170 ;
+    :linkedTo :E170HouseDisposition ;
+    :exclusionCap "250000"^^xsd:integer .

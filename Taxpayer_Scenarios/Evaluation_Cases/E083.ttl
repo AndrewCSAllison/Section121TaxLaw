@@ -1,49 +1,29 @@
 @prefix : <http://example.org/section121#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-#########################
-# Property
-#########################
-:Townhouse a :Property .
+:E083 a :Taxpayer ;
+    :owns :E083OwnershipInterval ;
+    :uses :E083ResidenceInterval ;
+    :disposesOf :E083TownhouseSale .
 
-#########################
-# Taxpayer
-#########################
-:AB a :Taxpayer ;
-    :owns :AB_OwnershipInterval1 ;
-    :uses :AB_ResidenceUseInterval1 ;
-    :disposesOf :AB_Disposition1 .
+:E083Townhouse a :Property .
 
-#########################
-# OwnershipUseInterval
-#########################
-:AB_OwnershipInterval1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :Townhouse ;
+:E083OwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :E083Townhouse ;
     :ownershipStart "1996-11-05"^^xsd:date ;
-    :ownershipEnd "2000-03-01"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2000-03-01"^^xsd:date .
 
-#########################
-# ResidenceUseInterval
-#########################
-:AB_ResidenceUseInterval1 a :ResidenceUseInterval ;
-    :hasResidenceOf :Townhouse ;
+:E083ResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :E083Townhouse ;
     :residenceStart "1995-03-01"^^xsd:date ;
     :residenceEnd "1998-01-30"^^xsd:date .
 
-#########################
-# Disposition
-#########################
-:AB_Disposition1 a :Disposition ;
-    :involves :Townhouse ;
+:E083TownhouseSale a :Disposition ;
+    :involves :E083Townhouse ;
     :sellDate "2000-03-01"^^xsd:date ;
-    :potentialGain 220000 .
+    :potentialGain "220000"^^xsd:integer .
 
-#########################
-# Return
-#########################
-:AB_SingleReturn a :SingleReturn ;
-    :associates :AB ;
-    :linkedTo :AB_Disposition1 ;
-    :exclusionCap 250000 .
+:E083SingleReturn a :SingleReturn ;
+    :associates :E083 ;
+    :linkedTo :E083TownhouseSale ;
+    :exclusionCap "250000"^^xsd:integer .

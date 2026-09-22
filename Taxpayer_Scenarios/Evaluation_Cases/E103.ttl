@@ -1,49 +1,51 @@
-:AI_1 a :Taxpayer .
-:AI_2 a :Taxpayer .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:MainResidence a :Property .
+:E103a a :Taxpayer ;
+    :owns :E103aOwnership ;
+    :uses :E103aResidenceUse ;
+    :disposesOf :HouseSale .
 
-:AI1_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E103b a :Taxpayer ;
+    :owns :E103bOwnership ;
+    :uses :E103bResidenceUse ;
+    :disposesOf :HouseSale .
+
+:House a :Property .
+
+:E103aOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2010-06-01"^^xsd:date ;
     :ownershipEnd "2012-05-31"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:AI2_Ownership a :OwnershipUseInterval ;
-    :hasOwnershipOf :MainResidence ;
+:E103bOwnership a :OwnershipUseInterval ;
+    :hasOwnershipOf :House ;
     :ownershipStart "2010-06-01"^^xsd:date ;
     :ownershipEnd "2012-05-31"^^xsd:date ;
-    :percentageOwned 0.5 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
-:AI1_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E103aResidenceUse a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2010-06-01"^^xsd:date ;
     :residenceEnd "2012-05-31"^^xsd:date .
 
-:AI2_Residence a :ResidenceUseInterval ;
-    :hasResidenceOf :MainResidence ;
+:E103bResidenceUse a :ResidenceUseInterval ;
+    :hasResidenceOf :House ;
     :residenceStart "2010-06-01"^^xsd:date ;
     :residenceEnd "2012-05-31"^^xsd:date .
 
-:AI_Disposition a :Disposition ;
-    :involves :MainResidence ;
+:HouseSale a :Disposition ;
+    :involves :House ;
     :sellDate "2012-05-31"^^xsd:date ;
-    :potentialGain 256000 .
+    :potentialGain "256000"^^xsd:integer .
 
-:AI1_JointReturn a :JointReturn ;
-    :exclusionCap 500000 ;
-    :associates :AI_1 ;
-    :linkedTo :AI_Disposition .
+:E103aReturn a :SingleReturn ;
+    :associates :E103a ;
+    :linkedTo :HouseSale ;
+    :exclusionCap "250000"^^xsd:integer .
 
-:AI2_JointReturn a :JointReturn ;
-    :exclusionCap 500000 ;
-    :associates :AI_2 ;
-    :linkedTo :AI_Disposition .
-
-:AI_1 :owns :AI1_Ownership ;
-        :uses :AI1_Residence ;
-        :disposesOf :AI_Disposition .
-
-:AI_2 :owns :AI2_Ownership ;
-        :uses :AI2_Residence ;
-        :disposesOf :AI_Disposition .
+:E103bReturn a :SingleReturn ;
+    :associates :E103b ;
+    :linkedTo :HouseSale ;
+    :exclusionCap "250000"^^xsd:integer .

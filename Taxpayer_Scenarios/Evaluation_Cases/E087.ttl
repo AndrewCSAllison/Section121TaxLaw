@@ -1,27 +1,29 @@
-:AC a :Taxpayer ;
-    :owns :AC_OwnershipInterval1 ;
-    :uses :AC_ResidenceInterval1 ;
-    :disposesOf :AC_Disposition1 .
+@prefix : <http://example.org/section121#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-:Townhouse a :Property .
+:E087 a :Taxpayer ;
+    :owns :E087OwnershipInterval ;
+    :uses :E087ResidenceInterval ;
+    :disposesOf :E087Disposition .
 
-:AC_OwnershipInterval1 a :OwnershipUseInterval ;
-    :hasOwnershipOf :Townhouse ;
+:E087Townhouse a :Property .
+
+:E087OwnershipInterval a :OwnershipUseInterval ;
+    :hasOwnershipOf :E087Townhouse ;
     :ownershipStart "1997-04-01"^^xsd:date ;
-    :ownershipEnd "2000-09-09"^^xsd:date ;
-    :percentageOwned 1.0 .
+    :ownershipEnd "2000-09-09"^^xsd:date .
 
-:AC_ResidenceInterval1 a :ResidenceUseInterval ;
-    :hasResidenceOf :Townhouse ;
+:E087ResidenceInterval a :ResidenceUseInterval ;
+    :hasResidenceOf :E087Townhouse ;
     :residenceStart "1995-09-09"^^xsd:date ;
     :residenceEnd "1998-06-15"^^xsd:date .
 
-:AC_Disposition1 a :Disposition ;
-    :involves :Townhouse ;
+:E087Disposition a :Disposition ;
+    :involves :E087Townhouse ;
     :sellDate "2000-09-09"^^xsd:date ;
-    :potentialGain 245000 .
+    :potentialGain "245000"^^xsd:integer .
 
-:AC_Return a :SingleReturn ;
-    :associates :AC ;
-    :linkedTo :AC_Disposition1 ;
-    :exclusionCap 250000 .
+:E087SingleReturn a :SingleReturn ;
+    :associates :E087 ;
+    :linkedTo :E087Disposition ;
+    :exclusionCap "250000"^^xsd:integer .
