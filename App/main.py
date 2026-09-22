@@ -60,7 +60,7 @@ SCENARIO_INSTRUCTIONS = (
     "  \u2022 Realized gain (positive) or loss (negative) for each property\n\n"
     "TAX RETURN\n"
     "  \u2022 Return type: Single or Joint\n"
-    "  \u2022 Which taxpayer(s) are apart of which return\n"
+    "  \u2022 Which taxpayer(s) are a part of which return\n"
     "  \u2022 Which property sale is linked to the return\n\n"
     "PARTIAL EXCLUSION REASON (only if applicable)\n"
     "  \u2022 Employment-related  \u2014 job change / reassignment / distance \u2265 50 miles\n"
@@ -94,7 +94,7 @@ GUIDE_STEPS = [
         [
             "Click one of the LLM buttons (↗ ChatGPT, ↗ Claude, ↗ Gemini) to open it.",
             "Click '📋 Copy Full Prompt' then paste the prompt into the LLM chat.",
-            "If the LLM has all the necessary information to proceed, it will return a Turtle (.ttl) file instide a code block.",
+            "If the LLM has all the necessary information to proceed, it will return a Turtle (.ttl) file inside a code block.",
             "Otherwise, it may ask you follow-up questions to clarify missing or ambiguous details in your scenario — answer these as best you can until the LLM has what it needs.",
             "Then, copy the entire TTL output from the LLM (including all @prefix lines).",
         ],

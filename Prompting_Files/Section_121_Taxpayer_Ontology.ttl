@@ -22,8 +22,6 @@
 :Return a owl:Class .
 :JointReturn rdfs:subClassOf :Return .
 :SingleReturn rdfs:subClassOf :Return .
-:DerivedInfo a owl:Class .
-:InterpretationInfo a owl:Class .
 
 #########################
 # Datatype Properties
@@ -98,14 +96,6 @@
 :partialExclusionReason a owl:ObjectProperty ;
     rdfs:domain :Disposition ;
     rdfs:range :ReasonType .
-
-:hasDerivedInfo a owl:ObjectProperty ;
-    rdfs:domain :DerivedInfo ;
-    rdfs:range :Disposition .
-
-:hasInterpretation a owl:ObjectProperty ;
-    rdfs:domain :DerivedInfo ;
-    rdfs:range :Disposition .
 
 #########################
 # Individuals — §121(c) Generalized Reason Flags

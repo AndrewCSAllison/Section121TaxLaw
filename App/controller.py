@@ -18,8 +18,8 @@ try:
     from App.formatter import format_results_nl
     from App.config import SHACL_GRAPH, ONTOLOGY_GRAPH
     from App.graphdb_client import (
+        ShaclViolation,
         upload_ttl,
-        run_shacl_validation,
         run_select_query,
         run_update_query,
     )
@@ -27,8 +27,8 @@ except ModuleNotFoundError:
     from formatter import format_results_nl
     from config import SHACL_GRAPH, ONTOLOGY_GRAPH
     from graphdb_client import (
+        ShaclViolation,
         upload_ttl,
-        run_shacl_validation,
         run_select_query,
         run_update_query,
     )
@@ -95,27 +95,27 @@ def submit_with_callback(ttl_content: str, log):
     widgets directly, making it straightforward to unit-test or reuse.
     """
 
-    # 1. Upload TTL
+    # 1. Upload TTL.  GraphDB validates against the SHACL shapes as it commits,
+    #    so a violating scenario is refused here and never reaches step 2.
     log("  Uploading TTL…", "system")
     try:
         upload_ttl(ttl_content)
-        log("  ✔ TTL uploaded successfully", "success")
+    except ShaclViolation as exc:
+        # The Turtle parsed — it is the facts the shapes reject — so say that
+        # before listing what has to change.
+        log("  ✔ TTL parsed", "success")
+        log("  ✘ SHACL Violations Found:", "error")
+        for violation in exc.violations:
+            log(f"    {violation}", "error")
+        return
     except Exception as exc:
         log(f"  ✘ Upload failed: {exc}", "error")
         return
+    log("  ✔ TTL uploaded successfully", "success")
 
-    # 2. SHACL validation
-    log("  Running SHACL validation…", "system")
-    try:
-        shacl_result = run_shacl_validation()
-        if shacl_result:
-            log("  ✘ SHACL Violations Found:", "error")
-            log(shacl_result, "error")
-            return
-        log("  ✔ SHACL: no violations", "success")
-    except Exception as exc:
-        log(f"  ✘ SHACL check error: {exc}", "error")
-        return
+    # 2. SHACL validation — enforced by the store on the commit above, so
+    #    arriving here with the data in place is the pass.
+    log("  ✔ SHACL: no violations", "success")
 
     # 3. NYI check
     log("  Running NYI check…", "system")

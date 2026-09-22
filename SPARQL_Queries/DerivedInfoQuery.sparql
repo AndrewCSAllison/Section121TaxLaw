@@ -11,6 +11,11 @@ INSERT {
                  :jointReturnFlag ?isJointReturn ;
                  :jointExclusionCap ?jointCap ;
         		     :percentageOwned ?percentageOwnedSafe ;
+                 :gainShare ?gainShare ;
+                 :meetsOwnershipUse ?meetsOwnershipUse ;
+                 :spouseMeetsOwnershipUse ?spouseMeetsOwnershipUse ;
+                 :coFilerOnDisposition ?coFilerOnDisposition ;
+                 :coFilerRanksFirst ?coFilerRanksFirst ;
                  :allocableGain ?allocableGain ;
                  :spouseOwnDays ?spouseOwnDaysSafe ;
                  :spouseResDays ?spouseResDaysSafe ;
@@ -45,7 +50,7 @@ WHERE {
                     :percentageOwned ?percentageOwned .
   }
 
-  # Compute five-year cutoff as xsd:date once at outer scope (used for insertion)
+  # --- Five-year cutoff as xsd:date, once at outer scope (used for insertion) ---
   BIND(year(?sellDate) - 5 AS ?cutYear)
   BIND(month(?sellDate) AS ?cutMonth)
   BIND(day(?sellDate) AS ?cutDay)
@@ -55,7 +60,7 @@ WHERE {
     IF(?cutDay<10,"0",""), STR(?cutDay)
   )) AS ?fiveYearCutoff)
 
-  # Single & joint return flags/caps
+  # --- Single & joint return flags/caps ---
   OPTIONAL {
     ?singleReturn a :SingleReturn ;
                   :linkedTo ?disposition ;
@@ -76,7 +81,7 @@ WHERE {
   OPTIONAL {
     SELECT ?taxpayer ?property (SUM(?windowDays) AS ?ownDays)
     WHERE {
-      # Bind sellDate locally (correlated subselect) and recompute cutoff
+      # --- Bind sellDate locally (correlated subselect) and recompute cutoff ---
       ?taxpayer :disposesOf ?disp .
       ?disp :sellDate ?sellDate .
 
@@ -94,15 +99,15 @@ WHERE {
                    :ownershipStart ?ownStart ;
                    :ownershipEnd ?ownEnd .
 
-      # Clamp to [fiveYearCutoffLoc, sellDate]
+      # --- Clamp to [fiveYearCutoffLoc, sellDate] ---
       BIND(IF(?ownStart < ?fiveYearCutoffLoc, ?fiveYearCutoffLoc, ?ownStart) AS ?startBoundRaw)
       BIND(IF(?ownEnd   > ?sellDate,          ?sellDate,          ?ownEnd)   AS ?endBoundRaw)
 
-      # Cast clamped bounds to dateTime for Y/M/D functions
+      # --- Cast clamped bounds to dateTime for Y/M/D functions ---
       BIND(xsd:dateTime(?startBoundRaw) AS ?startBound)
       BIND(xsd:dateTime(?endBoundRaw)   AS ?endBound)
 
-      # Compute days only if overlap
+      # --- Compute days only if overlap ---
       BIND(
         IF(?endBound >= ?startBound,
            xsd:integer(
@@ -121,7 +126,7 @@ WHERE {
   OPTIONAL {
     SELECT ?taxpayer ?property (SUM(?resWindowDays) AS ?resDays)
     WHERE {
-      # Bind sellDate locally and recompute cutoff
+      # --- Bind sellDate locally and recompute cutoff ---
       ?taxpayer :disposesOf ?disp .
       ?disp :sellDate ?sellDate .
 
@@ -139,15 +144,15 @@ WHERE {
                    :residenceStart ?resStart ;
                    :residenceEnd ?resEnd .
 
-      # Clamp to [fiveYearCutoffLoc, sellDate]
+      # --- Clamp to [fiveYearCutoffLoc, sellDate] ---
       BIND(IF(?resStart < ?fiveYearCutoffLoc, ?fiveYearCutoffLoc, ?resStart) AS ?resStartBoundRaw)
       BIND(IF(?resEnd   > ?sellDate,          ?sellDate,          ?resEnd)   AS ?resEndBoundRaw)
 
-      # Cast clamped bounds to dateTime
+      # --- Cast clamped bounds to dateTime ---
       BIND(xsd:dateTime(?resStartBoundRaw) AS ?resStartBound)
       BIND(xsd:dateTime(?resEndBoundRaw)   AS ?resEndBound)
 
-      # Compute days only if overlap
+      # --- Compute days only if overlap ---
       BIND(
         IF(?resEndBound >= ?resStartBound,
            xsd:integer(
@@ -166,7 +171,7 @@ WHERE {
   OPTIONAL {
     SELECT ?taxpayer ?property (SUM(?spouseOwnWindowDays) AS ?spouseOwnDays)
     WHERE {
-      # Use correlated disposition ?disp and bind joint return to get spouse for this taxpayer/disposition
+      # --- Correlated disposition ?disp, bound through the joint return to reach the spouse ---
       ?jointReturn a :JointReturn ;
                    :linkedTo ?disp ;
                    :associates ?taxpayer ;
@@ -188,15 +193,15 @@ WHERE {
                  :ownershipStart ?spouseOwnStart ;
                  :ownershipEnd ?spouseOwnEnd .
 
-      # Clamp
+      # --- Clamp ---
       BIND(IF(?spouseOwnStart < ?fiveYearCutoffLoc, ?fiveYearCutoffLoc, ?spouseOwnStart) AS ?spouseOwnStartBoundRaw)
       BIND(IF(?spouseOwnEnd   > ?sellDate,          ?sellDate,          ?spouseOwnEnd)   AS ?spouseOwnEndBoundRaw)
 
-      # Cast
+      # --- Cast ---
       BIND(xsd:dateTime(?spouseOwnStartBoundRaw) AS ?spouseOwnStartBound)
       BIND(xsd:dateTime(?spouseOwnEndBoundRaw)   AS ?spouseOwnEndBound)
 
-      # Overlap days
+      # --- Overlap days ---
       BIND(
         IF(?spouseOwnEndBound >= ?spouseOwnStartBound,
            xsd:integer(
@@ -236,15 +241,15 @@ WHERE {
                  :residenceStart ?spouseResStart ;
                  :residenceEnd ?spouseResEnd .
 
-      # Clamp
+      # --- Clamp ---
       BIND(IF(?spouseResStart < ?fiveYearCutoffLoc, ?fiveYearCutoffLoc, ?spouseResStart) AS ?spouseResStartBoundRaw)
       BIND(IF(?spouseResEnd   > ?sellDate,          ?sellDate,          ?spouseResEnd)   AS ?spouseResEndBoundRaw)
 
-      # Cast
+      # --- Cast ---
       BIND(xsd:dateTime(?spouseResStartBoundRaw) AS ?spouseResStartBound)
       BIND(xsd:dateTime(?spouseResEndBoundRaw)   AS ?spouseResEndBound)
 
-      # Overlap days
+      # --- Overlap days ---
       BIND(
         IF(?spouseResEndBound >= ?spouseResStartBound,
            xsd:integer(
@@ -259,11 +264,11 @@ WHERE {
     GROUP BY ?taxpayer ?property
   }
 
-  # Shorter and numerator logic
+  # --- Shorter and numerator logic ---
   BIND(IF(?ownDays < ?resDays, ?ownDays, ?resDays) AS ?shorterDays)
   BIND(IF(?spouseOwnDays < ?spouseResDays, ?spouseOwnDays, ?spouseResDays) AS ?spouseShorterDays)
 
-  # Previous sale for two-year lookback (taxpayer)
+  # --- Previous sale for two-year lookback (taxpayer) ---
   OPTIONAL {
     SELECT ?taxpayer ?disposition (MAX(?prevSellDate) AS ?mostRecentPrev)
     WHERE {
@@ -296,12 +301,12 @@ WHERE {
                  :associates ?spouse .
     FILTER(?spouse != ?taxpayer)
 
-    # Look at any disposition of the spouse (single or joint)
+    # --- Any disposition of the spouse (single or joint) ---
     ?spouse :disposesOf ?spousePrevDisposition .
     ?spousePrevDisposition :sellDate ?spousePrevSellDate .
             FILTER(?spousePrevDisposition != ?disposition) .
 
-    # Must be before the current disposition
+    # --- Must be before the current disposition ---
     ?disposition :sellDate ?sellDate .
     FILTER(?spousePrevSellDate < ?sellDate)
   }
@@ -310,7 +315,7 @@ WHERE {
 
 
 
-  # Compute spouseDaysSincePrevQualifyingSale (keyed to taxpayer)
+  # --- spouseDaysSincePrevQualifyingSale (keyed to taxpayer) ---
   BIND(
     IF(bound(?spouseMostRecentPrev),
        xsd:integer(
@@ -322,7 +327,7 @@ WHERE {
     ) AS ?spouseDaysSincePrevQualifyingSale
   )
 
-  # Numerator (taxpayer only)
+  # --- Numerator (taxpayer only) ---
   BIND(
     IF(?daysSincePrevQualifyingSale >= 0,
        IF(?daysSincePrevQualifyingSale < ?shorterDays, ?daysSincePrevQualifyingSale, ?shorterDays),
@@ -330,7 +335,7 @@ WHERE {
     ) AS ?numeratorDays
   )
 
-  # Safe bindings to satisfy SHACL
+  # --- Safe bindings to satisfy SHACL ---
   BIND(xsd:integer(COALESCE(?ownDays, 0)) AS ?ownDaysSafe)
   BIND(xsd:integer(COALESCE(?resDays, 0)) AS ?resDaysSafe)
   BIND(xsd:integer(COALESCE(?shorterDays, 0)) AS ?shorterDaysSafe)
@@ -338,35 +343,93 @@ WHERE {
   BIND(xsd:integer(COALESCE(?spouseOwnDays, 0)) AS ?spouseOwnDaysSafe)
   BIND(xsd:integer(COALESCE(?spouseResDays, 0)) AS ?spouseResDaysSafe)
   BIND(xsd:integer(COALESCE(?spouseDaysSincePrevQualifyingSale, -1)) AS ?spouseDaysSincePrevQualifyingSaleSafe)
-  # --- Check if spouse is selling the same property in this joint return ---
+  # --- Co-filer is a party to THIS sale ---
+  BIND(
+    EXISTS {
+      ?coFilingReturn a :JointReturn ;
+                      :linkedTo ?disposition ;
+                      :associates ?taxpayer , ?coFiler .
+      FILTER(?coFiler != ?taxpayer)
+      ?coFiler :disposesOf ?disposition .
+    } AS ?coFilerOnDisposition
+  )
+
   # --- Determine allocable ownership percentage safely ---
+  # A half interest is only presumable when the co-filer is a party to THIS sale;
+  # only then is there a second row holding the other half. Spouses who each sell
+  # a separately owned residence (Reg. §1.121-2(a)(4) Example 1) file jointly but
+  # hold one disposition each.
   BIND(
     xsd:decimal(
       IF(bound(?percentageOwned),
         ?percentageOwned,  # use explicit ownership if present
-        IF(
-          ?isJointReturn,
-          IF(
-            EXISTS {
-              ?jointReturn a :JointReturn ;
-                            :linkedTo ?disposition ;
-                            :associates ?spouse .
-              FILTER(?spouse != ?taxpayer)
-              ?spouse :owns ?spouseOwnPct .
-              ?spouseOwnPct :hasOwnershipOf ?property ;
-                            :percentageOwned 1.0 .
-            },
-            0,               # spouse already owns 1.0, assign 0 to this taxpayer
-            0.5              # otherwise, split 50/50
-          ),
-          1.0                # not a joint return, assign full ownership
+        IF(?isSingleReturn || !?coFilerOnDisposition,
+           1.0,            # sole party to the sale owns the whole
+           0.5             # co-filing spouses on one sale: presume a half interest
         )
       )
     ) AS ?percentageOwnedSafe
   )
-  BIND(xsd:decimal(?gain) * ?percentageOwnedSafe AS ?allocableGain)
+  # --- Gain attribution between spouses filing jointly on one sale ---
+  BIND(?ownDaysSafe >= 730 && ?resDaysSafe >= 730 AS ?meetsOwnershipUse)
+  BIND(?spouseOwnDaysSafe >= 730 && ?spouseResDaysSafe >= 730 AS ?spouseMeetsOwnershipUse)
 
-  # Derived node
+  # --- §121(b)(2)(B): each spouse treated as owning for the period either owned ---
+  # Mirrors InterpretationQuery, which re-decides this on the post-§121(b)(3) outcome.
+  BIND(IF(?spouseOwnDaysSafe > ?ownDaysSafe,
+          ?spouseOwnDaysSafe, ?ownDaysSafe) AS ?betterSpouseOwnershipDays)
+
+  # --- A co-filer with their own §121(c) reduced exclusion keeps a share ---
+  BIND(IF(?betterSpouseOwnershipDays < ?spouseResDaysSafe,
+          ?betterSpouseOwnershipDays, ?spouseResDaysSafe) AS ?spouseShorterDaysSafe)
+  BIND(
+    bound(?reasonType) &&
+    ?reasonType IN (:EmploymentRelatedReason, :HealthRelatedReason, :UnforeseenCircumstanceReason)
+    AS ?qualifyingPartialReason
+  )
+  BIND(?qualifyingPartialReason && !?meetsOwnershipUse &&
+       ?betterSpouseOwnershipDays > 0 && ?resDaysSafe > 0 AS ?ownPartialClaim)
+  BIND(?qualifyingPartialReason && !?spouseMeetsOwnershipUse &&
+       ?spouseShorterDaysSafe > 0 AS ?spousePartialClaim)
+
+  # --- Both spouses qualify: deterministic carrier, ordered by IRI ---
+  BIND(
+    EXISTS {
+      ?rankingReturn a :JointReturn ;
+                     :linkedTo ?disposition ;
+                     :associates ?taxpayer , ?rankedCoFiler .
+      FILTER(?rankedCoFiler != ?taxpayer)
+      ?rankedCoFiler :disposesOf ?disposition .
+      FILTER(STR(?rankedCoFiler) < STR(?taxpayer))
+    } AS ?coFilerRanksFirst
+  )
+  BIND(?isJointReturn && ?coFilerOnDisposition &&
+       ?meetsOwnershipUse && ?spouseMeetsOwnershipUse AS ?bothSpousesQualify)
+
+  BIND(
+    (?isJointReturn && ?coFilerOnDisposition &&
+     ?meetsOwnershipUse && !?spouseMeetsOwnershipUse && !?spousePartialClaim) ||
+    (?bothSpousesQualify && !?coFilerRanksFirst)
+    AS ?carriesWholeGain
+  )
+  BIND(
+    (?isJointReturn && ?coFilerOnDisposition &&
+     !?meetsOwnershipUse && ?spouseMeetsOwnershipUse && !?ownPartialClaim) ||
+    (?bothSpousesQualify && ?coFilerRanksFirst)
+    AS ?yieldsGainToCoFiler
+  )
+
+  BIND(
+    IF(?carriesWholeGain,
+       xsd:decimal(1.0),
+       IF(?yieldsGainToCoFiler,
+          xsd:decimal(0),
+          ?percentageOwnedSafe)
+    ) AS ?gainShare
+  )
+  BIND(xsd:decimal(?gain) * ?gainShare AS ?allocableGain)
+
+  # --- Derived node ---
   BIND(IRI(CONCAT(
       STR(:),
       "DerivedInfo_",

@@ -12,14 +12,17 @@
     sh:property [
 	sh:path :disposesOf ;
 	sh:class :Disposition ;
+	sh:message "A taxpayer's disposesOf must reference a Disposition." ;
     ] ;
     sh:property [
 	sh:path :owns ;
 	sh:class :OwnershipUseInterval ;
+	sh:message "A taxpayer's owns must reference an OwnershipUseInterval." ;
     ] ;
     sh:property [
 	sh:path :uses ;
 	sh:class :ResidenceUseInterval ;
+	sh:message "A taxpayer's uses must reference a ResidenceUseInterval." ;
     ] .
 
 :OwnershipUseIntervalShape
@@ -30,18 +33,21 @@
 	sh:class :Property ;
 	sh:minCount 1 ;
 	sh:maxCount 1 ;
+	sh:message "Every ownership interval must reference exactly one Property." ;
     ] ;
     sh:property [
 	sh:path :ownershipStart ;
 	sh:datatype xsd:date ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
+        sh:message "Every ownership interval must have one ownershipStart date (xsd:date)." ;
     ] ;
     sh:property [
 	sh:path :ownershipEnd ;
 	sh:datatype xsd:date ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
+        sh:message "Every ownership interval must have one ownershipEnd date (xsd:date)." ;
     ] ;
     sh:property [
     sh:path :percentageOwned ;
@@ -50,6 +56,7 @@
         sh:maxCount 1 ;
         sh:minInclusive 0 ;
         sh:maxInclusive 1 ;
+        sh:message "percentageOwned must be a single decimal between 0 and 1." ;
     ] .
 
 :ResidenceUseIntervalShape
@@ -60,18 +67,21 @@
 	sh:class :Property ;
 	sh:minCount 1 ;
 	sh:maxCount 1 ;
+	sh:message "Every residence interval must reference exactly one Property." ;
     ] ;
     sh:property [
 	sh:path :residenceStart ;
 	sh:datatype xsd:date ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
+        sh:message "Every residence interval must have one residenceStart date (xsd:date)." ;
     ] ;
     sh:property [
 	sh:path :residenceEnd ;
 	sh:datatype xsd:date ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
+        sh:message "Every residence interval must have one residenceEnd date (xsd:date)." ;
     ] .
 
 :DispositionShape

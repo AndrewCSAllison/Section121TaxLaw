@@ -1,13 +1,17 @@
 PREFIX : <http://example.org/section121#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
-SELECT ?taxpayer ?property ?sellDate ?numeratorDaysSafe ?percentageOwned ?isSingleReturn ?isJointReturn
+SELECT ?taxpayer ?disposition ?property ?sellDate ?numeratorDaysSafe ?percentageOwned ?gainShare ?isSingleReturn ?isJointReturn
+       ?saleRealizedGain ?saleExcludedGain ?saleTaxableGain
+       ?netGroup ?netSaleCount ?netGroupHasLoss
+       ?netRealizedGain ?netExcludedGain ?netTaxableGain
        (MAX(?Rule121aFinal) AS ?Rule121aFinal)
        (MAX(?Rule121b1Excluded) AS ?Rule121b1Excluded)
        (MAX(?Rule121b2AExcluded) AS ?Rule121b2AExcluded)
        (MAX(?Rule121b2BExcluded) AS ?Rule121b2BExcluded)
        (MAX(?Rule121b3Applies) AS ?Rule121b3Applies)
        (MAX(?Rule121cExcluded) AS ?Rule121cExcluded)
+       (MAX(?Rule121cReasonNonQualifying) AS ?Rule121cReasonNonQualifying)
        (MAX(?Rule121d1Applies) AS ?Rule121d1Applies)
        (MAX(?partialExclusionReason) AS ?partialExclusionReason)
        (MAX(?realizedGain) AS ?realizedGain)
@@ -22,10 +26,11 @@ WHERE {
                  :involves ?property ;
                  :numeratorDays ?numeratorDaysSafe ;
 				 :jointReturnFlag ?isJointReturn ;
-        		 :singleReturnFlag ?isSingleReturn .
+        		 :singleReturnFlag ?isSingleReturn ;
+                 :percentageOwned ?percentageOwned .
   }
 
-  GRAPH :Interpretation {
+  GRAPH :InterpretationInfo {
     ?interpNode :forDisposition ?disposition ;
                 :forTaxpayer ?taxpayer ;
                 :involves ?property .
@@ -35,14 +40,71 @@ WHERE {
     OPTIONAL { ?interpNode :Rule121b2BExcluded ?Rule121b2BExcluded }
     OPTIONAL { ?interpNode :Rule121b3Applies ?Rule121b3Applies }
     OPTIONAL { ?interpNode :Rule121cExcluded ?Rule121cExcluded }
+    OPTIONAL { ?interpNode :Rule121cReasonNonQualifying ?Rule121cReasonNonQualifying }
     OPTIONAL { ?interpNode :Rule121d1Applies ?Rule121d1Applies }
     OPTIONAL { ?interpNode :partialExclusionReason ?partialExclusionReason }
+    ?interpNode :gainShare ?gainShare .
     OPTIONAL { ?interpNode :excludedGain ?excludedGain }
     OPTIONAL { ?interpNode :taxableGain ?taxableGain }
     OPTIONAL { ?interpNode :potentialGain ?realizedGain }
-    OPTIONAL { ?interpNode :percentageOwned ?percentageOwned }    
 
   }
+
+  # --- Sale-level totals ---
+  {
+    SELECT ?disposition
+           (SUM(?rowRealizedGain) AS ?saleRealizedGain)
+           (SUM(?rowExcludedGain) AS ?saleExcludedGain)
+           (SUM(?rowTaxableGain)  AS ?saleTaxableGain)
+    WHERE {
+      GRAPH :InterpretationInfo {
+        ?saleRowNode :forDisposition ?disposition ;
+                     :potentialGain ?rowRealizedGain ;
+                     :excludedGain ?rowExcludedGain ;
+                     :taxableGain ?rowTaxableGain .
+      }
+    }
+    GROUP BY ?disposition
+  }
+
+  # --- Same-day return totals, keyed on (return, sell date) — Reg. §1.121-1(b)(3) ---
+  OPTIONAL {
+    ?netGroup :linkedTo ?disposition ;
+              :associates ?taxpayer .
+    {
+      SELECT ?netGroup ?sellDate
+             (SUM(?rowRealized) AS ?netRealizedGain)
+             (SUM(?rowExcluded) AS ?netSumExcluded)
+             (SUM(?rowTaxable)  AS ?netRawTaxable)
+             (SUM(IF(?rowRealized < 0, 1, 0)) AS ?netLossRowCount)
+             (COUNT(DISTINCT ?netDisp)        AS ?netSaleCount)
+      WHERE {
+        VALUES ?returnType { :SingleReturn :JointReturn }
+        ?netGroup a ?returnType ;
+                  :linkedTo ?netDisp ;
+                  :associates ?netTaxpayer .
+        ?netDisp :sellDate ?sellDate .
+        GRAPH :InterpretationInfo {
+          ?netRow :forDisposition ?netDisp ;
+                  :forTaxpayer ?netTaxpayer ;
+                  :potentialGain ?rowRealized ;
+                  :excludedGain ?rowExcluded ;
+                  :taxableGain ?rowTaxable .
+        }
+      }
+      GROUP BY ?netGroup ?sellDate
+    }
+  }
+
+  # --- Loss offsets taxable gain before it touches the exclusion ---
+  BIND(IF(?netRawTaxable > 0, ?netRawTaxable, xsd:decimal(0)) AS ?netTaxableGain)
+  BIND(IF(?netRawTaxable < 0, ?netRawTaxable, xsd:decimal(0)) AS ?netLossCarry)
+  BIND(?netSumExcluded + ?netLossCarry AS ?netExcludedGain)
+  # --- Counted rather than tested with MAX(), which is not dependable over booleans ---
+  BIND(?netLossRowCount > 0 AS ?netGroupHasLoss)
 }
-GROUP BY ?taxpayer ?property ?sellDate ?numeratorDaysSafe ?percentageOwned ?isSingleReturn ?isJointReturn
+GROUP BY ?taxpayer ?disposition ?property ?sellDate ?numeratorDaysSafe ?percentageOwned ?gainShare ?isSingleReturn ?isJointReturn
+         ?saleRealizedGain ?saleExcludedGain ?saleTaxableGain
+         ?netGroup ?netSaleCount ?netGroupHasLoss
+         ?netRealizedGain ?netExcludedGain ?netTaxableGain
 ORDER BY ?taxpayer ?property ?sellDate

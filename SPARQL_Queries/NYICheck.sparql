@@ -19,7 +19,7 @@ WHERE {
       # Ignore derived + interpretation entities
       FILTER(
         !STRSTARTS(STR(?s), STR(:DerivedInfo_)) &&
-        !STRSTARTS(STR(?s), STR(:Interpretation_))
+        !STRSTARTS(STR(?s), STR(:InterpretationInfo_))
       )
 
       # Ignore RDF/RDFS/OWL classes
@@ -50,7 +50,7 @@ WHERE {
       # Ignore derived + interpretation entities
       FILTER(
         !STRSTARTS(STR(?s), STR(:DerivedInfo_)) &&
-        !STRSTARTS(STR(?s), STR(:Interpretation_))
+        !STRSTARTS(STR(?s), STR(:InterpretationInfo_))
       )
 
       # Ignore RDF/RDFS/OWL built-ins
