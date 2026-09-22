@@ -12,12 +12,14 @@
 :Own_T031a_1 a :OwnershipUseInterval ;
     :ownershipStart "2020-01-01"^^xsd:date ;
     :ownershipEnd   "2022-12-31"^^xsd:date ;
-    :hasOwnershipOf :Property_T031 .
+    :hasOwnershipOf :Property_T031 ;
+    :percentageOwned "0.5"^^xsd:decimal .
 
 :Own_T031b_1 a :OwnershipUseInterval ;
     :ownershipStart "2020-01-01"^^xsd:date ;
     :ownershipEnd   "2022-12-31"^^xsd:date ;
-    :hasOwnershipOf :Property_T031 .
+    :hasOwnershipOf :Property_T031 ;
+    :percentageOwned "0.5"^^xsd:decimal .
 
 ### Residence Use
 :Use_T031a_1 a :ResidenceUseInterval ;
@@ -31,27 +33,22 @@
     :hasResidenceOf :Property_T031 .
 
 ### Dispositions (split gain)
-:Disp_T031a a :Disposition ;
+:Disp_T031 a :Disposition ;
     :sellDate "2022-12-31"^^xsd:date ;
-    :potentialGain "128000"^^xsd:integer ;
-    :involves :Property_T031 .
-
-:Disp_T031b a :Disposition ;
-    :sellDate "2022-12-31"^^xsd:date ;
-    :potentialGain "128000"^^xsd:integer ;
+    :potentialGain "256000"^^xsd:integer ;
     :involves :Property_T031 .
 
 ### Associations
-:T031a :owns :Own_T031a_1 ; :uses :Use_T031a_1 ; :disposesOf :Disp_T031a .
-:T031b :owns :Own_T031b_1 ; :uses :Use_T031b_1 ; :disposesOf :Disp_T031b .
+:T031a :owns :Own_T031a_1 ; :uses :Use_T031a_1 ; :disposesOf :Disp_T031 .
+:T031b :owns :Own_T031b_1 ; :uses :Use_T031b_1 ; :disposesOf :Disp_T031 .
 
 ### Individual Returns
 :Return_T031a a :SingleReturn ;
     :exclusionCap "250000"^^xsd:integer ;
     :associates :T031a ;
-    :linkedTo :Disp_T031a .
+    :linkedTo :Disp_T031 .
 
 :Return_T031b a :SingleReturn ;
     :exclusionCap "250000"^^xsd:integer ;
     :associates :T031b ;
-    :linkedTo :Disp_T031b .
+    :linkedTo :Disp_T031 .

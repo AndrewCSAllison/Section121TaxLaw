@@ -31,7 +31,7 @@
 
 :T076_Sale a :Disposition ;
     :sellDate "2004-01-01"^^xsd:date ;
-    :potentialGain "250000"^^xsd:integer ;
+    :potentialGain "350000"^^xsd:integer ;
     :involves :T076_Property ;
     :partialExclusionReason :EmploymentRelatedReason .
 

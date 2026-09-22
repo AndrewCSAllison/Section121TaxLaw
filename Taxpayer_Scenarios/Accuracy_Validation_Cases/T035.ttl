@@ -12,12 +12,14 @@
 :Own_T035a_1 a :OwnershipUseInterval ;
     :ownershipStart "2010-06-01"^^xsd:date ;
     :ownershipEnd   "2012-05-31"^^xsd:date ;
-    :hasOwnershipOf :Property_T035 .
+    :hasOwnershipOf :Property_T035 ;
+    :percentageOwned "0.5"^^xsd:decimal .
 
 :Own_T035b_1 a :OwnershipUseInterval ;
     :ownershipStart "2010-06-01"^^xsd:date ;
     :ownershipEnd   "2012-05-31"^^xsd:date ;
-    :hasOwnershipOf :Property_T035 .
+    :hasOwnershipOf :Property_T035 ;
+    :percentageOwned "0.5"^^xsd:decimal .
 
 ### Residence Use
 :Use_T035a_1 a :ResidenceUseInterval ;
@@ -30,28 +32,23 @@
     :residenceEnd   "2012-05-31"^^xsd:date ;
     :hasResidenceOf :Property_T035 .
 
-### Dispositions (split gain)
-:Disp_T035a a :Disposition ;
+### Disposition (one sale; the gain is split by ownership share)
+:Disp_T035 a :Disposition ;
     :sellDate "2012-05-31"^^xsd:date ;
-    :potentialGain "128000"^^xsd:integer ;
-    :involves :Property_T035 .
-
-:Disp_T035b a :Disposition ;
-    :sellDate "2012-05-31"^^xsd:date ;
-    :potentialGain "128000"^^xsd:integer ;
+    :potentialGain "256000"^^xsd:integer ;
     :involves :Property_T035 .
 
 ### Associations
-:T035a :owns :Own_T035a_1 ; :uses :Use_T035a_1 ; :disposesOf :Disp_T035a .
-:T035b :owns :Own_T035b_1 ; :uses :Use_T035b_1 ; :disposesOf :Disp_T035b .
+:T035a :owns :Own_T035a_1 ; :uses :Use_T035a_1 ; :disposesOf :Disp_T035 .
+:T035b :owns :Own_T035b_1 ; :uses :Use_T035b_1 ; :disposesOf :Disp_T035 .
 
 ### Individual Returns
 :Return_T035a a :SingleReturn ;
     :exclusionCap "250000"^^xsd:integer ;
     :associates :T035a ;
-    :linkedTo :Disp_T035a .
+    :linkedTo :Disp_T035 .
 
 :Return_T035b a :SingleReturn ;
     :exclusionCap "250000"^^xsd:integer ;
     :associates :T035b ;
-    :linkedTo :Disp_T035b .
+    :linkedTo :Disp_T035 .

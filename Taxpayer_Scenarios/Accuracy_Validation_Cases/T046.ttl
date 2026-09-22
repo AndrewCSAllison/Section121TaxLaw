@@ -13,13 +13,13 @@
     :ownershipStart "2000-02-01"^^xsd:date ;
     :ownershipEnd   "2003-12-31"^^xsd:date ;
     :hasOwnershipOf :Property_T046 ;
-    :percentageOwned 1.0 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
 :Own_T046b_1 a :OwnershipUseInterval ;
     :ownershipStart "2000-02-01"^^xsd:date ;
     :ownershipEnd   "2003-12-31"^^xsd:date ;
     :hasOwnershipOf :Property_T046 ;
-    :percentageOwned 1.0 .
+    :percentageOwned "0.5"^^xsd:decimal .
     
 ### Residence Use
 :Use_T046b_1 a :ResidenceUseInterval ;

@@ -13,13 +13,13 @@
     :ownershipStart "2001-02-01"^^xsd:date ;
     :ownershipEnd   "2004-12-31"^^xsd:date ;
     :hasOwnershipOf :Property_T047 ;
-    :percentageOwned 1.0 .
+    :percentageOwned "0.5"^^xsd:decimal .
 
 :Own_T047b_1 a :OwnershipUseInterval ;
     :ownershipStart "2001-02-01"^^xsd:date ;
     :ownershipEnd   "2004-12-31"^^xsd:date ;
     :hasOwnershipOf :Property_T047 ;
-    :percentageOwned 1.0 . 
+    :percentageOwned "0.5"^^xsd:decimal . 
     
 ### Residence Use
 # Only T047b qualifies

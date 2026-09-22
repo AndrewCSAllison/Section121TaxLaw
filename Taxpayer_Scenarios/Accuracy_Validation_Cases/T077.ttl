@@ -27,11 +27,6 @@
     :residenceEnd   "2000-01-15"^^xsd:date ;
     :hasResidenceOf :T077_Property .
 
-:T077b_OwnInterval a :OwnershipUseInterval ;
-    :ownershipStart "1999-01-15"^^xsd:date ;
-    :ownershipEnd   "2000-01-15"^^xsd:date ;
-    :hasOwnershipOf :T077_Property .
-
 :T077b_ResInterval a :ResidenceUseInterval ;
     :residenceStart "1999-01-15"^^xsd:date ;
     :residenceEnd   "2000-01-15"^^xsd:date ;
@@ -40,8 +35,7 @@
 :T077a :owns :T077a_OwnInterval ;
         :uses :T077a_ResInterval .
 
-:T077b :owns :T077b_OwnInterval ;
-        :uses :T077b_ResInterval .
+:T077b :uses :T077b_ResInterval .
 
 #####################
 # Disposition (Sale)
