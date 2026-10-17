@@ -897,7 +897,7 @@ anything further.
 
 This project is released under the **MIT License**, permitting use, modification, and distribution with appropriate preservation of the copyright and license notice. See the `LICENSE.md` file for full terms.
 
-This software was developed as a proof-of-concept research project under the **Loyola University Chicago Lab for Applied AI**. If you use or reference this work in academic research, publications, or derivative projects, please cite the associated research paper and acknowledge its institutional research affiliation.*
+This software was developed as a proof-of-concept research project under the **Loyola University Chicago Lab for Applied AI**. If you use or reference this work in academic research, publications, or derivative projects, please cite the associated research paper and acknowledge its institutional research affiliation.
 
 ---
 
