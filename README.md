@@ -901,4 +901,4 @@ This software was developed as a proof-of-concept research project under the **L
 
 ---
 
-*Built for proof-of-concept research regarding knowledge-graph–driven tax law reasoning under the **Loyola University Chicago Lab for Applied AI**. This software is provided for academic research and reproducibility purposes only. It is not intended to provide professional tax or legal advice. Results and legal conclusions should not be relied upon for actual tax reporting or compliance without independent verification by a qualified tax professional. *
+*Built for proof-of-concept research regarding knowledge-graph–driven tax law reasoning under the **Loyola University Chicago Lab for Applied AI**. This software is provided for academic research and reproducibility purposes only. It is not intended to provide professional tax or legal advice. Results and legal conclusions should not be relied upon for actual tax reporting or compliance without independent verification by a qualified tax professional.*
