@@ -9,10 +9,10 @@ A proof of concept knowledge graph–driven application for evaluating **IRC §1
 ## Table of Contents
 
 1. [Project Overview](#1-project-overview)
-2. [Architecture & Pipeline](#2-architecture--pipeline)
+2. [Architecture &amp; Pipeline](#2-architecture--pipeline)
 3. [Repository Structure](#3-repository-structure)
 4. [Prerequisites](#4-prerequisites)
-5. [Installation & Setup](#5-installation--setup)
+5. [Installation &amp; Setup](#5-installation--setup)
 6. [Configuration](#6-configuration)
 7. [Running the Application](#7-running-the-application)
 8. [Using the Application](#8-using-the-application)
@@ -24,13 +24,13 @@ A proof of concept knowledge graph–driven application for evaluating **IRC §1
    - [SHACL Shapes](#shacl-shapes)
    - [SPARQL Queries](#sparql-queries)
 10. [LLM Prompting System](#10-llm-prompting-system)
-11. [Output Format & Interpretation](#11-output-format--interpretation)
-12. [Evaluation & Testing](#12-evaluation--testing)
+11. [Output Format &amp; Interpretation](#11-output-format--interpretation)
+12. [Evaluation &amp; Testing](#12-evaluation--testing)
 13. [Module Reference](#13-module-reference)
 14. [Keyboard Shortcuts](#14-keyboard-shortcuts)
 15. [Troubleshooting](#15-troubleshooting)
 16. [Known Limitations](#16-known-limitations)
-17. [License & Citation](#17-license--citation)
+17. [License &amp; Citation](#17-license--citation)
 
 ---
 
@@ -141,9 +141,15 @@ Section121TaxLaw/
 ├── Docs/
 │   └── pipeline_overview.png            # Architecture diagram used in §2
 │
-└── debug_results.py                     # CLI diagnostic; batch-runs scenario files
-                                         # and prints raw ResultsQuery bindings,
-                                         # bypassing formatter.py. Not used by the GUI.
+├── debug_results.py                     # CLI diagnostic; batch-runs scenario files
+│                                        # and prints raw ResultsQuery bindings,
+│                                        # bypassing formatter.py. Not used by the GUI.
+│
+├── reproduce_results.py                 # Recomputes the paper's reported statistics
+│                                        # from the workbooks in Results/. Does not run
+│                                        # the pipeline; needs neither GraphDB nor the app.
+│
+└── requirements.txt                     # Python dependencies: requests, openpyxl
 ```
 
 **`debug_results.py`** runs the same pipeline as the GUI but stops one step short of
@@ -158,20 +164,35 @@ result reads:
 .venv\Scripts\python debug_results.py T046 --json
 ```
 
+**`reproduce_results.py`** recomputes the statistics reported in the paper directly from
+the workbooks in `Results/`, and prints each figure beside the one the paper gives. It
+does not run the pipeline, so it needs neither GraphDB nor the app, only `openpyxl`:
+
+```bash
+.venv\Scripts\python reproduce_results.py               # both workbooks
+.venv\Scripts\python reproduce_results.py validation    # 77 Accuracy Validation Cases
+.venv\Scripts\python reproduce_results.py evaluation    # 231 Evaluation Cases (Tables 2 and 3)
+```
+
+It exits 1 if a figure is not reproduced, so it can be used as a check.
+
 > **Note:** `Combined_Prompting_File` is automatically read by `main.py` at startup and pre-loaded into the Prompt Builder. Do not move or rename it without updating the path in `main.py`.
 
 ---
 
 ## 4. Prerequisites
 
-| Requirement  | Version             | Notes                                                       |
-| ------------ | ------------------- | ----------------------------------------------------------- |
+| Requirement  | Version             | Notes                                                          |
+| ------------ | ------------------- | -------------------------------------------------------------- |
 | Python       | 3.9 +               | 3.11+ recommended [Download](https://www.python.org/downloads/) |
-| tkinter      | bundled with Python | Confirm with `python -m tkinter`                          |
-| GraphDB Free | 10.8 +              | [Download](https://graphdb.ontotext.com/)                      |
-| requests     | ≥ 2.28              | `pip install requests`                                    |
+| tkinter      | bundled with Python | Confirm with `python -m tkinter`                             |
+| GraphDB Free | 10.8 +              | [Download](https://graphdb.ontotext.com/)                       |
+| requests     | ≥ 2.28             | `pip install requests`                                       |
+| openpyxl     | ≥ 3.1              | `pip install openpyxl` — only for `reproduce_results.py`  |
 
-No other third-party Python libraries are required.
+`requests` is needed by the app and `debug_results.py`; `openpyxl` only by
+`reproduce_results.py`. Both are listed in `requirements.txt`. No other third-party
+Python libraries are required.
 
 You will also need access to at least one LLM (ChatGPT, Claude, or Gemini) through your browser — direct links are provided inside the application.
 
@@ -197,7 +218,7 @@ cd Section121TaxLaw
 python -m venv .venv
 ```
 
-Activate it before installing anything, so the dependency lands in the environment
+Activate it before installing anything, so the dependencies land in the environment
 rather than in your system Python:
 
 ```powershell
@@ -213,7 +234,7 @@ source .venv/bin/activate
 ### 5.3 Install Python Dependencies
 
 ```bash
-pip install requests
+pip install -r requirements.txt
 ```
 
 ### 5.4 Install & Configure GraphDB
@@ -309,14 +330,14 @@ The primary working tab. Split into two panels:
 
 Displays timestamped, color-coded pipeline progress:
 
-| Color       | Symbol | Meaning                                                    |
-| ----------- | ------ | ---------------------------------------------------------- |
+| Color       | Symbol | Meaning                                                               |
+| ----------- | ------ | --------------------------------------------------------------------- |
 | Grey        | —     | Neutral status line ("Uploading TTL…", "Running SHACL validation…") |
-| Green       | ✔     | Step completed successfully                                |
-| Red         | ✘     | Error — pipeline halted; review message and fix TTL       |
-| Yellow      | ⚠     | Warning — undefined entities detected; pipeline continues |
-| Blue (bold) | —     | Section heading / submission timestamp                     |
-| White       | —     | Final exclusion results                                    |
+| Green       | ✔     | Step completed successfully                                           |
+| Red         | ✘     | Error — pipeline halted; review message and fix TTL                  |
+| Yellow      | ⚠     | Warning — undefined entities detected; pipeline continues            |
+| Blue (bold) | —     | Section heading / submission timestamp                                |
+| White       | —     | Final exclusion results                                               |
 
 The **Copy** button copies all output text to the clipboard. The **Clear** button resets the output panel.
 
@@ -379,17 +400,17 @@ A scrollable, step-by-step in-app guide that mirrors the workflow above. Useful 
 
 The ontology declares the following classes — these are the complete set available to the LLM:
 
-| Class                     | Description                                                                          |
-| ------------------------- | ------------------------------------------------------------------------------------ |
-| `:Taxpayer`             | An individual taxpayer                                                               |
-| `:Property`             | A real property asset                                                                |
-| `:OwnershipUseInterval` | A contiguous period during which a taxpayer owned a property                         |
-| `:ResidenceUseInterval` | A contiguous period during which a taxpayer used a property as a principal residence |
-| `:Disposition`          | A sale or other disposition of a property                                            |
-| `:Return`               | A tax return (superclass)                                                            |
+| Class                     | Description                                                                               |
+| ------------------------- | ----------------------------------------------------------------------------------------- |
+| `:Taxpayer`             | An individual taxpayer                                                                    |
+| `:Property`             | A real property asset                                                                     |
+| `:OwnershipUseInterval` | A contiguous period during which a taxpayer owned a property                              |
+| `:ResidenceUseInterval` | A contiguous period during which a taxpayer used a property as a principal residence      |
+| `:Disposition`          | A sale or other disposition of a property                                                 |
+| `:Return`               | A tax return (superclass)                                                                 |
 | `:SingleReturn`         | A single-filer return (exclusion cap: $250,000); declared via `rdfs:subClassOf :Return` |
-| `:JointReturn`          | A joint-filer return (exclusion cap: $500,000); declared via `rdfs:subClassOf :Return` |
-| `:ReasonType`           | A §121(c) partial exclusion reason type                                             |
+| `:JointReturn`          | A joint-filer return (exclusion cap: $500,000); declared via `rdfs:subClassOf :Return`  |
+| `:ReasonType`           | A §121(c) partial exclusion reason type                                                  |
 
 > **`:DerivedInfo` and `:Interpretation` are named graphs.**
 > The two UPDATE queries write into `GRAPH :DerivedInfo` and `GRAPH :Interpretation`,
@@ -411,15 +432,15 @@ Key datatype properties. The ontology declares domain and range only; the **Requ
 column reflects the `sh:minCount` constraints in the SHACL shapes, which are what actually
 reject a file:
 
-| Property             | Domain                    | Range           | Required (SHACL) | Constraint       |
-| -------------------- | ------------------------- | --------------- | ---------------- | ---------------- |
-| `:ownershipStart`  | `:OwnershipUseInterval` | `xsd:date`    | Yes (exactly 1)  | —               |
-| `:ownershipEnd`    | `:OwnershipUseInterval` | `xsd:date`    | Yes (exactly 1)  | —               |
-| `:percentageOwned` | `:OwnershipUseInterval` | `xsd:decimal` | No (0 or 1)      | in [0, 1]        |
-| `:residenceStart`  | `:ResidenceUseInterval` | `xsd:date`    | Yes (exactly 1)  | —               |
-| `:residenceEnd`    | `:ResidenceUseInterval` | `xsd:date`    | Yes (exactly 1)  | —               |
-| `:sellDate`        | `:Disposition`          | `xsd:date`    | Yes (exactly 1)  | —               |
-| `:potentialGain`   | `:Disposition`          | `xsd:integer` | Yes (exactly 1)  | negative = loss  |
+| Property             | Domain                    | Range           | Required (SHACL) | Constraint        |
+| -------------------- | ------------------------- | --------------- | ---------------- | ----------------- |
+| `:ownershipStart`  | `:OwnershipUseInterval` | `xsd:date`    | Yes (exactly 1)  | —                |
+| `:ownershipEnd`    | `:OwnershipUseInterval` | `xsd:date`    | Yes (exactly 1)  | —                |
+| `:percentageOwned` | `:OwnershipUseInterval` | `xsd:decimal` | No (0 or 1)      | in [0, 1]         |
+| `:residenceStart`  | `:ResidenceUseInterval` | `xsd:date`    | Yes (exactly 1)  | —                |
+| `:residenceEnd`    | `:ResidenceUseInterval` | `xsd:date`    | Yes (exactly 1)  | —                |
+| `:sellDate`        | `:Disposition`          | `xsd:date`    | Yes (exactly 1)  | —                |
+| `:potentialGain`   | `:Disposition`          | `xsd:integer` | Yes (exactly 1)  | negative = loss   |
 | `:exclusionCap`    | `:Return`               | `xsd:integer` | Yes (exactly 1)  | 250,000 / 500,000 |
 
 Key object properties:
@@ -666,16 +687,27 @@ Each evaluation case was scored on four columns, recorded in the results workboo
 > `Additional Prompting = No`). 166 cases needed no clarification, but only 163 of those were
 > also correct, so the two figures are not interchangeable. Full cross-tabulation:
 >
-> |                          | Correct | Incorrect | Total |
-> | ------------------------ | ------- | --------- | ----- |
-> | No additional prompting  | 163     | 3         | 166   |
-> | Additional prompting     | 64      | 1         | 65    |
-> | **Total**                | **227** | **4**     | **231** |
+> |                         | Correct       | Incorrect   | Total         |
+> | ----------------------- | ------------- | ----------- | ------------- |
+> | No additional prompting | 163           | 3           | 166           |
+> | Additional prompting    | 64            | 1           | 65            |
+> | **Total**         | **227** | **4** | **231** |
 
 Two outcome categories are worth separating:
 
 - **Structural validity (SHACL / NYI):** no generated file was rejected on import with 0 / 231 initial SHACL violations reported so the error-correction loop was never exercised for structural repair in this benchmark. The 65 cases that needed additional prompting needed *facts*, not structural fixes: the LLM asked the user to resolve a detail the scenario left ambiguous before it would emit a file, which is the behavior the prompt specifies rather than a failure. (Structural recovery via the error-correction loop was exercised earlier, while hand-correcting LLM output for the Accuracy Validation set; see [Incorrect Example Cases](#incorrect-example-cases).)
 - **Final correctness:** structural validity does not guarantee a correct answer. 4 / 231 cases (1.73%) `E200`, `E202`, `E204`, `E231` — produced Turtle that parsed and passed SHACL, but still led the pipeline to the wrong exclusion determination: a natural language to ontology modeling gap rather than a validation failure. These are the 4 reflected in the 227 / 231 (98.27%) figure above, and they are exactly the 4 flagged under `Proper Ontology Construction`, which tracks `Correct` on every row of the workbook.
+
+### Reproducing the Reported Statistics
+
+`reproduce_results.py` (see [Repository Structure](#3-repository-structure)) re-derives the
+figures above from the two workbooks: 77 / 77 for the Accuracy Validation Cases, and
+Tables 2 and 3 for the Evaluation Cases. It also cross-checks the `Correct` column by
+comparing triggered rules and exclusions against their targets directly. That comparison
+differs on three rows (`E203`, `E229`, `E230`) for labelling reasons only: `E203` has a
+Target Rules of `None` against a triggered `121c`, and `E229` and `E230` have `121c1`
+where the target says `121c`. The amounts agree on all three. It does not cover the 30
+original Test Cases.
 
 ### Incorrect Example Cases
 
@@ -711,13 +743,13 @@ Defines the three string constants (`GRAPHDB_REPO`, `SHACL_GRAPH`, `ONTOLOGY_GRA
 
 All HTTP communication with GraphDB. Functions:
 
-| Function                                       | Description                                                                        |
-| ---------------------------------------------- | ---------------------------------------------------------------------------------- |
-| `upload_ttl(ttl_content, target_graph=None)` | POST Turtle content to the default or a named graph                                |
-| `parse_validation_report(body)`              | Parse GraphDB's rejection body into one readable line per SHACL violation          |
-| `run_update_query(query, from_file=True)`    | Execute a SPARQL UPDATE; if `from_file=True`, loads from `SPARQL_DIR`          |
-| `run_select_query(filename)`                 | Execute a SPARQL SELECT from a file; returns parsed JSON                           |
-| `load_query_file(filename)`                  | Read a `.sparql` file from `SPARQL_Queries/`                                   |
+| Function                                       | Description                                                               |
+| ---------------------------------------------- | ------------------------------------------------------------------------- |
+| `upload_ttl(ttl_content, target_graph=None)` | POST Turtle content to the default or a named graph                       |
+| `parse_validation_report(body)`              | Parse GraphDB's rejection body into one readable line per SHACL violation |
+| `run_update_query(query, from_file=True)`    | Execute a SPARQL UPDATE; if `from_file=True`, loads from `SPARQL_DIR` |
+| `run_select_query(filename)`                 | Execute a SPARQL SELECT from a file; returns parsed JSON                  |
+| `load_query_file(filename)`                  | Read a `.sparql` file from `SPARQL_Queries/`                          |
 
 ### `controller.py`
 
@@ -814,6 +846,11 @@ Reusable themed widget factories:
 - Run the app as a module from the root: `python -m App.main`
 - `controller.py` and `main.py` carry partial `except ModuleNotFoundError` fallbacks, but `graphdb_client.py` and `widgets.py` import `App.*` unconditionally — so running a file directly (`python App/main.py`) fails regardless. Running as a package is the only supported approach.
 
+**`ModuleNotFoundError: No module named 'openpyxl'` (or `requests`)**
+
+- The virtual environment is not active, or the dependencies were never installed.
+- Activate `.venv` (see [5.2](#52-create-and-activate-a-virtual-environment)) and run `pip install -r requirements.txt`.
+
 **Previous scenario data affecting results**
 
 - Always click **⟳ Reset Repository** before submitting a new scenario.
@@ -825,7 +862,7 @@ Reusable themed widget factories:
 
 Version 1.0 is a proof of concept. The following are known and deliberate:
 
-**Statutory coverage.** Only `121(a)`, `121(b)(1)`, `121(b)(2)(A)`, `121(b)(2)(B)`, `121(b)(3)`, `121(c)` and `121(d)(1)` are implemented. Scenarios that turn on any other provision like §121(d)(2) through §121(d)(12), nonqualified use under §121(b)(5), or the §121(f) election will still produce output, because the pipeline reasons only over the rules it has encoded.
+**Statutory coverage.** Only `121(a)`, `121(b)(1)`, `121(b)(2)(A)`, `121(b)(2)(B)`, `121(b)(3)`, `121(c)` and `121(d)(1)` are implemented. Scenarios that turn on any other provisions will still produce output, because the pipeline reasons only over the rules it has encoded.
 
 **Day counting is approximate.** Both UPDATE queries compute interval lengths as
 `(Δyears × 365) + (Δmonths × 30.4167) + (Δdays + 1)` rather than as a true date difference,
@@ -851,18 +888,17 @@ output panel reports the error; re-run the reset from the repository root before
 anything further.
 
 **No automated test suite.** Correctness is established by the scored case suites in
-`Results/`, re-run manually. `debug_results.py` is the tool for batch re-runs.
+`Results/`, re-run manually. `debug_results.py` is the tool for batch re-runs, and
+`reproduce_results.py` recomputes the reported statistics from the workbooks.
 
 ---
 
 ## 17. License & Citation
 
-No license has been specified for this repository. Until one is added, all rights are
-reserved and the code is provided for review and research discussion only.
+This project is released under the **MIT License**, permitting use, modification, and distribution with appropriate preservation of the copyright and license notice. See the `LICENSE.md` file for full terms.
 
-If you reference this work, please cite it as a proof-of-concept system developed at the
-Loyola University Chicago Lab for Applied AI.
+This software was developed as a proof-of-concept research project under the **Loyola University Chicago Lab for Applied AI**. If you use or reference this work in academic research, publications, or derivative projects, please cite the associated research paper and acknowledge its institutional research affiliation.*
 
 ---
 
-*Built for proof-of-concept research regarding knowledge-graph–driven tax law reasoning under the **Loyola University Chicago Lab for Applied AI**. All legal conclusions should be verified by a qualified tax professional.*
+*Built for proof-of-concept research regarding knowledge-graph–driven tax law reasoning under the **Loyola University Chicago Lab for Applied AI**. This software is provided for academic research and reproducibility purposes only. It is not intended to provide professional tax or legal advice. Results and legal conclusions should not be relied upon for actual tax reporting or compliance without independent verification by a qualified tax professional. *
